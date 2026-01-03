@@ -1,0 +1,67 @@
+{% extends 'charts/chart_common.html' %}
+{% load l10n %}
+{% block chart_title %}Kontostand über Zeit{% endblock %}
+{% block chart_content %}
+  <div id="chart"></div>
+  <script>
+    var options = {
+          series: [{
+          name: 'Gesamt',
+          data: [
+            {% for balance in balances_over_time %}
+              [new Date({{ balance.date|unlocalize }}000), {{ balance.balance|unlocalize }}]{% if not forloop.last %},{% endif %}
+            {% endfor %}
+          ]
+        }],
+          chart: {
+                type: 'area',
+                height: 300,
+                fontFamily: 'inherit',
+                toolbar: {
+                    show: true // Versteckt das Menü oben rechts am Chart
+                },
+          zoom: {
+            type: 'x',
+            enabled: true,
+            autoScaleYaxis: true
+          },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'stepline',
+                
+                width: 2
+            },
+            xaxis: {
+                type: 'datetime',
+                tooltip: {
+                    enabled: false
+                }
+            },
+            yaxis: {
+                labels: {
+                    formatter: function (value) {
+                        return value.toFixed(2) + " €";
+                    }
+                }
+            },
+            theme: {
+                mode: 'light', 
+            },
+            colors: ['#0d6efd'], // Bootstrap Primary Blue
+            fill: {
+                type: 'gradient',
+            },
+            tooltip: {
+                x: {
+                    format: 'dd. MMM yyyy'
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+  </script>
+{% endblock %}

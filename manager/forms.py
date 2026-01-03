@@ -1,0 +1,57 @@
+from django import forms
+from .models import Transaction, Account, Category
+
+class TransactionForm(forms.ModelForm):
+    timestamp = forms.DateTimeField(
+        label="Datum & Zeit",
+        widget=forms.DateTimeInput(
+            attrs={'type': 'datetime-local', 'class': 'form-control'},
+            format='%Y-%m-%dT%H:%M'
+        ),
+        input_formats=['%Y-%m-%dT%H:%M']
+    )
+    
+    class Meta:
+        model = Transaction
+        fields = ['sender', 'receiver', 'amount', 'timestamp', 'category', 'description']
+        
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'sender': forms.Select(attrs={'class': 'form-select'}),
+            'receiver': forms.Select(attrs={'class': 'form-select'}),
+            'category': forms.Select(attrs={'class': 'form-select'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Trennen der auszuwählenden Konten in eigene / fremde
+        my_accounts = Account.objects.filter(is_mine=True).order_by('name')
+        other_accounts = Account.objects.filter(is_mine=False).order_by('name')
+        
+        def get_choices(objects):
+            return [(obj.id, str(obj)) for obj in objects]
+
+        grouped_choices = [
+            ('', '---------'), 
+            ('Meine Konten', get_choices(my_accounts)),
+            ('Externe Konten', get_choices(other_accounts)),
+        ]
+
+        self.fields['sender'].choices = grouped_choices
+        self.fields['receiver'].choices = grouped_choices
+
+    def clean(self):
+        cleaned_data = super().clean()
+        sender = cleaned_data.get('sender')
+        receiver = cleaned_data.get('receiver')
+        amount = cleaned_data.get('amount')
+
+        if sender == receiver:
+            raise forms.ValidationError("Sender und Empfänger können nicht identisch sein.")
+            
+        if amount and amount < 0:
+             raise forms.ValidationError("Der Betrag darf nicht negativ sein.")
+             
+        return cleaned_data

@@ -1,0 +1,65 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<a href="/charts" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Zurück zur Diagrammübersicht</a>
+    <h1 class="mt-4">{% block chart_title %}{%endblock%}</h1>
+    
+        <form method="post">
+            {% csrf_token %}
+            <div id="charts_filter" class="row">
+            <div class="col-12 col-md-6">
+                <label for="time">Zeitraum:</label>
+                <select name="time" id="time"class="form-select mb-3">
+                    <option value="select">---- Bitte wählen ----</option>
+                    <option value="this-month" {% if request.POST.time == 'this-month' %}selected{% endif %}>Dieser Monat</option>
+                    <option value="last-month" {% if request.POST.time == 'last-month' %}selected{% endif %}>Letzter Monat</option>
+                    <option value="this-year" {% if request.POST.time == 'this-year' %}selected{% endif %}>Dieses Jahr</option>
+                    <option value="last-year" {% if request.POST.time == 'last-year' %}selected{% endif %}>Letztes Jahr</option>
+                    <option value="all-time" {% if request.POST.time == 'all-time' %}selected{% endif %}>Gesamtzeitraum</option>
+                    <option value="custom" {% if request.POST.time == 'custom' %}selected{% endif %}>Benutzerdefiniert</option>
+                </select>
+                {#  Custom time range  #}
+                <div id="custom_time_range" style="{% if request.POST.time != 'custom' %}display: none;{% endif %}">
+                    <label for="start_date">Startdatum:</label>
+                    <input type="datetime-local" name="start_date" id="start_date" class="form-control mb-3" {% if request.POST.start_date %}value="{{ request.POST.start_date }}"{% endif %}/>
+                    <label for="end_date">Enddatum:</label>
+                    <input type="datetime-local" name="end_date" id="end_date" class="form-control mb-3" {% if request.POST.end_date %}value="{{ request.POST.end_date }}"{% endif %} />
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="account">Konto:</label>
+                <select name="account" id="account" class="form-select mb-3">
+                    <option value="all" {% if request.POST.account == 'all' %}selected{% endif %}>Alle Konten</option>
+                    {% for account in accounts %}
+                    <option value="{{ account.id }}" {% if request.POST.account|to_int == account.id %}selected{% endif %}>{{ account.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary mt-2">Anwenden</button>
+                </div>
+            </div>
+
+            </div>
+        </form>
+    
+    <div id="chart">
+        {% block chart_content %}{% endblock %}
+    </div>
+    <script>
+        document.querySelector('select[name="time"]').addEventListener('change', function() {
+            var customTimeRange = document.getElementById('custom_time_range');
+            if (this.value === 'custom') {
+                customTimeRange.style.display = 'block';
+            } else {
+                customTimeRange.style.display = 'none';
+            }
+        });
+        // Submit the form when any filter changes
+//        document.querySelectorAll('#charts_filter select, #charts_filter input').forEach(function(element) {
+//            element.addEventListener('change', function() {
+//                this.form.submit();
+//            });
+//        });
+    </script>
+
+{% endblock %}

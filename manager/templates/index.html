@@ -1,0 +1,149 @@
+{% extends 'master.html' %}
+{% load humanize %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<div class="container mt-4">
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center border-end">
+                            <h6 class="text-muted text-uppercase ls-1">Gesamtvermögen</h6>
+                            <h2 class="display-6 fw-bold {% if total_balance >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                {{ total_balance|floatformat:2|intcomma }} €
+                            </h2>
+                        </div>
+                        
+                        <div class="col-md-9">
+                            <div id="balanceChart" style="min-height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mb-3">Meine Konten</h4>
+    
+    <div class="row">
+        {% for account in accounts %}
+        {% with balance=account.get_current_balance %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <a href="{% url 'account_detail' account.id %}" class="text-decoration-none text-dark">
+                    
+                    <div class="card h-100 shadow-sm border-0 
+                        {% if balance > 0 %}
+                            alert-success
+                        {% elif balance < 0 %}
+                            alert-danger
+                        {% else %}
+                            bg-light border
+                        {% endif %}">
+                        
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="card-title fw-bold mb-1">{{ account.name }}</h5>
+                                    <p class="card-text small opacity-75 mb-0">{{ account.iban|default:"" }}</p>
+                                </div>
+                                <i class="bi bi-wallet2 fs-4 opacity-50"></i>
+                            </div>
+                            
+                            <hr class="opacity-25 my-3">
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small text-uppercase fw-bold opacity-75">Aktuell</span>
+                                <span class="fs-4 fw-bold">
+                                    {{ balance|floatformat:2|intcomma }} €
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endwith %}
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-secondary">Keine Konten gefunden.</div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Daten aus Django holen (safe filter ist wichtig!)
+        const rawData = {{ balances_over_time_json|safe }};
+
+        // Daten für ApexCharts mappen: [ { x: Datum, y: Betrag }, ... ]
+        const seriesData = rawData.map(item => {
+            return {
+                x: new Date(item.date).getTime(), // Timestamp ist am besten für Apex
+                y: item.balance
+            };
+        });
+
+        var options = {
+            series: [{
+                name: 'Gesamtvermögen',
+                data: seriesData
+            }],
+            chart: {
+                type: 'area',
+                height: 300,
+                fontFamily: 'inherit',
+                toolbar: {
+                    show: true // Versteckt das Menü oben rechts am Chart
+                },
+          zoom: {
+            type: 'x',
+            enabled: true,
+            autoScaleYaxis: true
+          },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'stepline',
+                
+                width: 2
+            },
+            xaxis: {
+                type: 'datetime',
+                tooltip: {
+                    enabled: false
+                }
+            },
+            yaxis: {
+                labels: {
+                    formatter: function (value) {
+                        return value.toFixed(2) + " €";
+                    }
+                }
+            },
+            theme: {
+                mode: 'light', 
+            },
+            colors: ['#0d6efd'], // Bootstrap Primary Blue
+            fill: {
+                type: 'gradient',
+            },
+            tooltip: {
+                x: {
+                    format: 'dd. MMM yyyy'
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#balanceChart"), options);
+        chart.render();
+    });
+</script>
+
+{% endblock %}

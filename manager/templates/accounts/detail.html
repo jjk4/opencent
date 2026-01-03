@@ -1,0 +1,26 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<a href="{% url 'accounts' %}" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Zurück zur Kontenübersicht</a>
+  <h1>{{ account.name }}</h1>
+    <i>Aktueller Kontostand: <strong>{{ account.current_balance }} €</strong></i><br>
+    <i>Iban: <strong>{{ account.iban }}</strong></i>
+    <hr>
+  <h2>Transaktionen</h2>
+
+  {% for month, dates in transactions.items %}
+    <h3>{{ month }}</h3>
+    {% for date, transactions in dates.items %}
+      <h6>{{ date }}</h6>
+      <div class="card mb-3">
+        <ul class="list-group list-group-flush">
+          {% for transaction in transactions %}
+            <li class="list-group-item d-flex justify-content-between" style="background-color: {{ transaction.bg_color }};">
+              {{ transaction.sender }} -> {{ transaction.receiver }} <span class="text-end"><strong>{{ transaction.amount }} €</strong></span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'charts/chart_common.html' %}
+{% load l10n %}
+
+{% block chart_title %}Einnahmen-Ausgaben Sankey{% endblock %}
+{% block chart_content %}
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexsankey"></script>
+<div id="svg-sankey" style="display: flex; justify-content: center"></div>
+<script>
+    const data = {
+  nodes: [
+    // Budget node
+    {
+      id: 'budget',
+      title: 'Budget: {{total_income}} €',
+    },
+    // Income
+    {% for income_category, values in income_by_category.items %}
+    {
+        id: '{{income_category}}',
+        title: '{{values.name}}',
+    },
+    {% endfor %}
+    // Expenses
+    {% for expense_category, values in expenses_by_category.items %}
+    {
+        id: '{{expense_category}}',
+        title: '{{values.name}}',
+    },
+    {% endfor %}
+  ],
+  edges: [
+    // Income
+    {% for income_category, values in income_by_category.items %}
+    {
+        source: '{{income_category}}',
+        target: '{% if values.parent %}{{values.parent}}{% else %}budget{% endif %}',
+        value: {{values.amount|unlocalize}},
+    },
+    {% endfor %}
+    // Expenses
+    {% for expense_category, values in expenses_by_category.items %}
+    {
+        source: '{% if values.parent %}{{values.parent}}{% else %}budget{% endif %}',
+        target: '{{expense_category}}',
+        value: {{values.amount|unlocalize}},
+    },
+    {% endfor %}
+
+  ],
+};
+const graphOptions = {
+  nodeWidth: 10,
+};
+const s = new ApexSankey(document.getElementById('svg-sankey'), graphOptions);
+s.render(data);
+</script>
+
+
+{% endblock %}

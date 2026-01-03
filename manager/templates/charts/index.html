@@ -1,0 +1,31 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block content %}
+    <h1>Analyse</h1>
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <a href="/charts/balance_over_time" style="color: black; text-decoration: none;">
+                <div class="card" style="background-color: #f8f9fa; color: black;">
+                <img src="{% static 'charts/chart_balance_over_time.webp' %}" class="card-img-top" alt="..." />
+                <div class="card-body">
+                    <h5 class="card-title" style="">Kontostand</h5>
+                    <p class="card-text">Zeigt den absoluten Kontostand über einen gewählten Zeitraum an</p>
+                </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <a href="/charts/sankey" style="color: black; text-decoration: none;">
+                <div class="card" style="background-color: #f8f9fa; color: black;">
+                <img src="{% static 'charts/chart_sankey.webp' %}" class="card-img-top" alt="..." />
+                <div class="card-body">
+                    <h5 class="card-title" style="">Einnahmen/Ausgaben Sankey</h5>
+                    <p class="card-text">Zeigt Einnahmen und Ausgaben nach Kategorie in einem Sankey an</p>
+                </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+{% endblock %}

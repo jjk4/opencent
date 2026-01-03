@@ -1,0 +1,36 @@
+{% extends 'master.html' %}
+{% load humanize %}
+{% block content %}
+<h1>Kontenübersicht</h1>
+<table class="table table-hover align-middle">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>IBAN</th>
+            <th class="text-end">Aktueller Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for account in accounts %}
+        {% with balance=account.get_current_balance %}
+        <tr>
+            <td>{{ account.name }}</td>
+            <td>{{ account.iban|default:"-" }}</td>
+            <td class="text-end
+                {% if balance > 0 %}
+                    text-success
+                {% elif balance < 0 %}
+                    text-danger
+                {% endif %}">
+                {{ balance|floatformat:2|intcomma }} €
+            </td>
+        </tr>
+        {% endwith %}
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">Keine Konten gefunden.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
