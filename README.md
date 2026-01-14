@@ -47,7 +47,7 @@ TBD
 
 1.  **Clone and enter directory:**
     ```bash
-    git clone [https://github.com/jjk4/opencent.git](https://github.com/jjk4/opencent.git)
+    git clone https://github.com/jjk4/opencent
     cd opencent
     ```
 2.  **Create & activate virtual environment:**
@@ -115,7 +115,7 @@ TBD
 
 1.  **Repository klonen:**
     ```bash
-    git clone [https://github.com/jjk4/opencent.git](https://github.com/jjk4/opencent.git)
+    git clone https://github.com/jjk4/opencent
     cd opencent
     ```
 2.  **Virtuelle Umgebung erstellen & aktivieren:**
