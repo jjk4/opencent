@@ -50,7 +50,9 @@ TBD
     git clone https://github.com/jjk4/opencent
     cd opencent
     ```
-2.  **Create & activate virtual environment:**
+2.  **Create .env file:**
+    Create a `.env` file by copying .env.example and set a SECRET_KEY value.
+3.  **Create & activate virtual environment:**
     ```bash
     python -m venv .venv
     # Windows
@@ -58,19 +60,19 @@ TBD
     # Mac/Linux
     source .venv/bin/activate
     ```
-3.  **Install dependencies:**
+4.  **Install dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
-4.  **Migrate database:**
+5.  **Migrate database:**
     ```bash
     python manage.py migrate
     ```
-5.  **Create Superuser:**
+6.  **Create Superuser:**
     ```bash
     python manage.py createsuperuser
     ```
-6.  **Run Server:**
+7.  **Run Server:**
     ```bash
     python manage.py runserver
     ```
@@ -126,6 +128,8 @@ TBD
     git clone https://github.com/jjk4/opencent
     cd opencent
     ```
+2.  **.env Datei erstellen:**
+    Erstelle eine `.env` Datei, indem du .env.example kopierst und einen SECRET_KEY Wert setzt.
 2.  **Virtuelle Umgebung erstellen & aktivieren:**
     ```bash
     python -m venv .venv
