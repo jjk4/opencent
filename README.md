@@ -74,6 +74,10 @@ TBD
     ```bash
     python manage.py runserver
     ```
+### Example Data
+For use in development, you can load example data by copying example_data_DE.sqlite3 to db.sqlite3
+Username: admin
+Password: 1234
 
 ---
 ---
@@ -146,7 +150,10 @@ TBD
     ```bash
     python manage.py runserver
     ```
-
+### Beispieldaten
+Für die Entwicklung kannst du Beispieldaten laden, indem du example_data_DE.sqlite3 nach db.sqlite3 kopierst.
+Username: admin
+Passwort: 1234
 ---
 
 ## 🛠️ Tech Stack
