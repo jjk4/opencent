@@ -66,7 +66,11 @@ TBD
     ```bash
     python manage.py migrate
     ```
-5.  **Run Server:**
+5.  **Create Superuser:**
+    ```bash
+    python manage.py createsuperuser
+    ```
+6.  **Run Server:**
     ```bash
     python manage.py runserver
     ```
@@ -134,7 +138,11 @@ TBD
     ```bash
     python manage.py migrate
     ```
-5.  **Server starten:**
+5.  **Admin-User erstellen:**
+    ```bash
+    python manage.py createsuperuser
+    ```
+6.  **Server starten:**
     ```bash
     python manage.py runserver
     ```
