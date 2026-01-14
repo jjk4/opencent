@@ -55,3 +55,22 @@ class TransactionForm(forms.ModelForm):
              raise forms.ValidationError("Der Betrag darf nicht negativ sein.")
              
         return cleaned_data
+    
+class AccountForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['name', 'start_balance', 'is_mine']
+        
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'start_balance': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'is_mine': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+    def clean(self):
+        cleaned_data = super().clean()
+        start_balance = cleaned_data.get('start_balance')
+
+        if start_balance and start_balance < 0:
+            raise forms.ValidationError("Der Anfangssaldo darf nicht negativ sein.")
+            
+        return cleaned_data

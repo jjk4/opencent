@@ -1,0 +1,47 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<h1>Neues Konto hinzufügen</h1>
+<form method="post">
+{% csrf_token %}
+
+{% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {% for error in form.non_field_errors %}
+            {{ error }}
+        {% endfor %}
+    </div>
+{% endif %}
+<div class="mb-3">
+    <label class="form-label">Kontoname</label>
+    {{ form.name }}
+    {% if form.name.errors %}
+        <div class="text-danger small">{{ form.name.errors }}</div>
+    {% endif %}
+</div>
+<div class="mb-3">
+    <label class="form-label">Anfangssaldo (€)</label>
+    {{ form.start_balance }}
+    {% if form.start_balance.errors %}
+        <div class="text-danger small">{{ form.start_balance.errors }}</div>
+    {% endif %}
+</div>
+<div class="mb-3">
+    <label class="form-label">Eigenes Konto?</label>
+    {{ form.is_mine }}
+    {% if form.is_mine.errors %}
+        <div class="text-danger small">{{ form.is_mine.errors }}</div>
+    {% endif %}
+</div>
+<div class="d-flex justify-content-end">
+    <a href="{% url 'accounts' %}" class="btn btn-secondary me-2">Abbrechen</a>
+    <button type="submit" class="btn btn-primary">
+        {% if is_edit %}
+            Änderungen speichern
+        {% else %}
+            Konto hinzufügen
+        {% endif %}
+    </button>
+</div>
+</form>
+{% endblock %}

@@ -2,6 +2,7 @@
 {% load humanize %}
 {% block content %}
 <h1>Kontenübersicht</h1>
+<a href="{% url 'account_add' %}" class="btn btn-primary mb-3">Neues Konto hinzufügen</a>
 <table class="table table-hover align-middle">
     <thead>
         <tr>
@@ -13,18 +14,18 @@
     <tbody>
         {% for account in accounts %}
         {% with balance=account.get_current_balance %}
-        <tr>
-            <td>{{ account.name }}</td>
-            <td>{{ account.iban|default:"-" }}</td>
-            <td class="text-end
-                {% if balance > 0 %}
-                    text-success
-                {% elif balance < 0 %}
-                    text-danger
-                {% endif %}">
-                {{ balance|floatformat:2|intcomma }} €
-            </td>
-        </tr>
+            <tr>
+                <td><a href="{% url 'account_detail' account.id %}">{{ account.name }}</a></td>
+                <td>{{ account.iban|default:"-" }}</td>
+                <td class="text-end
+                    {% if balance > 0 %}
+                        text-success
+                    {% elif balance < 0 %}
+                        text-danger
+                    {% endif %}">
+                    {{ balance|floatformat:2|intcomma }} €
+                </td>
+            </tr>
         {% endwith %}
         {% empty %}
         <tr>

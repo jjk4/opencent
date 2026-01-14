@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from .models import Transaction, Account, Category
-from .forms import TransactionForm
+from .forms import TransactionForm, AccountForm
 from datetime import datetime, timedelta
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
@@ -248,6 +248,62 @@ def account_detail(request, account_id):
         'transactions': months,
     }
     return render(request, 'accounts/detail.html', context)
+
+def account_add(request):
+    if request.method == 'POST':
+        form = AccountForm(request.POST)
+        
+        if form.is_valid():
+            form.save() 
+            return redirect('accounts') 
+    else:
+        form = AccountForm()
+    
+    context = {
+        'header_data': {
+            'title': 'Neues Konto',
+            'selected_tab': 'accounts',
+        },
+        'form': form,
+    }
+    return render(request, 'accounts/add.html', context)
+
+def account_edit(request, account_id):
+    account = get_object_or_404(Account, id=account_id)
+    
+    if request.method == 'POST':
+        form = AccountForm(request.POST, instance=account)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts')
+    else:
+        form = AccountForm(instance=account)
+    
+    context = {
+        'header_data': {
+            'title': 'Konto bearbeiten',
+            'selected_tab': 'accounts',
+        },
+        'form': form,
+        'is_edit': True
+    }
+    return render(request, 'accounts/add.html', context)
+
+def account_delete(request, account_id):
+    account = get_object_or_404(Account, id=account_id)
+    
+    if request.method == 'POST':
+        account.delete()
+        return redirect('accounts')
+        
+    context = {
+         'header_data': {
+            'title': 'Konto löschen',
+            'selected_tab': 'accounts',
+        },
+        'account': account
+    }
+    return render(request, 'accounts/delete.html', context)
 
 def categories(request):
     categories = Category.objects.filter(parent_category__isnull=True)

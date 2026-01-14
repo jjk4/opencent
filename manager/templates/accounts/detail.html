@@ -4,7 +4,9 @@
 <a href="{% url 'accounts' %}" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Zurück zur Kontenübersicht</a>
   <h1>{{ account.name }}</h1>
     <i>Aktueller Kontostand: <strong>{{ account.current_balance }} €</strong></i><br>
-    <i>Iban: <strong>{{ account.iban }}</strong></i>
+    <i>Iban: <strong>{{ account.iban }}</strong></i><br>
+    <a href="{% url 'account_edit' account.id %}" class="btn btn-primary"><i class="bi bi-pencil"></i> Konto bearbeiten</a>
+    <a href="{% url 'account_delete' account.id %}" class="btn btn-danger ms-1"><i class="bi bi-trash"></i> Konto löschen</a>
     <hr>
   <h2>Transaktionen</h2>
 

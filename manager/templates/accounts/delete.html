@@ -1,0 +1,29 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card border-danger mx-auto" style="max-width: 500px;">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">Löschen bestätigen</h5>
+        </div>
+        <div class="card-body text-center p-4">
+            <p class="lead">Möchtest du das Konto wirklich löschen?</p>
+            
+            <div class="alert alert-light border">
+                <strong>{{ account.name }}</strong><br>
+                {{ account.get_current_balance }} €<br>
+            </div>
+            
+            <p class="text-danger small">Dies kann nicht rückgängig gemacht werden.</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center mt-4">
+                    <a href="{% url 'account_detail' account.id %}" class="btn btn-secondary me-3">Abbrechen</a>
+                    <button type="submit" class="btn btn-danger">Ja, unwiderruflich löschen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
