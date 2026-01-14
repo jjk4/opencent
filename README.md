@@ -154,6 +154,7 @@ TBD
 Für die Entwicklung kannst du Beispieldaten laden, indem du example_data_DE.sqlite3 nach db.sqlite3 kopierst.
 Username: admin
 Passwort: 1234
+
 ---
 
 ## 🛠️ Tech Stack
