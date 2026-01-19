@@ -1,36 +1,16 @@
 {% extends 'master.html' %}
 
 {% block content %}
-<h1>Kategorien</h1>
-<div class="accordion" id="categoriesAccordion">
-    {% for category in categories %}
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="heading{{ category.id }}">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ category.id }}" aria-expanded="false" aria-controls="collapse{{ category.id }}">
-                {% if category.icon %}
-                    <i class="{{ category.icon }}"></i>&nbsp;
-                {% endif %}
-                {{ category.name }}
-            </button>
-        </h2>
-        <div id="collapse{{ category.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ category.id }}" data-bs-parent="#categoriesAccordion">
-            <div class="accordion-body">
-                {% if category.subcategories.all %}
-                    <ul>
-                        {% for subcategory in category.subcategories.all %}
-                            <li>
-                                {% if subcategory.icon %}
-                                    <i class="{{ subcategory.icon }}"></i>&nbsp;
-                                {% endif %}
-                                {{ subcategory.name }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>Keine Unterkategorien.</p>
-                {% endif %}
-            </div>
-        </div>
+<div class="container mt-4">
+    <h1>Kategorien</h1>
+    <a href="{% url 'category_add' %}" class="btn btn-primary mb-3">Neue Kategorie hinzufügen</a>
+    
+    <div class="list-group">
+        {% for category in categories %}
+            {% include "elements/categories/category_item.html" with category=category %}
+        {% empty %}
+            <p>Keine Kategorien vorhanden.</p>
+        {% endfor %}
     </div>
-    {% endfor %}
+</div>
 {% endblock %}

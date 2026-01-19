@@ -1,0 +1,28 @@
+<div class="list-group-item border-0 p-0 mb-1">
+    <div class="d-flex align-items-center justify-content-between p-2 border rounded bg-light">
+        <a href="{% url 'category_detail' category.id %}" class="text-decoration-none text-dark d-flex align-items-center flex-grow-1">
+            {% if category.icon %}
+                <i class="{{ category.icon }} me-2"></i>
+            {% endif %}
+            {{ category.name }}
+        </a>
+
+        {% if category.subcategories.all %}
+            <button class="btn btn-sm btn-outline-secondary ms-2" type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#collapse{{ category.id }}" 
+                    aria-expanded="false">
+                <i class="bi bi-chevron-down"></i> </button>
+        {% endif %}
+    </div>
+
+    {% if category.subcategories.all %}
+        <div class="collapse ps-4 mt-1 border-start ms-2" id="collapse{{ category.id }}">
+            <div class="list-group">
+                {% for subcategory in category.subcategories.all %}
+                   {% include "elements/categories/category_item.html" with category=subcategory %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>

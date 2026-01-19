@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from .models import Transaction, Account, Category
-from .forms import TransactionForm, AccountForm
+from .forms import TransactionForm, AccountForm, CategoryForm
 from datetime import datetime, timedelta
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
@@ -315,6 +315,73 @@ def categories(request):
         'categories': categories,
     }
     return render(request, 'categories/index.html', context)
+
+def category_detail(request, category_id):
+    category = Category.objects.get(id=category_id)
+    context = {
+        'header_data': {
+            'title': category.name + " Details",
+            'selected_tab': 'categories',
+        },
+        'category': category,
+    }
+    return render(request, 'categories/detail.html', context)
+
+def category_add(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        
+        if form.is_valid():
+            form.save() 
+            return redirect('categories') 
+    else:
+        form = CategoryForm()
+    
+    context = {
+        'header_data': {
+            'title': 'Neue Kategorie',
+            'selected_tab': 'categories',
+        },
+        'form': form,
+    }
+    return render(request, 'categories/add.html', context)
+
+def category_edit(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('categories')
+    else:
+        form = CategoryForm(instance=category)
+    
+    context = {
+        'header_data': {
+            'title': 'Kategorie bearbeiten',
+            'selected_tab': 'categories',
+        },
+        'form': form,
+        'is_edit': True
+    }
+    return render(request, 'categories/add.html', context)
+
+def category_delete(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    
+    if request.method == 'POST':
+        category.delete()
+        return redirect('categories')
+        
+    context = {
+         'header_data': {
+            'title': 'Kategorie löschen',
+            'selected_tab': 'categories',
+        },
+        'category': category
+    }
+    return render(request, 'categories/delete.html', context)
 
 def charts(request):
     template = loader.get_template('charts/index.html')
