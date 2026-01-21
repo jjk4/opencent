@@ -5,6 +5,9 @@
 
 
   <a href="{% url 'transaction_add' %}" class="btn btn-primary mb-3">Neue Transaktion</a>
+  {% if filter %}
+    <a href="{% url 'transactions' %}" class="btn btn-outline-secondary mb-3">Filter zurücksetzen</a>
+  {% endif %}
 {% regroup transaction_list by timestamp|date:"F Y" as transactions_by_month %}
 
 {% for month in transactions_by_month %}

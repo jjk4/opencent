@@ -99,7 +99,28 @@ def get_balance_history(my_accounts, from_date=None):
     return history
 # ---------------------------------------------------------
 def transactions(request):
+    filter = False
     transaction_list = Transaction.objects.select_related('sender', 'receiver', 'category').prefetch_related('original_transaction_refunds', 'original_transaction_refunds__refund_transaction').all()
+    filter_accounts = request.GET.getlist('account')
+    if filter_accounts:
+        filter = True
+        transaction_list = transaction_list.filter(
+            Q(sender__id__in=filter_accounts) | Q(receiver__id__in=filter_accounts)
+        )
+
+    filter_categories = request.GET.getlist('category')
+    if filter_categories:
+        filter = True
+        category_ids = []
+        for cat_id in filter_categories:
+            category_ids.append(int(cat_id))
+            category = Category.objects.get(id=cat_id)
+            subcategories = category.get_all_subcategories_recursive()
+            for subcat in subcategories:
+                if subcat.id not in category_ids:
+                    category_ids.append(subcat.id)
+        transaction_list = transaction_list.filter(category__id__in=category_ids)
+
     context = {
         'header_data': {
             'title': 'Transaktionen',
@@ -108,6 +129,7 @@ def transactions(request):
         'transaction_list': transaction_list,
         'my_accounts': Account.objects.filter(is_mine=True),
         'show_refunds': request.GET.get('refunds') == 'on',
+        'filter': filter,
     }
     
     return render(request, 'transactions/index.html', context)

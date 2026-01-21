@@ -34,6 +34,9 @@
     <a href="{% url 'category_delete' category.id %}" class="btn btn-outline-danger">
         <i class="bi bi-trash"></i> Löschen
     </a>
+    <a href="{% url 'transactions' %}?category={{ category.id }}" class="btn btn-outline-secondary ms-2">
+        <i class="bi bi-list-ul"></i> Transaktionen anzeigen
+    </a>
 
 </div>
 {% endblock %}

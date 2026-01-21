@@ -91,6 +91,15 @@ class Category(models.Model):
     
     class Meta:
         verbose_name_plural = "Categories"
-        
+    
+    def get_all_subcategories_recursive(self):
+        subcategories = []
+        def fetch_subcategories(category):
+            for subcat in category.subcategories.all():
+                subcategories.append(subcat)
+                fetch_subcategories(subcat)
+        fetch_subcategories(self)
+        return subcategories
+
     def __str__(self):
         return f"{self.name}"

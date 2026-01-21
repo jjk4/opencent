@@ -20,23 +20,9 @@
     <a href="{% url 'account_delete' account.id %}" class="btn btn-outline-danger">
         <i class="bi bi-trash"></i> Löschen
     </a>
+     <a href="{% url 'transactions' %}?account={{ account.id }}" class="btn btn-outline-secondary ms-2">
+        <i class="bi bi-list-ul"></i> Transaktionen anzeigen
+    </a>
 
 </div>
-  <h2>Transaktionen</h2>
-
-  {% for month, dates in transactions.items %}
-    <h3>{{ month }}</h3>
-    {% for date, transactions in dates.items %}
-      <h6>{{ date }}</h6>
-      <div class="card mb-3">
-        <ul class="list-group list-group-flush">
-          {% for transaction in transactions %}
-            <li class="list-group-item d-flex justify-content-between" style="background-color: {{ transaction.bg_color }};">
-              {{ transaction.sender }} -> {{ transaction.receiver }} <span class="text-end"><strong>{{ transaction.amount }} €</strong></span>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endfor %}
-  {% endfor %}
 {% endblock %}
