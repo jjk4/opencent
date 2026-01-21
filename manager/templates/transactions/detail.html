@@ -2,9 +2,8 @@
 
 {% block content %}
 <a href="{% url 'transactions' %}" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Zurück zur Transaktionsübersicht</a><br>
-  <i>Transaktion vom {{ transaction.timestamp|date:"d.m.Y H:i" }}</i>
     <div class="card mt-3"> 
-        <div class="card-body"> 
+        <div class="card-body shadow-sm"> 
             <h5 class="card-title"> 
                 {{ transaction.sender }} 
                 {% if transaction.sender.is_mine %}
@@ -17,8 +16,8 @@
                 {% endif %}
             
             </h5>
-            <p class="card-text"><i>Betrag:</i> <strong>{{ transaction.amount }} €
-            </strong></p>
+            <p class="card-text"><i>Datum:</i> <strong>{{ transaction.timestamp|date:"d.m.Y H:i" }} €</strong></p>
+            <p class="card-text"><i>Betrag:</i> <strong>{{ transaction.amount }} €</strong></p>
             {% if transaction.description %}
                 <p class="card-text"><i>Beschreibung:</i> <br> {{ transaction.description }}</p>
             {% endif %}

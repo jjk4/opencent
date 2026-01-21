@@ -1,24 +1,39 @@
 {% extends 'master.html' %} {% block content %}
-<a href="{% url 'categories' %}" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Zurück zur Kategorieübersicht</a>
-<h1 class="mb-3"><i class="{{ category.icon }}"></i> {{ category.name }}</h1>
-    <a href="{% url 'category_edit' category.id %}" class="btn btn-primary"><i class="bi bi-pencil"></i> Kategorie bearbeiten</a>
-    <a href="{% url 'category_delete' category.id %}" class="btn btn-danger ms-1"><i class="bi bi-trash"></i> Kategorie löschen</a>
-{% if category.parent_category %}
-<h3>Übergeordnete Kategorie: <b>{{ category.parent_category.name }}</b></h3>
-{% endif %}
-<h3>Unterkategorien</h3>
-{% if category.subcategories.all %}
-<ul>
-    {% for subcategory in category.subcategories.all %}
-    <li>
-        {% if subcategory.icon %}
-        <i class="{{ subcategory.icon }}"></i>&nbsp;
-        {% endif %}
-        {{ subcategory.name }}
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>Keine Unterkategorien.</p>
-{% endif %}
+<a href="{% url 'categories' %}" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Zurück zur Kategorieübersicht</a><br>
+<div class="card mt-3"> 
+        <div class="card-body shadow-sm"> 
+            <h5 class="card-title"> 
+                <i class="{{ category.icon }}"></i> {{ category.name }}
+            </h5>
+            {% if category.parent_category %}
+                <p class="card-text"><i>Übergeordnete Kategorie:</i> <b>{{ category.parent_category.name }}</b></p>
+            {% endif %}
+
+
+            {% if category.subcategories.all %}
+            <i>Unterkategorien:</i>
+            <ul>
+                {% for subcategory in category.subcategories.all %}
+                <li>
+                    {% if subcategory.icon %}
+                    <i class="{{ subcategory.icon }}"></i>&nbsp;
+                    {% endif %}
+                    {{ subcategory.name }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+<div class="mt-4 border-top pt-3 d-flex justify-content-end">
+    
+    <a href="{% url 'category_edit' category.id %}" class="btn btn-outline-primary me-2">
+        <i class="bi bi-pencil"></i> Bearbeiten
+    </a>
+    
+    <a href="{% url 'category_delete' category.id %}" class="btn btn-outline-danger">
+        <i class="bi bi-trash"></i> Löschen
+    </a>
+
+</div>
 {% endblock %}

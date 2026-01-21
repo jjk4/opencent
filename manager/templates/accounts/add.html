@@ -1,7 +1,12 @@
 {% extends 'master.html' %}
 
 {% block content %}
-<h1>Neues Konto hinzufügen</h1>
+{% if is_edit %}
+    <h1>Konto bearbeiten</h1>
+{% else %}
+    <h1>Neues Konto</h1>
+{% endif %}
+
 <form method="post">
 {% csrf_token %}
 

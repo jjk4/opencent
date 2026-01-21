@@ -1,7 +1,11 @@
 {% extends 'master.html' %}
 
 {% block content %}
-<h1>Neue Transaktion hinzufügen</h1>
+{% if is_edit %}
+    <h1>Transaktion bearbeiten</h1>
+{% else %}
+    <h1>Neue Transaktion</h1>
+{% endif %}
 <form method="post">
 {% csrf_token %}
 

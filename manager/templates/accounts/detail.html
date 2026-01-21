@@ -1,13 +1,27 @@
 {% extends 'master.html' %}
 
 {% block content %}
-<a href="{% url 'accounts' %}" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Zurück zur Kontenübersicht</a>
-  <h1>{{ account.name }}</h1>
-    <i>Aktueller Kontostand: <strong>{{ account.current_balance }} €</strong></i><br>
-    <i>Iban: <strong>{{ account.iban }}</strong></i><br>
-    <a href="{% url 'account_edit' account.id %}" class="btn btn-primary"><i class="bi bi-pencil"></i> Konto bearbeiten</a>
-    <a href="{% url 'account_delete' account.id %}" class="btn btn-danger ms-1"><i class="bi bi-trash"></i> Konto löschen</a>
-    <hr>
+<a href="{% url 'accounts' %}" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Zurück zur Kontenübersicht</a><br>
+<div class="card mt-3"> 
+        <div class="card-body shadow-sm"> 
+            <h5 class="card-title"> 
+                {{ account.name }}
+            </h5>
+            <p class="card-text"><i>Aktueller Kontostand: </i><b>{{ account.current_balance }} €</b></p>
+            <p class="card-text"><i>Iban:  </i><b>{{ account.iban }} €</b></p>
+        </div>
+    </div>
+<div class="mt-4 border-top pt-3 d-flex justify-content-end">
+    
+    <a href="{% url 'account_edit' account.id %}" class="btn btn-outline-primary me-2">
+        <i class="bi bi-pencil"></i> Bearbeiten
+    </a>
+    
+    <a href="{% url 'account_delete' account.id %}" class="btn btn-outline-danger">
+        <i class="bi bi-trash"></i> Löschen
+    </a>
+
+</div>
   <h2>Transaktionen</h2>
 
   {% for month, dates in transactions.items %}
