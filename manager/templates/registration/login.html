@@ -1,0 +1,69 @@
+{% extends "master.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white text-center">
+          <h4 class="mb-0">Anmelden</h4>
+        </div>
+        
+        <div class="card-body p-4">
+
+          {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+              Dein Benutzername und Passwort stimmen nicht überein. Bitte versuche es erneut.
+            </div>
+          {% endif %}
+
+          {% if next %}
+            {% if user.is_authenticated %}
+              <div class="alert alert-warning" role="alert">
+                Dein Konto hat keinen Zugriff auf diese Seite. Bitte melde dich mit einem passenden Konto an.
+              </div>
+            {% else %}
+              <div class="alert alert-info" role="alert">
+                Bitte melde dich an, um diese Seite zu sehen.
+              </div>
+            {% endif %}
+          {% endif %}
+
+          <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            
+            <div class="mb-3 input-group-hack">
+              <label for="{{ form.username.id_for_label }}" class="form-label">
+                {{ form.username.label }}
+              </label>
+              {{ form.username }}
+            </div>
+
+            <div class="mb-3 input-group-hack">
+              <label for="{{ form.password.id_for_label }}" class="form-label">
+                {{ form.password.label }}
+              </label>
+              {{ form.password }}
+            </div>
+
+            <div class="d-grid gap-2 mt-4">
+              <input type="submit" class="btn btn-primary" value="Login">
+            </div>
+            
+            <input type="hidden" name="next" value="{{ next }}">
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+  var inputs = document.querySelectorAll('.input-group-hack input');
+  inputs.forEach(function(input) {
+    input.classList.add('form-control');
+  });
+</script>
+{% endblock %}

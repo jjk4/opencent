@@ -23,6 +23,7 @@
             <span class="fs-4 fw-bold">OpenCent</span>
           </a>
           <ul class="nav nav-pills col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            {% if user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link {% if header_data.selected_tab == 'home' %}active{% endif %}" href="/"><i class="bi bi-house-fill"></i> Startseite</a>
             </li>
@@ -38,17 +39,27 @@
             <li class="nav-item">
               <a class="nav-link {% if header_data.selected_tab == 'categories' %}active{% endif %}" href="/categories"><i class="bi bi-tags"></i> Kategorien</a>
             </li>
+            {% endif %}
           </ul> <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
             <input type="search" name="search" class="form-control" placeholder="Suchen..." aria-label="Search" />
           </form> <div class="dropdown text-end">
             <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle"></i></a> <ul class="dropdown-menu text-small" style="">
-              <li>
-                <a class="dropdown-item" href="#">Einstellungen</a>
-              </li> <li>
-                <hr class="dropdown-divider" />
-              </li> <li>
-                <a class="dropdown-item" href="#">Abmelden</a>
-              </li>
+              {% if user.is_authenticated %}
+                <li>
+                  <a class="dropdown-item" href="#">Einstellungen</a>
+                </li> <li>
+                  <hr class="dropdown-divider" />
+                </li> <li>
+                  <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item">Logout</button>
+                  </form>
+                </li>
+              {% else %}
+                <li>
+                  <a class="dropdown-item" href="/users/login">Login</a>
+                </li>
+              {% endif %}
             </ul>
           </div>
         </div>

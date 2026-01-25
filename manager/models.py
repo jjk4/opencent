@@ -8,6 +8,7 @@ class Transaction(models.Model):
     timestamp = models.DateTimeField()
     description = models.TextField(blank=True, null=True)
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     
     def __str__(self):
         return f"{self.sender.name} -> {self.receiver.name}: {self.amount} €"
@@ -71,6 +72,7 @@ class Account(models.Model):
     iban = models.CharField(max_length=34, unique=True, null=True, blank=True)
     start_balance = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     is_mine = models.BooleanField(default=False)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     
     def get_current_balance(self):
         incoming = Transaction.objects.filter(receiver=self).aggregate(models.Sum('amount'))['amount__sum'] or Decimal(0)
@@ -88,6 +90,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     parent_category = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subcategories')
     icon = models.CharField(max_length=50, default='bi bi-tags')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     
     class Meta:
         verbose_name_plural = "Categories"

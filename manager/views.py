@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
+from django.contrib.auth.decorators import login_required
 from .models import Transaction, Account, Category
 from .forms import TransactionForm, AccountForm, CategoryForm
 from datetime import datetime, timedelta
@@ -12,8 +13,8 @@ month_names = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'Au
 
 # ------------------- Util functions ----------------------
 def chart_timerange(request):
-    start_date_fallback = Transaction.objects.last().timestamp
-    end_date_fallback = Transaction.objects.first().timestamp
+    start_date_fallback = Transaction.objects.filter(user=request.user).last().timestamp
+    end_date_fallback = Transaction.objects.filter(user=request.user).first().timestamp
     # Determine time range
     if request.POST.get('time') == 'custom':
         try:
@@ -51,32 +52,32 @@ def chart_timerange(request):
 
 def chart_startbalance(request, start_date, end_date, account_selected):
         if account_selected:
-            start_balance = Account.objects.get(id=request.POST.get('account')).start_balance
-            start_balance += sum(t.amount for t in Transaction.objects.all().filter(timestamp__lt=start_date, receiver__id=request.POST.get('account')))
-            start_balance -= sum(t.amount for t in Transaction.objects.all().filter(timestamp__lt=start_date, sender__id=request.POST.get('account')))
+            start_balance = Account.objects.get(id=request.POST.get('account'), user=request.user).start_balance
+            start_balance += sum(t.amount for t in Transaction.objects.all().filter(user=request.user, timestamp__lt=start_date, receiver__id=request.POST.get('account')))
+            start_balance -= sum(t.amount for t in Transaction.objects.all().filter(user=request.user, timestamp__lt=start_date, sender__id=request.POST.get('account')))
         else:
-            start_balance = sum(account.start_balance for account in Account.objects.filter(is_mine=True))
-            start_balance += sum(t.amount for t in Transaction.objects.all().filter(timestamp__lt=start_date, receiver__is_mine=True))
-            start_balance -= sum(t.amount for t in Transaction.objects.all().filter(timestamp__lt=start_date, sender__is_mine=True))
+            start_balance = sum(account.start_balance for account in Account.objects.filter(is_mine=True, user=request.user))
+            start_balance += sum(t.amount for t in Transaction.objects.all().filter(user=request.user, timestamp__lt=start_date, receiver__is_mine=True))
+            start_balance -= sum(t.amount for t in Transaction.objects.all().filter(user=request.user, timestamp__lt=start_date, sender__is_mine=True))
         
         return start_balance
 
 def chart_transactions(request, start_date, end_date, account_selected):
-        transactions = Transaction.objects.all().filter(timestamp__gte=start_date, timestamp__lte=end_date).order_by('timestamp')
+        transactions = Transaction.objects.all().filter(user=request.user, timestamp__gte=start_date, timestamp__lte=end_date).order_by('timestamp')
         if account_selected:
             transactions = transactions.filter(sender__id=request.POST.get('account')) | transactions.filter(receiver__id=request.POST.get('account'))
         return transactions
 
-def get_balance_history(my_accounts, from_date=None):
+def get_balance_history(request, my_accounts, from_date=None):
     """
     Berechnet den Verlauf des Gesamtvermögens über die Zeit.
     """
-    current_balance = chart_startbalance(None, from_date, None, None)
+    current_balance = chart_startbalance(request, from_date, None, None)
     history = []
     
     transactions = Transaction.objects.filter(
         Q(sender__in=my_accounts) | Q(receiver__in=my_accounts)
-    ).order_by('timestamp')
+    ).filter(user=request.user).order_by('timestamp')
     
     if from_date:
         transactions = transactions.filter(timestamp__gte=from_date)
@@ -98,9 +99,10 @@ def get_balance_history(my_accounts, from_date=None):
         
     return history
 # ---------------------------------------------------------
+@login_required
 def transactions(request):
     filter = False
-    transaction_list = Transaction.objects.select_related('sender', 'receiver', 'category').prefetch_related('original_transaction_refunds', 'original_transaction_refunds__refund_transaction').all()
+    transaction_list = Transaction.objects.filter(user=request.user).select_related('sender', 'receiver', 'category').prefetch_related('original_transaction_refunds', 'original_transaction_refunds__refund_transaction').all()
     filter_accounts = request.GET.getlist('account')
     if filter_accounts:
         filter = True
@@ -127,15 +129,18 @@ def transactions(request):
             'selected_tab': 'transactions',
         },
         'transaction_list': transaction_list,
-        'my_accounts': Account.objects.filter(is_mine=True),
+        'my_accounts': Account.objects.filter(is_mine=True, user=request.user),
         'show_refunds': request.GET.get('refunds') == 'on',
         'filter': filter,
     }
     
     return render(request, 'transactions/index.html', context)
 
+@login_required
 def transaction_detail(request, transaction_id):
     transaction = Transaction.objects.get(id=transaction_id)
+    if transaction.user != request.user: # TODO: Fehlermeldung
+        return redirect('transactions')
     context = {
         'header_data': {
             'title': (transaction.description or f"Transaktion {transaction.id}") + " Details",
@@ -147,12 +152,14 @@ def transaction_detail(request, transaction_id):
     }
     return render(request, 'transactions/detail.html', context)
 
+@login_required
 def transaction_add(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST)
-        
         if form.is_valid():
-            form.save() 
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
             return redirect('transactions') 
     else:
         form = TransactionForm(initial={'timestamp': datetime.now()})
@@ -166,10 +173,11 @@ def transaction_add(request):
     }
     return render(request, 'transactions/add.html', context)
 
-
+@login_required
 def transaction_edit(request, transaction_id):
     transaction = get_object_or_404(Transaction, id=transaction_id)
-    
+    if transaction.user != request.user: # TODO: Fehlermeldung
+        return redirect('transactions')
     if request.method == 'POST':
         form = TransactionForm(request.POST, instance=transaction)
         if form.is_valid():
@@ -188,9 +196,11 @@ def transaction_edit(request, transaction_id):
     }
     return render(request, 'transactions/add.html', context)
 
+@login_required
 def transaction_delete(request, transaction_id):
     transaction = get_object_or_404(Transaction, id=transaction_id)
-    
+    if transaction.user != request.user: # TODO: Fehlermeldung
+        return redirect('transactions')
     if request.method == 'POST':
         transaction.delete()
         return redirect('transactions')
@@ -204,14 +214,15 @@ def transaction_delete(request, transaction_id):
     }
     return render(request, 'transactions/delete.html', context)
 
+@login_required
 def homepage(request):
-    account_list = Account.objects.filter(is_mine=True)
+    account_list = Account.objects.filter(is_mine=True, user=request.user)
     
     total_balance = sum(acc.get_current_balance() for acc in account_list)
 
     today_last_year = datetime.now() - timedelta(days=365)
     
-    chart_data = get_balance_history(account_list, today_last_year)
+    chart_data = get_balance_history(request, account_list, today_last_year)
 
     context = {
         'header_data': {
@@ -226,8 +237,9 @@ def homepage(request):
     
     return render(request, 'index.html', context)
 
+@login_required
 def accounts(request):
-    account_list = Account.objects.filter(is_mine=True)
+    account_list = Account.objects.filter(is_mine=True, user=request.user)
     context = {
         'header_data': {
             'title': 'Konten',
@@ -237,29 +249,11 @@ def accounts(request):
     }
     return render(request, 'accounts/index.html', context)
 
+@login_required
 def account_detail(request, account_id):
     account = Account.objects.get(id=account_id)
-    data = Transaction.objects.filter(sender=account) | Transaction.objects.filter(receiver=account)
-    months = {}
-    for t in data:
-        # Determine background color based on sender and receiver
-        if not(t.sender.is_mine) and t.receiver.is_mine:
-            t.bg_color = '#d6ffd6ff'
-        elif t.sender.is_mine is True and t.receiver.is_mine is False:
-            t.bg_color = '#ffd6d6ff'
-        else:
-            t.bg_color = '#d3d3d3ff'
-        
-        # Organize transactions by month and date
-        month_string = month_names[t.timestamp.month - 1] + " " + str(t.timestamp.year)
-        date_string = str(t.timestamp.day).zfill(2) + "." + str(t.timestamp.month).zfill(2) + "." + str(t.timestamp.year)
-        if month_string not in months:
-           months[month_string] = {}
-        if date_string not in months[month_string]:
-              months[month_string][date_string] = []
-
-        months[month_string][date_string].append(t)
-    
+    if account.user != request.user: # TODO: Fehlermeldung
+        return redirect('accounts')
     account.current_balance = account.get_current_balance()
     context = {
         'header_data': {
@@ -267,16 +261,18 @@ def account_detail(request, account_id):
             'selected_tab': 'accounts',
         },
         'account': account,
-        'transactions': months,
     }
     return render(request, 'accounts/detail.html', context)
 
+@login_required
 def account_add(request):
     if request.method == 'POST':
         form = AccountForm(request.POST)
         
         if form.is_valid():
-            form.save() 
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
             return redirect('accounts') 
     else:
         form = AccountForm()
@@ -290,9 +286,11 @@ def account_add(request):
     }
     return render(request, 'accounts/add.html', context)
 
+@login_required
 def account_edit(request, account_id):
     account = get_object_or_404(Account, id=account_id)
-    
+    if account.user != request.user: # TODO: Fehlermeldung
+        return redirect('accounts')
     if request.method == 'POST':
         form = AccountForm(request.POST, instance=account)
         if form.is_valid():
@@ -311,9 +309,11 @@ def account_edit(request, account_id):
     }
     return render(request, 'accounts/add.html', context)
 
+@login_required
 def account_delete(request, account_id):
     account = get_object_or_404(Account, id=account_id)
-    
+    if account.user != request.user: # TODO: Fehlermeldung
+        return redirect('accounts')
     if request.method == 'POST':
         account.delete()
         return redirect('accounts')
@@ -327,8 +327,9 @@ def account_delete(request, account_id):
     }
     return render(request, 'accounts/delete.html', context)
 
+@login_required
 def categories(request):
-    categories = Category.objects.filter(parent_category__isnull=True)
+    categories = Category.objects.filter(parent_category__isnull=True, user=request.user)
     context = {
         'header_data': {
             'title': "Kategorien",
@@ -338,8 +339,11 @@ def categories(request):
     }
     return render(request, 'categories/index.html', context)
 
+@login_required
 def category_detail(request, category_id):
     category = Category.objects.get(id=category_id)
+    if category.user != request.user: # TODO: Fehlermeldung
+        return redirect('categories')
     context = {
         'header_data': {
             'title': category.name + " Details",
@@ -349,12 +353,15 @@ def category_detail(request, category_id):
     }
     return render(request, 'categories/detail.html', context)
 
+@login_required
 def category_add(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         
         if form.is_valid():
-            form.save() 
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
             return redirect('categories') 
     else:
         form = CategoryForm()
@@ -368,9 +375,11 @@ def category_add(request):
     }
     return render(request, 'categories/add.html', context)
 
+@login_required
 def category_edit(request, category_id):
     category = get_object_or_404(Category, id=category_id)
-    
+    if category.user != request.user: # TODO: Fehlermeldung
+        return redirect('categories')
     if request.method == 'POST':
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
@@ -389,9 +398,11 @@ def category_edit(request, category_id):
     }
     return render(request, 'categories/add.html', context)
 
+@login_required
 def category_delete(request, category_id):
     category = get_object_or_404(Category, id=category_id)
-    
+    if category.user != request.user: # TODO: Fehlermeldung
+        return redirect('categories')
     if request.method == 'POST':
         category.delete()
         return redirect('categories')
@@ -405,6 +416,7 @@ def category_delete(request, category_id):
     }
     return render(request, 'categories/delete.html', context)
 
+@login_required
 def charts(request):
     template = loader.get_template('charts/index.html')
     context = {
@@ -415,6 +427,7 @@ def charts(request):
     }
     return HttpResponse(template.render(context, request))
 
+@login_required
 def chart_balance_over_time(request):
     template = loader.get_template('charts/balance_over_time.html')
     if request.method == 'POST':
@@ -450,11 +463,12 @@ def chart_balance_over_time(request):
             'title': "Diagramme",
             'selected_tab': 'analysis',
         },
-        'accounts': Account.objects.filter(is_mine=True),
+        'accounts': Account.objects.filter(is_mine=True, user=request.user),
         'balances_over_time': balances_over_time,
     }
     return HttpResponse(template.render(context, request))
 
+@login_required
 def chart_sankey(request):
     template = loader.get_template('charts/sankey.html')
     if request.method == 'POST':
@@ -511,7 +525,7 @@ def chart_sankey(request):
             'title': "Diagramme",
             'selected_tab': 'analysis',
         },
-        'accounts': Account.objects.filter(is_mine=True),
+        'accounts': Account.objects.filter(is_mine=True, user=request.user),
         'income_by_category': income_by_category,
         'expenses_by_category': expenses_by_category,
         'total_expenses': total_expenses,
@@ -522,20 +536,3 @@ def chart_sankey(request):
 
 def devview(request):
     pass
-    # dates = [
-    #     datetime(2014,1,2,12,00),   # 1. Neujahr
-    #     datetime(2014,2,3,12,00),   # 1./2. Wochenende
-    #     datetime(2014,3,3,12,00),
-    #     datetime(2014,4,1,12,00),
-    #     datetime(2014,5,2,12,00),   # 1. Tag der Arbeit
-    #     datetime(2014,6,2,12,00),   # 1. Sonntag
-    #     datetime(2014,7,1,12,00),
-    #     datetime(2014,8,1,12,00),
-    #     datetime(2014,9,1,12,00),
-    #     datetime(2014,10,1,12,00),
-    #     datetime(2014,11,3,12,00),  # 1. Allerheiligen (Sa), 2. So
-    #     datetime(2014,12,1,12,00),
-    # ]
-    # for date in dates:
-    #     t = Transaction(timestamp=date, sender=Account.objects.get(id=19), receiver=Account.objects.get(id=34), amount=7.5, category=Category.objects.get(id=10))
-    #     t.save()
