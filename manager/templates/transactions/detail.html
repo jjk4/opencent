@@ -6,14 +6,10 @@
         <div class="card-body shadow-sm"> 
             <h5 class="card-title"> 
                 {{ transaction.sender }} 
-                {% if transaction.sender.is_mine %}
                     <a href="{% url 'account_detail' transaction.sender.id %}"><i class="bi bi-box-arrow-up-right"></i></a>
-                {% endif %}
                  &rarr; 
                  {{ transaction.receiver }} 
-                {% if transaction.receiver.is_mine %}
                     <a href="{% url 'account_detail' transaction.receiver.id %}"><i class="bi bi-box-arrow-up-right"></i></a>
-                {% endif %}
             
             </h5>
             <p class="card-text"><i>Datum:</i> <strong>{{ transaction.timestamp|date:"d.m.Y H:i" }} €</strong></p>

@@ -61,7 +61,13 @@
                             {% if t.sender.is_mine and t.receiver.is_mine %}
                                 <i class="bi bi-arrow-left-right fs-4 opacity-75"></i>
                             {% else %}
-                              <i class="{{ t.category.icon|default:'bi bi-tags' }} fs-4 opacity-75"></i>
+                              {% if t.sender.is_mine and t.receiver.icon %}
+                                <img src="{{ t.receiver.icon.url }}" alt="Konto Icon" style="width: 40px; height: 40px; object-fit: contain;">
+                              {% elif t.receiver.is_mine and t.sender.icon %}
+                                <img src="{{ t.sender.icon.url }}" alt="Konto Icon" style="width: 40px; height: 40px; object-fit: contain;">
+                              {% else %}
+                                <i class="{{ t.category.icon|default:'bi bi-tags' }} fs-4 opacity-75"></i>
+                              {% endif %}
                             {% endif %}
                         </div>
 

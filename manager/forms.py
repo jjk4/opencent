@@ -59,12 +59,13 @@ class TransactionForm(forms.ModelForm):
 class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
-        fields = ['name', 'start_balance', 'is_mine']
+        fields = ['name', 'start_balance', 'is_mine', 'icon']
         
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'start_balance': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'is_mine': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'icon': forms.FileInput(attrs={'class': 'form-control'}),
         }
     def clean(self):
         cleaned_data = super().clean()

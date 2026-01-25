@@ -267,7 +267,7 @@ def account_detail(request, account_id):
 @login_required
 def account_add(request):
     if request.method == 'POST':
-        form = AccountForm(request.POST)
+        form = AccountForm(request.POST, request.FILES)
         
         if form.is_valid():
             instance = form.save(commit=False)
@@ -292,7 +292,7 @@ def account_edit(request, account_id):
     if account.user != request.user: # TODO: Fehlermeldung
         return redirect('accounts')
     if request.method == 'POST':
-        form = AccountForm(request.POST, instance=account)
+        form = AccountForm(request.POST, request.FILES, instance=account)
         if form.is_valid():
             form.save()
             return redirect('accounts')

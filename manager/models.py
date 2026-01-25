@@ -1,5 +1,10 @@
 from django.db import models
 from decimal import Decimal, ROUND_HALF_UP
+from io import BytesIO
+from PIL import Image, ImageOps  # Wichtig für Bildbearbeitung
+from django.core.files.base import ContentFile
+import os
+from django.core.validators import FileExtensionValidator
 
 class Transaction(models.Model):
     sender = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='sent_transactions', null=False, blank=False)
@@ -73,13 +78,42 @@ class Account(models.Model):
     start_balance = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     is_mine = models.BooleanField(default=False)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    icon = models.FileField(
+        upload_to='account_icons/', 
+        null=True, 
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'svg'])]
+    )
     
     def get_current_balance(self):
         incoming = Transaction.objects.filter(receiver=self).aggregate(models.Sum('amount'))['amount__sum'] or Decimal(0)
         outgoing = Transaction.objects.filter(sender=self).aggregate(models.Sum('amount'))['amount__sum'] or Decimal(0)
         balance = self.start_balance + incoming - outgoing
         return Decimal(balance).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
-    
+
+    def save(self, *args, **kwargs):
+        if self.icon:
+            is_svg = self.icon.name.lower().endswith('.svg')
+
+            if not is_svg:
+                try:
+                    img = Image.open(self.icon)
+                    if img.format != 'WEBP' or img.width > 128 or img.height > 128:
+                        if img.mode in ("RGBA", "P"):
+                            img = img.convert("RGBA")
+                        else:
+                            img = img.convert("RGB")
+                        img.thumbnail((128, 128), Image.Resampling.LANCZOS)
+                        buffer = BytesIO()
+                        img.save(buffer, format='WEBP', quality=90)
+                        new_filename = os.path.splitext(self.icon.name)[0] + '.webp'
+                        self.icon.save(new_filename, ContentFile(buffer.getvalue()), save=False)
+                
+                except Exception as e:
+                    print(f"Fehler bei der Bildverarbeitung: {e}")
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.name}"
     
