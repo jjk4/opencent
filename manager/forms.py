@@ -24,11 +24,12 @@ class TransactionForm(forms.ModelForm):
         }
     
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         
         # Trennen der auszuwählenden Konten in eigene / fremde
-        my_accounts = Account.objects.filter(is_mine=True).order_by('name')
-        other_accounts = Account.objects.filter(is_mine=False).order_by('name')
+        my_accounts = Account.objects.filter(is_mine=True, user=user).order_by('name')
+        other_accounts = Account.objects.filter(is_mine=False, user=user).order_by('name')
         
         def get_choices(objects):
             return [(obj.id, str(obj)) for obj in objects]

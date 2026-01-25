@@ -155,14 +155,14 @@ def transaction_detail(request, transaction_id):
 @login_required
 def transaction_add(request):
     if request.method == 'POST':
-        form = TransactionForm(request.POST)
+        form = TransactionForm(request.POST, user=request.user)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.user = request.user
             instance.save()
             return redirect('transactions') 
     else:
-        form = TransactionForm(initial={'timestamp': datetime.now()})
+        form = TransactionForm(initial={'timestamp': datetime.now()}, user=request.user)
     
     context = {
         'header_data': {
@@ -179,12 +179,12 @@ def transaction_edit(request, transaction_id):
     if transaction.user != request.user: # TODO: Fehlermeldung
         return redirect('transactions')
     if request.method == 'POST':
-        form = TransactionForm(request.POST, instance=transaction)
+        form = TransactionForm(request.POST, instance=transaction, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('transactions')
     else:
-        form = TransactionForm(instance=transaction)
+        form = TransactionForm(instance=transaction, user=request.user)
     
     context = {
         'header_data': {
