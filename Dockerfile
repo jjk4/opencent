@@ -22,7 +22,12 @@ RUN pip install --no-cache-dir -r requirements.txt
  
 # Stage 2: Production stage
 FROM python:3.13-slim
- 
+
+# Install the runtime library for Postgres
+RUN apt-get update && \
+    apt-get install -y libpq5 netcat-openbsd && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN useradd -m -r appuser && \
    mkdir /app && \
    chown -R appuser /app
@@ -36,7 +41,10 @@ WORKDIR /app
  
 # Copy application code
 COPY --chown=appuser:appuser . .
- 
+
+COPY --chown=appuser:appuser docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
 # Set environment variables to optimize Python
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1 
@@ -46,6 +54,8 @@ USER appuser
  
 # Expose the application port
 EXPOSE 8000 
- 
+
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
+
 # Start the application using Gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "opencent.wsgi:application"]

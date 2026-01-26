@@ -1,0 +1,36 @@
+{% extends 'master.html' %}
+{% block content %}
+{% if superuser_exists %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="alert alert-info text-center" role="alert">
+                <h4 class="alert-heading">Setup abgeschlossen!</h4>
+                <p>Das Setup wurde bereits abgeschlossen!</p>
+                <hr>
+                <a href="/users/login" class="btn btn-primary mt-3">Zum Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Erste Schritte</h4>
+                    <p class="card-text">Willkommen bei OpenCent! Es sieht so aus, als ob Sie OpenCent zum ersten Mal starten. Bitte erstellen Sie ein Superuser-Konto, um fortzufahren zu können.</p>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <input type="text" name="username" class="form-control mb-3" placeholder="Benutzername" required />
+                        <input type="password" name="password" class="form-control mb-3" placeholder="Passwort" required />
+                        <button type="submit" class="btn btn-primary mt-3">Superuser-Konto erstellen</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

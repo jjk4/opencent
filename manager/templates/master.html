@@ -45,9 +45,12 @@
           </form> <div class="dropdown text-end">
             <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle"></i></a> <ul class="dropdown-menu text-small" style="">
               {% if user.is_authenticated %}
+                {% if request.user.is_superuser or request.user.is_staff%}
                 <li>
-                  <a class="dropdown-item" href="#">Einstellungen</a>
-                </li> <li>
+                  <a class="dropdown-item" href="/admin/">Admin-Bereich</a>
+                </li>
+                {% endif %}
+                <li>
                   <hr class="dropdown-divider" />
                 </li> <li>
                   <form method="post" action="{% url 'logout' %}">

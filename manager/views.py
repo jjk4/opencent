@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth.decorators import login_required
 from .models import Transaction, Account, Category
+from django.contrib.auth.models import User
 from .forms import TransactionForm, AccountForm, CategoryForm
 from datetime import datetime, timedelta
 from django.core.serializers.json import DjangoJSONEncoder
@@ -99,6 +100,26 @@ def get_balance_history(request, my_accounts, from_date=None):
         
     return history
 # ---------------------------------------------------------
+def first_run_setup(request):
+    superuser = User.objects.filter(is_superuser=True).first()
+    superuser_exists = superuser is not None
+    if request.method == 'POST':
+        if not superuser_exists:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            User.objects.create_superuser(username=username, password=password, email='')
+            return redirect('/users/login')
+
+    context = {
+        'header_data': {
+            'title': 'Einrichtungsassistent',
+            'selected_tab': 'home',
+        },
+        'superuser_exists': superuser_exists,
+    }
+    
+    return render(request, 'first_run_setup.html', context)
+
 @login_required
 def transactions(request):
     filter = False
