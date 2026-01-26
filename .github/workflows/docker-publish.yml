@@ -1,0 +1,67 @@
+name: Create and publish docker image
+
+on:
+  push:
+    branches: [ "main" ]
+    # Workflow startet auch bei Tags wie v1.0.0
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            # Regel 1: Bei Push auf 'main' Branch -> Tag 'dev'
+            type=raw,value=dev,enable=${{ github.ref == 'refs/heads/main' }}
+            
+            # Regel 2: Bei Git Tags (v1.2.3) -> Tag '1.2.3' und '1.2'
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            
+            # Regel 3: Bei Git Tags -> Tag 'latest'
+            # (Wird NICHT ausgeführt, wenn es nur ein Commit auf main ist)
+            type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/') }}
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
