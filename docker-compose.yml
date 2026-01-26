@@ -10,7 +10,7 @@ services:
    volumes:
      - opencent_db:/var/lib/postgresql
   opencent:
-    image: opencent
+    image: ghcr.io/jjk4/opencent:dev
     ports:
       - "8000:8000"
     environment:
