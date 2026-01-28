@@ -1,5 +1,6 @@
 from django import forms
-from .models import Transaction, Account, Category
+from django.forms import inlineformset_factory, BaseInlineFormSet
+from .models import Transaction, Account, Category, TransactionSplit
 
 class TransactionForm(forms.ModelForm):
     timestamp = forms.DateTimeField(
@@ -13,14 +14,13 @@ class TransactionForm(forms.ModelForm):
     
     class Meta:
         model = Transaction
-        fields = ['sender', 'receiver', 'amount', 'timestamp', 'category', 'description']
+        fields = ['sender', 'receiver', 'amount', 'timestamp', 'description']
         
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'sender': forms.Select(attrs={'class': 'form-select'}),
             'receiver': forms.Select(attrs={'class': 'form-select'}),
-            'category': forms.Select(attrs={'class': 'form-select'}),
         }
     
     def __init__(self, *args, **kwargs):
@@ -56,7 +56,59 @@ class TransactionForm(forms.ModelForm):
              raise forms.ValidationError("Der Betrag darf nicht negativ sein.")
              
         return cleaned_data
-    
+
+class TransactionSplitForm(forms.ModelForm):
+    class Meta:
+        model = TransactionSplit
+        fields = ['category', 'amount']
+        widgets = {
+            'category': forms.Select(attrs={'class': 'form-select'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': 'Betrag'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['category'].queryset = Category.objects.filter(user=user)
+
+
+class BaseTransactionSplitFormSet(BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        
+        if any(self.errors):
+            return
+
+        total_split_amount = 0
+        has_splits = False
+        
+        for form in self.forms:
+            if not form.cleaned_data or form.cleaned_data.get('DELETE'):
+                continue
+            
+            amount = form.cleaned_data.get('amount')
+            if amount:
+                total_split_amount += amount
+                has_splits = True
+
+        transaction_amount = self.instance.amount
+        
+        if has_splits and transaction_amount is not None:
+             if round(total_split_amount, 2) != round(transaction_amount, 2):
+                raise forms.ValidationError(
+                    f"Die Summe der Kategorien ({total_split_amount} €) entspricht nicht dem Gesamtbetrag ({transaction_amount} €)."
+                )
+
+TransactionSplitFormSet = inlineformset_factory(
+    Transaction,
+    TransactionSplit,
+    form=TransactionSplitForm,
+    formset=BaseTransactionSplitFormSet, 
+    extra=1,
+    can_delete=True
+)
+
 class AccountForm(forms.ModelForm):
     class Meta:
         model = Account

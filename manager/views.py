@@ -4,7 +4,7 @@ from django.template import loader
 from django.contrib.auth.decorators import login_required
 from .models import Transaction, Account, Category
 from django.contrib.auth.models import User
-from .forms import TransactionForm, AccountForm, CategoryForm
+from .forms import TransactionForm, AccountForm, CategoryForm, TransactionSplitFormSet
 from datetime import datetime, timedelta
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
@@ -123,7 +123,13 @@ def first_run_setup(request):
 @login_required
 def transactions(request):
     filter = False
-    transaction_list = Transaction.objects.filter(user=request.user).select_related('sender', 'receiver', 'category').prefetch_related('original_transaction_refunds', 'original_transaction_refunds__refund_transaction').all()
+    transaction_list = Transaction.objects.filter(user=request.user).select_related(
+            'sender', 'receiver'
+        ).prefetch_related(
+            'splits__category',
+            'original_transaction_refunds', 
+            'original_transaction_refunds__refund_transaction'
+        ).all()
     filter_accounts = request.GET.getlist('account')
     if filter_accounts:
         filter = True
@@ -142,7 +148,7 @@ def transactions(request):
             for subcat in subcategories:
                 if subcat.id not in category_ids:
                     category_ids.append(subcat.id)
-        transaction_list = transaction_list.filter(category__id__in=category_ids)
+        transaction_list = transaction_list.filter(categories__id__in=category_ids).distinct()
 
     context = {
         'header_data': {
@@ -159,7 +165,10 @@ def transactions(request):
 
 @login_required
 def transaction_detail(request, transaction_id):
-    transaction = Transaction.objects.get(id=transaction_id)
+    transaction = get_object_or_404(
+        Transaction.objects.prefetch_related('splits__category'), 
+        id=transaction_id
+    )
     if transaction.user != request.user: # TODO: Fehlermeldung
         return redirect('transactions')
     context = {
@@ -177,13 +186,22 @@ def transaction_detail(request, transaction_id):
 def transaction_add(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST, user=request.user)
+        formset = TransactionSplitFormSet(request.POST, form_kwargs={'user': request.user})
         if form.is_valid():
-            instance = form.save(commit=False)
-            instance.user = request.user
-            instance.save()
-            return redirect('transactions') 
+            new_transaction = form.save(commit=False)
+            new_transaction.user = request.user
+            formset = TransactionSplitFormSet(
+                request.POST, 
+                instance=new_transaction, 
+                form_kwargs={'user': request.user}
+            )
+            if formset.is_valid():
+                new_transaction.save()
+                formset.save()
+                return redirect('transactions') 
     else:
         form = TransactionForm(initial={'timestamp': datetime.now()}, user=request.user)
+        formset = TransactionSplitFormSet(queryset=Transaction.objects.none(), form_kwargs={'user': request.user})
     
     context = {
         'header_data': {
@@ -191,6 +209,7 @@ def transaction_add(request):
             'selected_tab': 'transactions',
         },
         'form': form,
+        'formset': formset,
     }
     return render(request, 'transactions/add.html', context)
 
@@ -201,11 +220,21 @@ def transaction_edit(request, transaction_id):
         return redirect('transactions')
     if request.method == 'POST':
         form = TransactionForm(request.POST, instance=transaction, user=request.user)
-        if form.is_valid():
+        formset = TransactionSplitFormSet(
+            request.POST, 
+            instance=transaction, 
+            form_kwargs={'user': request.user}
+        )
+        if form.is_valid() and formset.is_valid():
             form.save()
+            formset.save()
             return redirect('transactions')
     else:
         form = TransactionForm(instance=transaction, user=request.user)
+        formset = TransactionSplitFormSet(
+            instance=transaction, 
+            form_kwargs={'user': request.user}
+        )
     
     context = {
         'header_data': {
@@ -213,6 +242,7 @@ def transaction_edit(request, transaction_id):
             'selected_tab': 'transactions',
         },
         'form': form,
+        'formset': formset,
         'is_edit': True
     }
     return render(request, 'transactions/add.html', context)

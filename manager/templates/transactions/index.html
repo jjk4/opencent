@@ -66,7 +66,23 @@
                               {% elif t.receiver.is_mine and t.sender.icon %}
                                 <img src="{{ t.sender.icon.url }}" alt="Konto Icon" style="width: 40px; height: 40px; object-fit: contain;">
                               {% else %}
-                                <i class="{{ t.category.icon|default:'bi bi-tags' }} fs-4 opacity-75"></i>
+                                  {% with split_count=t.splits.all|length %}
+                                  
+                                      {% if split_count > 1 %}
+                                          <i class="bi bi-pie-chart fs-4 opacity-75" 
+                                            title="Mehrere Kategorien: {% for s in t.splits.all %}{{ s.category.name }} ({{ s.amount|floatformat:0 }}€){% if not forloop.last %}, {% endif %}{% endfor %}"
+                                            data-bs-toggle="tooltip">
+                                          </i>
+
+                                      {% elif split_count == 1 %}
+                                          {% with first_split=t.splits.all|first %}
+                                              <i class="{{ first_split.category.icon|default:'bi bi-tags' }} fs-4 opacity-75" 
+                                                title="{{ first_split.category.name }}">
+                                              </i>
+                                          {% endwith %}
+                                      {% endif %}
+                                  
+                                  {% endwith %}
                               {% endif %}
                             {% endif %}
                         </div>

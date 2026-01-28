@@ -1,84 +1,182 @@
 {% extends 'master.html' %}
 
 {% block content %}
-{% if is_edit %}
-    <h1>Transaktion bearbeiten</h1>
-{% else %}
-    <h1>Neue Transaktion</h1>
-{% endif %}
-<form method="post">
-{% csrf_token %}
+<div class="container mt-4">
+    {% if is_edit %}
+        <h1>Transaktion bearbeiten</h1>
+    {% else %}
+        <h1>Neue Transaktion</h1>
+    {% endif %}
+    
+    <form method="post" id="transaction-form">
+    {% csrf_token %}
 
-{% if form.non_field_errors %}
-    <div class="alert alert-danger">
-        {% for error in form.non_field_errors %}
-            {{ error }}
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    {% if formset.non_form_errors %}
+        <div class="alert alert-danger">
+            {{ formset.non_form_errors }}
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Von Konto (Sender)</label>
+            {{ form.sender }}
+            {% if form.sender.errors %}
+                <div class="text-danger small">{{ form.sender.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Nach Konto (Empfänger)</label>
+            {{ form.receiver }}
+            {% if form.receiver.errors %}
+                <div class="text-danger small">{{ form.receiver.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Betrag (€)</label>
+            {{ form.amount }}
+            {% if form.amount.errors %}
+                <div class="text-danger small">{{ form.amount.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Datum & Zeit</label>
+            {{ form.timestamp }} 
+            {% if form.timestamp.errors %}
+                <div class="text-danger small">{{ form.timestamp.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Beschreibung</label>
+        {{ form.description }}
+        {% if form.description.errors %}
+            <div class="text-danger small">{{ form.description.errors }}</div>
+        {% endif %}
+    </div>
+
+    <hr class="my-4">
+
+    <h4>Kategorien & Aufteilung</h4>
+    <p class="text-muted small">Die Summe der Kategorien muss exakt dem Gesamtbetrag entsprechen.</p>
+
+    {{ formset.management_form }}
+
+    <div id="split-form-container">
+        {% for split_form in formset %}
+            <div class="row mb-2 split-row align-items-end">
+                
+                {% for hidden in split_form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                <div class="col-md-6">
+                    <label class="form-label small">Kategorie</label>
+                    {{ split_form.category }}
+                    {% if split_form.category.errors %}
+                        <div class="text-danger small">{{ split_form.category.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="form-label small">Betrag</label>
+                    {{ split_form.amount }}
+                    {% if split_form.amount.errors %}
+                        <div class="text-danger small">{{ split_form.amount.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-2">
+                    {% if formset.can_delete %}
+                        <div class="form-check">
+                            {{ split_form.DELETE }}
+                            <label class="form-check-label small" for="{{ split_form.DELETE.id_for_label }}">
+                                Löschen
+                            </label>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         {% endfor %}
     </div>
-{% endif %}
 
-<div class="row">
-    <div class="col-md-6 mb-3">
-        <label class="form-label">Von Konto (Sender)</label>
-        {{ form.sender }}
-        {% if form.sender.errors %}
-            <div class="text-danger small">{{ form.sender.errors }}</div>
-        {% endif %}
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label">Nach Konto (Empfänger)</label>
-        {{ form.receiver }}
-        {% if form.receiver.errors %}
-            <div class="text-danger small">{{ form.receiver.errors }}</div>
-        {% endif %}
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-4 mb-3">
-        <label class="form-label">Betrag (€)</label>
-        {{ form.amount }}
-        {% if form.amount.errors %}
-            <div class="text-danger small">{{ form.amount.errors }}</div>
-        {% endif %}
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <label class="form-label">Datum & Zeit</label>
-        {{ form.timestamp }} 
-        {% if form.timestamp.errors %}
-            <div class="text-danger small">{{ form.timestamp.errors }}</div>
-        {% endif %}
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <label class="form-label">Kategorie</label>
-        {{ form.category }}
-        {% if form.category.errors %}
-            <div class="text-danger small">{{ form.category.errors }}</div>
-        {% endif %}
-    </div>
-</div>
-
-<div class="mb-3">
-    <label class="form-label">Beschreibung</label>
-    {{ form.description }}
-    {% if form.description.errors %}
-        <div class="text-danger small">{{ form.description.errors }}</div>
-    {% endif %}
-</div>
-
-<div class="d-flex justify-content-end">
-    <a href="{% url 'transactions' %}" class="btn btn-secondary me-2">Abbrechen</a>
-    <button type="submit" class="btn btn-primary">
-        {% if is_edit %}
-            Änderungen speichern
-        {% else %}
-            Transaktion hinzufügen
-        {% endif %}
+    <button type="button" id="add-split-btn" class="btn btn-outline-secondary btn-sm mt-2 mb-4">
+        <i class="bi bi-plus-circle"></i> Weitere Kategorie hinzufügen
     </button>
+
+
+    <div class="d-flex justify-content-end border-top pt-3">
+        <a href="{% url 'transactions' %}" class="btn btn-secondary me-2">Abbrechen</a>
+        <button type="submit" class="btn btn-primary">
+            {% if is_edit %}
+                Änderungen speichern
+            {% else %}
+                Transaktion hinzufügen
+            {% endif %}
+        </button>
+    </div>
+
+    </form>
 </div>
 
-</form>
+<div id="empty-form-template" style="display:none;">
+    <div class="row mb-2 split-row align-items-end">
+        <div class="col-md-6">
+            <label class="form-label small">Kategorie</label>
+            {{ formset.empty_form.category }}
+        </div>
+        <div class="col-md-4">
+            <label class="form-label small">Betrag</label>
+            {{ formset.empty_form.amount }}
+        </div>
+        <div class="col-md-2">
+            {% if formset.can_delete %}
+                <div class="form-check">
+                    {{ formset.empty_form.DELETE }}
+                    <label class="form-check-label small">Löschen</label>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addBtn = document.getElementById('add-split-btn');
+    const container = document.getElementById('split-form-container');
+    const totalFormsInput = document.getElementById('id_splits-TOTAL_FORMS');
+    const template = document.getElementById('empty-form-template');
+
+    addBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        let formCount = parseInt(totalFormsInput.value);
+
+        let newRowHtml = template.innerHTML;
+
+        newRowHtml = newRowHtml.replace(/__prefix__/g, formCount);
+
+        const newDiv = document.createElement('div');
+        newDiv.innerHTML = newRowHtml;
+        
+        while (newDiv.firstChild) {
+            container.appendChild(newDiv.firstChild);
+        }
+
+        totalFormsInput.value = formCount + 1;
+    });
+});
+</script>
+
 {% endblock %}

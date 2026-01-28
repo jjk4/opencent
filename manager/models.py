@@ -12,8 +12,13 @@ class Transaction(models.Model):
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     timestamp = models.DateTimeField()
     description = models.TextField(blank=True, null=True)
-    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    categories = models.ManyToManyField(
+        'Category', 
+        through='TransactionSplit',
+        related_name='transactions',
+        blank=True
+    )
     
     def __str__(self):
         return f"{self.sender.name} -> {self.receiver.name}: {self.amount} €"
@@ -61,9 +66,39 @@ class Transaction(models.Model):
         """Prüft, ob der erstattete Betrag >= dem ursprünglichen Betrag ist"""
         return self.total_refunded_amount >= self.amount
     
+    # Helper functions for categories
+    @property
+    def assigned_amount(self):
+        """Summe aller Kategorien-Splits"""
+        return self.splits.aggregate(sum=models.Sum('amount'))['sum'] or Decimal(0)
+
+    @property
+    def unassigned_amount(self):
+        """Wieviel vom Betrag ist noch keiner Kategorie zugeordnet?"""
+        remainder = self.amount - self.assigned_amount
+        return max(Decimal(0), remainder)
+
+    @property
+    def is_fully_categorized(self):
+        """Prüft, ob die Summe der Splits exakt dem Transaktionsbetrag entspricht"""
+        return self.amount == self.assigned_amount
+    
     class Meta:
         ordering = ['-timestamp']
-        
+
+class TransactionSplit(models.Model):
+    transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE, related_name='splits')
+    category = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='transaction_splits')
+    amount = models.DecimalField(decimal_places=2, max_digits=10)
+    
+    class Meta:
+        unique_together = ('transaction', 'category')
+        verbose_name = "Transaction Split"
+        verbose_name_plural = "Transaction Splits"
+
+    def __str__(self):
+        return f"{self.transaction.id} - {self.category.name}: {self.amount} €"
+
 class Refund(models.Model):
     original_transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE, related_name='original_transaction_refunds')
     refund_transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE, related_name='refund_transaction_refunds')
