@@ -45,6 +45,9 @@ COPY --chown=appuser:appuser . .
 COPY --chown=appuser:appuser docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh
 
+# Set permissions for /app/media directory
+RUN mkdir -p /app/media && chown -R appuser:appuser /app/media
+
 # Set environment variables to optimize Python
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1 
