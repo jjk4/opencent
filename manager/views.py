@@ -528,39 +528,74 @@ def chart_sankey(request):
         end_date = timerange[1]
         
         account_selected = request.POST.get('account') and request.POST.get('account') != 'all'
-        transactions = chart_transactions(request, start_date, end_date, account_selected)
-        # Income by category
+        
+        transactions = chart_transactions(request, start_date, end_date, account_selected).prefetch_related('splits__category')
+
         income_by_category = {-2: {'name': 'Nicht kategorisiert', 'amount': 0, 'parent': None}}
         total_income = 0
         for t in transactions:
-            if t.receiver.is_mine and t.sender.is_mine == False and t.is_refund ==False and t.has_refunds == False: # TODO: Calculate refunds correctly
-                if t.category is not None:
-                    if t.category.id not in income_by_category:
-                        income_by_category[t.category.id] = {'name': t.category.name, 'amount': 0, 'parent': t.category.parent_category.id if t.category.parent_category else None}
-                    income_by_category[t.category.id]["amount"] += t.amount
-                else:
-                    income_by_category[-2]["amount"] += t.amount
+            if t.receiver.is_mine and not t.sender.is_mine and not t.is_refund and not t.has_refunds:
+                
+                splits_sum = 0
+                
+                for split in t.splits.all():
+                    amount = split.amount
+                    splits_sum += amount
+                    cat = split.category
+                    
+                    if cat.id not in income_by_category:
+                        income_by_category[cat.id] = {
+                            'name': cat.name, 
+                            'amount': 0, 
+                            'parent': cat.parent_category.id if cat.parent_category else None
+                        }
+                    income_by_category[cat.id]["amount"] += amount
+                
+                remainder = t.amount - splits_sum
+                if remainder > 0:
+                    income_by_category[-2]["amount"] += remainder
+
                 total_income += t.amount
                 
-        # Expenses by category
         expenses_by_category = {-1: {'name': 'Nicht kategorisiert', 'amount': 0, 'parent': None}}
         total_expenses = 0
+        
         for t in transactions:
-            if t.receiver.is_mine == False and t.sender.is_mine and t.is_refund ==False and t.has_refunds == False: # TODO: Calculate refunds correctly
-                if t.category is not None:
-                    if t.category.id not in expenses_by_category:
-                        expenses_by_category[t.category.id] = {'name': t.category.name, 'amount': 0, 'parent': t.category.parent_category.id if t.category.parent_category else None}
-                    expenses_by_category[t.category.id]["amount"] += t.amount
-                    # Add Expenses to parent
-                    if expenses_by_category[t.category.id]["parent"] is not None:
-                        if expenses_by_category[t.category.id]["parent"] not in expenses_by_category:
-                            category = Category.objects.get(id=expenses_by_category[t.category.id]["parent"])
-                            expenses_by_category[expenses_by_category[t.category.id]["parent"]] = {'name': category.name, 'amount': 0, 'parent': category.parent_category.id if category.parent_category else None}
-                        expenses_by_category[expenses_by_category[t.category.id]["parent"]]["amount"] += t.amount
-                else:
-                    expenses_by_category[-1]["amount"] += t.amount
+            if not t.receiver.is_mine and t.sender.is_mine and not t.is_refund and not t.has_refunds:
+                
+                splits_sum = 0
+                
+                for split in t.splits.all():
+                    amount = split.amount
+                    splits_sum += amount
+                    cat = split.category
+                    
+                    if cat.id not in expenses_by_category:
+                        expenses_by_category[cat.id] = {
+                            'name': cat.name, 
+                            'amount': 0, 
+                            'parent': cat.parent_category.id if cat.parent_category else None
+                        }
+                    expenses_by_category[cat.id]["amount"] += amount
+
+                    if expenses_by_category[cat.id]["parent"] is not None:
+                        parent_id = expenses_by_category[cat.id]["parent"]
+                        
+                        if parent_id not in expenses_by_category:
+                            parent_obj = cat.parent_category
+                            expenses_by_category[parent_id] = {
+                                'name': parent_obj.name, 
+                                'amount': 0, 
+                                'parent': parent_obj.parent_category.id if parent_obj.parent_category else None
+                            }
+                        
+                        expenses_by_category[parent_id]["amount"] += amount
+
+                remainder = t.amount - splits_sum
+                if remainder > 0:
+                    expenses_by_category[-1]["amount"] += remainder
+
                 total_expenses += t.amount
-            
 
     else:
         total_income = 0
@@ -570,7 +605,7 @@ def chart_sankey(request):
     
     income_by_category = dict(sorted(income_by_category.items(), key=lambda item: item[1]['amount'], reverse=True))
     expenses_by_category = dict(sorted(expenses_by_category.items(), key=lambda item: item[1]['amount'], reverse=True))
-    print(total_expenses)
+    
     context = {
         'header_data': {
             'title': "Diagramme",
