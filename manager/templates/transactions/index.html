@@ -94,12 +94,12 @@
                                 {% endif %}
                                 
                                 {{ t.description|default:t.receiver }}
-                                
-                                {% if t.is_fully_refunded %}
-                                    <span class="badge bg-secondary ms-2">Erstattet</span>
-                                
-                                {% elif t.has_refunds %}
+                                {% if t.has_refunds %}
+                                  {% if t.is_fully_refunded %}
+                                      <span class="badge bg-secondary ms-2">Erstattet</span>
+                                  {% else %}
                                     <span class="badge bg-secondary ms-2">Teil-Erstattet</span>
+                                  {% endif %}
                                 {% endif %}
                             </div>
                             <small class="opacity-75">{{ t.sender.name }} &rarr; {{ t.receiver.name }}</small>
@@ -108,10 +108,10 @@
                     
                     <span class="fw-bold text-nowrap ms-3">
                       {% if t.has_refunds %}
-                        {% if t.remainder_of_refund == 0 %}  
+                        {% if t.remainder_after_refunds == 0 %}  
                           {{ t.amount }} €
                         {% else %}
-                          {{ t.total_amount_after_refunds }} € <span class="text-decoration-line-through text-muted small">{{ t.amount }} €</span>
+                          {{ t.remainder_after_refunds }} € <span class="text-decoration-line-through text-muted small">{{ t.amount }} €</span>
                         {% endif %}
                       {% elif t.is_refund %}
                         {{ t.remainder_of_refund }} € <span class="text-decoration-line-through text-muted small">{{ t.amount }} €</span>

@@ -13,6 +13,9 @@ class Transaction(models.Model):
     timestamp = models.DateTimeField()
     description = models.TextField(blank=True, null=True)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    remainder_of_refund = models.DecimalField(decimal_places=2, max_digits=10, default=0) # After calculation of all refunds, how much of the refunded amount is left
+    remainder_after_refunds = models.DecimalField(decimal_places=2, max_digits=10, default=0) # After calculation of all refunds, how much of the original amount is left
+
     categories = models.ManyToManyField(
         'Category', 
         through='TransactionSplit',
@@ -39,32 +42,32 @@ class Transaction(models.Model):
     def has_refunds(self):
         return self.original_transaction_refunds.exists()
     
-    @property
-    def remainder_of_refund(self):
-        """Berechnet den Rest einer Rückerstattungstransaktion, der nach der Rückerstattung noch übrig ist"""
-        amount = self.amount - sum(r.original_transaction.amount for r in self.refund_transaction_refunds.all())
-        if amount < 0:
-            return 0
-        else:
-            return amount
+    # @property
+    # def remainder_of_refund(self):
+    #     """Berechnet den Rest einer Rückerstattungstransaktion, der nach der Rückerstattung noch übrig ist"""
+    #     amount = self.amount - sum(r.original_transaction.amount for r in self.refund_transaction_refunds.all())
+    #     if amount < 0:
+    #         return 0
+    #     else:
+    #         return amount
 
-    @property
-    def total_refunded_amount(self):
-        """Berechnet die Summe aller Erstattungen für diese Transaktion"""
-        return sum(r.refund_transaction.amount for r in self.original_transaction_refunds.all())
+    # @property
+    # def total_refunded_amount(self):
+    #     """Berechnet die Summe aller Erstattungen für diese Transaktion"""
+    #     return sum(r.refund_transaction.amount for r in self.original_transaction_refunds.all())
 
-    @property
-    def total_amount_after_refunds(self):
-        amount = self.amount - self.total_refunded_amount
-        if amount < 0:
-            return 0
-        else:
-            return amount
+    # @property
+    # def total_amount_after_refunds(self):
+    #     amount = self.amount - self.total_refunded_amount
+    #     if amount < 0:
+    #         return 0
+    #     else:
+    #         return amount
 
     @property
     def is_fully_refunded(self):
-        """Prüft, ob der erstattete Betrag >= dem ursprünglichen Betrag ist"""
-        return self.total_refunded_amount >= self.amount
+        return self.remainder_after_refunds == 0
+
     
     # Helper functions for categories
     @property

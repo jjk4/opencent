@@ -9,7 +9,7 @@ class TransactionSplitInline(admin.TabularInline):
 # Register your models here.
 
 class TransactionAdmin(admin.ModelAdmin):
-  list_display = ('id', 'sender', 'receiver', 'amount', 'timestamp', 'description', 'is_refund', 'user','is_fully_categorized')
+  list_display = ('id', 'sender', 'receiver', 'amount', 'timestamp', 'description', 'is_refund', 'user','is_fully_categorized', 'remainder_of_refund', 'remainder_after_refunds')
   inlines = [TransactionSplitInline]
 
 admin.site.register(Transaction, TransactionAdmin)

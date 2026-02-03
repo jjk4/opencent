@@ -99,6 +99,33 @@ def get_balance_history(request, my_accounts, from_date=None):
         })
         
     return history
+
+def calculate_refunds(request):
+    reset_transactions = []
+    refund_transactions = Transaction.objects.filter(user=request.user)
+    for transaction in refund_transactions:
+        if transaction.is_refund:
+            transaction.remainder_of_refund = transaction.amount
+            transaction.remainder_after_refunds = 0
+            for refund in transaction.is_refund_of:
+                if refund.original_transaction.id not in reset_transactions:
+                    reset_transactions.append(refund.original_transaction.id)
+                    refund.original_transaction.remainder_after_refunds = refund.original_transaction.amount
+                    refund.original_transaction.remainder_of_refund = 0
+                if refund.original_transaction.remainder_after_refunds >= transaction.remainder_of_refund:
+                    refund.original_transaction.remainder_after_refunds -= transaction.remainder_of_refund
+                    transaction.remainder_of_refund = 0
+                else:
+                    transaction.remainder_of_refund -= refund.original_transaction.remainder_after_refunds
+                    refund.original_transaction.remainder_after_refunds = 0
+                refund.original_transaction.save()
+            transaction.save()
+        else:
+            if transaction.id not in reset_transactions:
+                transaction.remainder_after_refunds = transaction.amount
+                transaction.remainder_of_refund = 0
+                transaction.save()
+    return
 # ---------------------------------------------------------
 def first_run_setup(request):
     superuser = User.objects.filter(is_superuser=True).first()
@@ -198,6 +225,7 @@ def transaction_add(request):
             if formset.is_valid():
                 new_transaction.save()
                 formset.save()
+                calculate_refunds(request)
                 return redirect('transactions') 
     else:
         form = TransactionForm(initial={'timestamp': datetime.now()}, user=request.user)
@@ -228,6 +256,7 @@ def transaction_edit(request, transaction_id):
         if form.is_valid() and formset.is_valid():
             form.save()
             formset.save()
+            calculate_refunds(request)
             return redirect('transactions')
     else:
         form = TransactionForm(instance=transaction, user=request.user)
@@ -254,6 +283,7 @@ def transaction_delete(request, transaction_id):
         return redirect('transactions')
     if request.method == 'POST':
         transaction.delete()
+        calculate_refunds(request)
         return redirect('transactions')
         
     context = {
@@ -532,70 +562,75 @@ def chart_sankey(request):
         transactions = chart_transactions(request, start_date, end_date, account_selected).prefetch_related('splits__category')
 
         income_by_category = {-2: {'name': 'Nicht kategorisiert', 'amount': 0, 'parent': None}}
-        total_income = 0
-        for t in transactions:
-            if t.receiver.is_mine and not t.sender.is_mine and not t.is_refund and not t.has_refunds:
-                
-                splits_sum = 0
-                
-                for split in t.splits.all():
-                    amount = split.amount
-                    splits_sum += amount
-                    cat = split.category
-                    
-                    if cat.id not in income_by_category:
-                        income_by_category[cat.id] = {
-                            'name': cat.name, 
-                            'amount': 0, 
-                            'parent': cat.parent_category.id if cat.parent_category else None
-                        }
-                    income_by_category[cat.id]["amount"] += amount
-                
-                remainder = t.amount - splits_sum
-                if remainder > 0:
-                    income_by_category[-2]["amount"] += remainder
-
-                total_income += t.amount
-                
         expenses_by_category = {-1: {'name': 'Nicht kategorisiert', 'amount': 0, 'parent': None}}
+        
+        total_income = 0
         total_expenses = 0
         
         for t in transactions:
-            if not t.receiver.is_mine and t.sender.is_mine and not t.is_refund and not t.has_refunds:
+            effective_amount = t.amount
+
+            if t.has_refunds:
+                effective_amount = t.remainder_after_refunds
                 
-                splits_sum = 0
+            elif t.is_refund:
+                effective_amount = t.remainder_of_refund
+
+            if effective_amount == 0:
+                continue
+
+            scale_factor = effective_amount / t.amount if t.amount > 0 else 0
+
+
+            is_income = t.receiver.is_mine and not t.sender.is_mine
+            is_expense = not t.receiver.is_mine and t.sender.is_mine
+            
+            target_dict = None
+            if is_income:
+                target_dict = income_by_category
+                total_income += effective_amount
+            elif is_expense:
+                target_dict = expenses_by_category
+                total_expenses += effective_amount
+            else:
+                continue
+
+
+            splits_sum_original = 0
+            
+            for split in t.splits.all():
+                splits_sum_original += split.amount
                 
-                for split in t.splits.all():
-                    amount = split.amount
-                    splits_sum += amount
-                    cat = split.category
-                    
-                    if cat.id not in expenses_by_category:
-                        expenses_by_category[cat.id] = {
-                            'name': cat.name, 
+                adjusted_split_amount = split.amount * scale_factor
+                
+                cat = split.category
+                
+                if cat.id not in target_dict:
+                    target_dict[cat.id] = {
+                        'name': cat.name, 
+                        'amount': 0, 
+                        'parent': cat.parent_category.id if cat.parent_category else None
+                    }
+                
+                target_dict[cat.id]["amount"] += adjusted_split_amount
+
+                if is_expense and target_dict[cat.id]["parent"] is not None:
+                    parent_id = target_dict[cat.id]["parent"]
+                    if parent_id not in target_dict:
+                        parent_obj = cat.parent_category
+                        target_dict[parent_id] = {
+                            'name': parent_obj.name, 
                             'amount': 0, 
-                            'parent': cat.parent_category.id if cat.parent_category else None
+                            'parent': parent_obj.parent_category.id if parent_obj.parent_category else None
                         }
-                    expenses_by_category[cat.id]["amount"] += amount
+                    target_dict[parent_id]["amount"] += adjusted_split_amount
 
-                    if expenses_by_category[cat.id]["parent"] is not None:
-                        parent_id = expenses_by_category[cat.id]["parent"]
-                        
-                        if parent_id not in expenses_by_category:
-                            parent_obj = cat.parent_category
-                            expenses_by_category[parent_id] = {
-                                'name': parent_obj.name, 
-                                'amount': 0, 
-                                'parent': parent_obj.parent_category.id if parent_obj.parent_category else None
-                            }
-                        
-                        expenses_by_category[parent_id]["amount"] += amount
-
-                remainder = t.amount - splits_sum
-                if remainder > 0:
-                    expenses_by_category[-1]["amount"] += remainder
-
-                total_expenses += t.amount
+            uncategorized_original = t.amount - splits_sum_original
+            
+            if uncategorized_original > 0:
+                adjusted_uncategorized = uncategorized_original * scale_factor
+                uncat_key = -2 if is_income else -1
+                target_dict[uncat_key]["amount"] += adjusted_uncategorized
 
     else:
         total_income = 0
@@ -616,7 +651,6 @@ def chart_sankey(request):
         'expenses_by_category': expenses_by_category,
         'total_expenses': total_expenses,
         'total_income': total_income,
-        
     }
     return HttpResponse(template.render(context, request))
 
