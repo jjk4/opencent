@@ -297,9 +297,10 @@ def transaction_delete(request, transaction_id):
 
 @login_required
 def homepage(request):
-    account_list = Account.objects.filter(is_mine=True, user=request.user)
+    all_accounts = Account.objects.filter(is_mine=True, user=request.user)
+    account_list = all_accounts.filter(is_closed=False)
     
-    total_balance = sum(acc.get_current_balance() for acc in account_list)
+    total_balance = sum(acc.get_current_balance() for acc in all_accounts)
 
     today_last_year = datetime.now() - timedelta(days=365)
     
@@ -320,7 +321,7 @@ def homepage(request):
 
 @login_required
 def accounts(request):
-    account_list = Account.objects.filter(is_mine=True, user=request.user)
+    account_list = Account.objects.filter(user=request.user)
     context = {
         'header_data': {
             'title': 'Konten',

@@ -39,6 +39,13 @@
     {% endif %}
 </div>
 <div class="mb-3">
+    <label class="form-label">Konto geschlossen?</label>
+    {{ form.is_closed }}
+    {% if form.is_closed.errors %}
+        <div class="text-danger small">{{ form.is_closed.errors }}</div>
+    {% endif %}
+</div>
+<div class="mb-3">
     <label class="form-label">Konto-Icon (Optional)</label>
     
     {% if form.instance.icon %}

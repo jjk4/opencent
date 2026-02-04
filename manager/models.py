@@ -115,6 +115,7 @@ class Account(models.Model):
     iban = models.CharField(max_length=34, unique=True, null=True, blank=True)
     start_balance = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     is_mine = models.BooleanField(default=False)
+    is_closed = models.BooleanField(default=False)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     icon = models.FileField(
         upload_to='account_icons/', 

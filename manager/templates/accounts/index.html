@@ -3,6 +3,8 @@
 {% block content %}
 <h1>Kontenübersicht</h1>
 <a href="{% url 'account_add' %}" class="btn btn-primary mb-3">Neues Konto hinzufügen</a>
+
+<h3>Meine aktiven Konten:</h3>
 <table class="table table-hover align-middle">
     <thead>
         <tr>
@@ -13,20 +15,79 @@
     </thead>
     <tbody>
         {% for account in accounts %}
-        {% with balance=account.get_current_balance %}
-            <tr>
-                <td><a href="{% url 'account_detail' account.id %}">{{ account.name }}</a></td>
-                <td>{{ account.iban|default:"-" }}</td>
-                <td class="text-end
-                    {% if balance > 0 %}
-                        text-success
-                    {% elif balance < 0 %}
-                        text-danger
-                    {% endif %}">
-                    {{ balance|floatformat:2|intcomma }} €
-                </td>
-            </tr>
-        {% endwith %}
+        {% if account.is_mine and not account.is_closed%}
+            {% with balance=account.get_current_balance %}
+                <tr>
+                    <td><a href="{% url 'account_detail' account.id %}">{{ account.name }}</a></td>
+                    <td>{{ account.iban|default:"-" }}</td>
+                    <td class="text-end
+                        {% if balance > 0 %}
+                            text-success
+                        {% elif balance < 0 %}
+                            text-danger
+                        {% endif %}">
+                        {{ balance|floatformat:2|intcomma }} €
+                    </td>
+                </tr>
+            {% endwith %}
+        {% endif %}
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">Keine Konten gefunden.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h3 class="mt-5">Meine geschlossenen Konten:</h3>
+<table class="table table-hover align-middle">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>IBAN</th>
+            <th class="text-end">Aktueller Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for account in accounts %}
+        {% if account.is_mine and account.is_closed%}
+            {% with balance=account.get_current_balance %}
+                <tr>
+                    <td><a href="{% url 'account_detail' account.id %}">{{ account.name }}</a></td>
+                    <td>{{ account.iban|default:"-" }}</td>
+                    <td class="text-end
+                        {% if balance > 0 %}
+                            text-success
+                        {% elif balance < 0 %}
+                            text-danger
+                        {% endif %}">
+                        {{ balance|floatformat:2|intcomma }} €
+                    </td>
+                </tr>
+            {% endwith %}
+        {% endif %}
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">Keine Konten gefunden.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h3 class="mt-5">Fremde Konten:</h3>
+<table class="table table-hover align-middle">
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for account in accounts %}
+        {% if not account.is_mine%}
+            {% with balance=account.get_current_balance %}
+                <tr>
+                    <td><a href="{% url 'account_detail' account.id %}">{{ account.name }}</a></td>
+                </tr>
+            {% endwith %}
+        {% endif %}
         {% empty %}
         <tr>
             <td colspan="5" class="text-center">Keine Konten gefunden.</td>
