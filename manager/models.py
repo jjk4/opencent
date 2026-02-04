@@ -7,8 +7,8 @@ import os
 from django.core.validators import FileExtensionValidator
 
 class Transaction(models.Model):
-    sender = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='sent_transactions', null=False, blank=False)
-    receiver = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='received_transactions', null=False, blank=False)
+    sender = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='sent_transactions', null=False, blank=False, db_index=True)
+    receiver = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='received_transactions', null=False, blank=False, db_index=True)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     timestamp = models.DateTimeField()
     description = models.TextField(blank=True, null=True)
@@ -41,28 +41,6 @@ class Transaction(models.Model):
     @property
     def has_refunds(self):
         return self.original_transaction_refunds.exists()
-    
-    # @property
-    # def remainder_of_refund(self):
-    #     """Berechnet den Rest einer Rückerstattungstransaktion, der nach der Rückerstattung noch übrig ist"""
-    #     amount = self.amount - sum(r.original_transaction.amount for r in self.refund_transaction_refunds.all())
-    #     if amount < 0:
-    #         return 0
-    #     else:
-    #         return amount
-
-    # @property
-    # def total_refunded_amount(self):
-    #     """Berechnet die Summe aller Erstattungen für diese Transaktion"""
-    #     return sum(r.refund_transaction.amount for r in self.original_transaction_refunds.all())
-
-    # @property
-    # def total_amount_after_refunds(self):
-    #     amount = self.amount - self.total_refunded_amount
-    #     if amount < 0:
-    #         return 0
-    #     else:
-    #         return amount
 
     @property
     def is_fully_refunded(self):

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth.decorators import login_required
-from .models import Transaction, Account, Category
+from .models import Transaction, Account, Category, Refund
 from django.contrib.auth.models import User
 from .forms import TransactionForm, AccountForm, CategoryForm, TransactionSplitFormSet
 from datetime import datetime, timedelta
@@ -126,6 +126,19 @@ def calculate_refunds(request):
                 transaction.remainder_of_refund = 0
                 transaction.save()
     return
+
+def handle_refund_save(transaction, form):
+    is_refund = form.cleaned_data.get('is_refund')
+    refund_links = form.cleaned_data.get('refund_links')
+    
+    Refund.objects.filter(refund_transaction=transaction).delete()
+    
+    if is_refund and refund_links:
+        for original in refund_links:
+            Refund.objects.create(
+                original_transaction=original,
+                refund_transaction=transaction
+            )
 # ---------------------------------------------------------
 def first_run_setup(request):
     superuser = User.objects.filter(is_superuser=True).first()
@@ -225,6 +238,7 @@ def transaction_add(request):
             if formset.is_valid():
                 new_transaction.save()
                 formset.save()
+                handle_refund_save(new_transaction, form)
                 calculate_refunds(request)
                 return redirect('transactions') 
     else:
@@ -256,6 +270,7 @@ def transaction_edit(request, transaction_id):
         if form.is_valid() and formset.is_valid():
             form.save()
             formset.save()
+            handle_refund_save(transaction, form)
             calculate_refunds(request)
             return redirect('transactions')
     else:

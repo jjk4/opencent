@@ -3,6 +3,19 @@ from django.forms import inlineformset_factory, BaseInlineFormSet
 from .models import Transaction, Account, Category, TransactionSplit
 
 class TransactionForm(forms.ModelForm):
+    is_refund = forms.BooleanField(
+        label="Ist eine Rückerstattung", 
+        required=False, 
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
+    
+    refund_links = forms.ModelMultipleChoiceField(
+        queryset=Transaction.objects.none(),
+        required=False,
+        label="Ursprüngliche Transaktion(en)",
+        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5'})
+    )
+
     timestamp = forms.DateTimeField(
         label="Datum & Zeit",
         widget=forms.DateTimeInput(
@@ -43,17 +56,37 @@ class TransactionForm(forms.ModelForm):
         self.fields['sender'].choices = grouped_choices
         self.fields['receiver'].choices = grouped_choices
 
+        if user:
+            qs = Transaction.objects.filter(user=user).order_by('-timestamp')
+            
+            if self.instance.pk:
+                qs = qs.exclude(pk=self.instance.pk)
+                
+                has_refunds = self.instance.refund_transaction_refunds.exists()
+                self.fields['is_refund'].initial = has_refunds
+                
+                if has_refunds:
+                    existing_refs = self.instance.refund_transaction_refunds.values_list('original_transaction_id', flat=True)
+                    self.fields['refund_links'].initial = existing_refs
+
+            self.fields['refund_links'].queryset = qs
+
     def clean(self):
         cleaned_data = super().clean()
         sender = cleaned_data.get('sender')
         receiver = cleaned_data.get('receiver')
         amount = cleaned_data.get('amount')
+        is_refund = cleaned_data.get('is_refund')
+        refund_links = cleaned_data.get('refund_links')
 
         if sender == receiver:
             raise forms.ValidationError("Sender und Empfänger können nicht identisch sein.")
             
         if amount and amount < 0:
              raise forms.ValidationError("Der Betrag darf nicht negativ sein.")
+        
+        if is_refund and not refund_links:
+            self.add_error('refund_links', "Bitte wählen Sie mindestens eine ursprüngliche Transaktion aus.")
              
         return cleaned_data
 

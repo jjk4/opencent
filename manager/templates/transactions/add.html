@@ -65,6 +65,30 @@
             <div class="text-danger small">{{ form.description.errors }}</div>
         {% endif %}
     </div>
+    <hr class="my-4">
+
+    <h4>Rückerstattung</h4>
+    <p class="text-muted small">Ist dieser Betrag eine Rückzahlung für eine frühere Ausgabe?</p>
+
+    <div class="mb-3">
+        <div class="form-check">
+            {{ form.is_refund }}
+            <label class="form-check-label" for="{{ form.is_refund.id_for_label }}">
+                Diese Transaktion als Rückerstattung markieren
+            </label>
+        </div>
+    </div>
+
+    <div id="refund-selection-container" style="display: none;" class="mb-3">
+        <label class="form-label small">Ursprüngliche Transaktion(en)</label>
+        {{ form.refund_links }}
+        <div class="form-text text-muted small">
+            Halten Sie Strg (Windows) oder Cmd (Mac) gedrückt, um mehrere Transaktionen auszuwählen.
+        </div>
+        {% if form.refund_links.errors %}
+            <div class="text-danger small">{{ form.refund_links.errors }}</div>
+        {% endif %}
+    </div>
 
     <hr class="my-4">
 
@@ -176,6 +200,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
         totalFormsInput.value = formCount + 1;
     });
+
+    const refundCheckbox = document.getElementById('{{ form.is_refund.id_for_label }}');
+    const refundContainer = document.getElementById('refund-selection-container');
+
+    function toggleRefundContainer() {
+        if (refundCheckbox.checked) {
+            refundContainer.style.display = 'block';
+        } else {
+            refundContainer.style.display = 'none';
+        }
+    }
+
+    if (refundCheckbox) {
+        toggleRefundContainer();
+        refundCheckbox.addEventListener('change', toggleRefundContainer);
+    }
 });
 </script>
 
