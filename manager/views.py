@@ -102,6 +102,8 @@ def get_balance_history(request, my_accounts, from_date=None):
     return history
 
 def calculate_refunds(request):
+    print("Calculating refunds...")
+    print("----------------------")
     reset_transactions = []
     refund_transactions = Transaction.objects.filter(user=request.user)
     for transaction in refund_transactions:
@@ -247,7 +249,8 @@ def transaction_add(request):
                 new_transaction.save()
                 formset.save()
                 handle_refund_save(new_transaction, form)
-                calculate_refunds(request)
+                if form.cleaned_data.get('is_refund'):
+                    calculate_refunds(request)
                 return redirect('transactions') 
     else:
         form = TransactionForm(initial={'timestamp': datetime.now()}, user=request.user)
@@ -279,7 +282,8 @@ def transaction_edit(request, transaction_id):
             form.save()
             formset.save()
             handle_refund_save(transaction, form)
-            calculate_refunds(request)
+            if transaction.is_refund or transaction.has_refunds or form.cleaned_data.get('is_refund'):
+                calculate_refunds(request)
             return redirect('transactions')
     else:
         form = TransactionForm(instance=transaction, user=request.user)
@@ -305,8 +309,13 @@ def transaction_delete(request, transaction_id):
     if transaction.user != request.user: # TODO: Fehlermeldung
         return redirect('transactions')
     if request.method == 'POST':
+        if transaction.is_refund or transaction.has_refunds:
+            recalculate_refunds = True
+        else:
+            recalculate_refunds = False
         transaction.delete()
-        calculate_refunds(request)
+        if recalculate_refunds:
+            calculate_refunds(request)
         return redirect('transactions')
         
     context = {
