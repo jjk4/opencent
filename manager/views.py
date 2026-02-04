@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .models import Transaction, Account, Category, Refund
 from django.contrib.auth.models import User
@@ -162,24 +163,24 @@ def first_run_setup(request):
 
 @login_required
 def transactions(request):
-    filter = False
+    is_filter_active = False
     transaction_list = Transaction.objects.filter(user=request.user).select_related(
             'sender', 'receiver'
         ).prefetch_related(
             'splits__category',
             'original_transaction_refunds', 
             'original_transaction_refunds__refund_transaction'
-        ).all()
+        ).order_by('-timestamp')
     filter_accounts = request.GET.getlist('account')
     if filter_accounts:
-        filter = True
+        is_filter_active = True
         transaction_list = transaction_list.filter(
             Q(sender__id__in=filter_accounts) | Q(receiver__id__in=filter_accounts)
         )
 
     filter_categories = request.GET.getlist('category')
     if filter_categories:
-        filter = True
+        is_filter_active = True
         category_ids = []
         for cat_id in filter_categories:
             category_ids.append(int(cat_id))
@@ -190,7 +191,11 @@ def transactions(request):
                     category_ids.append(subcat.id)
         transaction_list = transaction_list.filter(categories__id__in=category_ids).distinct()
 
+    paginator = Paginator(transaction_list, 100)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
+        'page_obj': page_obj,
         'header_data': {
             'title': 'Transaktionen',
             'selected_tab': 'transactions',
@@ -198,8 +203,11 @@ def transactions(request):
         'transaction_list': transaction_list,
         'my_accounts': Account.objects.filter(is_mine=True, user=request.user),
         'show_refunds': request.GET.get('refunds') == 'on',
-        'filter': filter,
+        'is_filter_active': is_filter_active,
+        'last_month_grouper': request.GET.get('last_month'),
     }
+    if request.headers.get('HX-Request'):
+        return render(request, 'transactions/_transaction_list_partial.html', context)
     
     return render(request, 'transactions/index.html', context)
 
