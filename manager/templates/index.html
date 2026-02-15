@@ -50,7 +50,11 @@
                                     <h5 class="card-title fw-bold mb-1">{{ account.name }}</h5>
                                     <p class="card-text small opacity-75 mb-0">{{ account.account_nr|default:"" }}</p>
                                 </div>
-                                <i class="bi bi-wallet2 fs-4 opacity-50"></i>
+                                {% if account.icon %}
+                                    <img src="{{ account.icon.url }}" alt="Konto Icon" style="width: 40px; height: 40px; object-fit: contain;">
+                                {% else %}
+                                    <i class="bi bi-wallet2 fs-4 opacity-50"></i>
+                                {% endif %}
                             </div>
                             
                             <hr class="opacity-25 my-3">
