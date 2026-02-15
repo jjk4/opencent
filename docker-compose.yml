@@ -1,14 +1,16 @@
 services:
   opencent-db:
-   image: postgres:18
-   environment:
-     POSTGRES_DB: ${DATABASE_NAME}
-     POSTGRES_USER: ${DATABASE_USERNAME}
-     POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-   ports:
-     - "5432:5432"
-   volumes:
-     - opencent_db:/var/lib/postgresql
+    image: postgres:18
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - opencent_db:/var/lib/postgresql
+    restart: unless-stopped
+
   opencent:
     image: ghcr.io/jjk4/opencent:dev
     ports:
@@ -25,6 +27,7 @@ services:
       - opencent-db
     volumes:
       - opencent_media:/app/media
+    restart: unless-stopped
 
 volumes:
   opencent_db:
