@@ -90,7 +90,7 @@ class Refund(models.Model):
 
 class Account(models.Model):
     name = models.CharField(max_length=100)
-    iban = models.CharField(max_length=34, unique=True, null=True, blank=True)
+    account_nr = models.CharField(max_length=34, unique=True, null=True, blank=True)
     start_balance = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     is_mine = models.BooleanField(default=False)
     is_closed = models.BooleanField(default=False)

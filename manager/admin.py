@@ -17,7 +17,7 @@ admin.site.register(Transaction, TransactionAdmin)
 
 
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('name', 'iban', 'is_mine', 'start_balance', 'user')
+    list_display = ('name', 'account_nr', 'is_mine', 'start_balance', 'user')
     
 admin.site.register(Account, AccountAdmin)
 
