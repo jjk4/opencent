@@ -119,7 +119,7 @@
     {% with current_last_month=transactions_by_month|last %}
     
     <div id="load-more-trigger"
-         hx-get="{% url 'transactions' %}?page={{ page_obj.next_page_number }}&last_month={{ current_last_month.grouper|urlencode }}&{{ request.GET.urlencode }}"
+         hx-get="{% url 'transactions' %}?page={{ page_obj.next_page_number }}&last_month={{ current_last_month.grouper|urlencode }}"
          hx-trigger="revealed"
          hx-swap="outerHTML">
          
