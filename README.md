@@ -1,11 +1,11 @@
-<div align="center">
+<!---<div align="center">
   <a href="#-opencent-english">🇺🇸 Read in English</a> | 
   <a href="#-opencent-deutsch">🇩🇪 Auf Deutsch lesen</a>
-</div>
+</div>--->
 
 # 🚧 This Repo is currently under heavy development and not yet ready for production use! 🚧
----
 
+<!---
 <div id="-opencent-english"></div>
 
 # 💸 OpenCent
@@ -18,80 +18,18 @@ OpenCent runs on your own server (self-hosted), tracks your income and expenses 
 
 ## ✨ Features
 
-OpenCent is designed to reflect real-world financial flows realistically:
-
-* **📊 Comprehensive Transaction Management**
-    * Easily record income and expenses.
-    * Clearly distinguish between **real expenses** and **internal transfers** between your own accounts.
-* **↩️ Smart Refunds**
-    * Received a refund for a return? Mark transactions specifically as refunds.
-    * OpenCent calculates this correctly: The refund does not artificially inflate your "Income," and the original transaction does not distort your expense statistics.
-* **💳 Multi-Account & Cash**
-    * Manage unlimited accounts (Checking, Savings, Credit Cards).
-    * Maintain a dedicated **Cash Account** to keep track of physical spending.
-* **📈 Powerful Analytics**
-    * Visualize your money flow with interactive charts.
-    * Integrated **Sankey Diagrams** show you at a glance where your money comes from and where it goes.
-* **🛡️ Privacy First**
-    * No trackers, no ads, no data sharing with banks or analytics firms.
-
-## 🚀 Installation
-
-You can run OpenCent quickly via Docker or install it manually.
-
-
-### Option A: Docker (Recommended)
-
 TBD
 
-### Option B: Manual Installation (Django)
-
-1.  **Clone and enter directory:**
-    ```bash
-    git clone https://github.com/jjk4/opencent
-    cd opencent
-    ```
-2.  **Create .env file:**
-    Create a `.env` file by copying .env.example and set a SECRET_KEY value.
-3.  **Create & activate virtual environment:**
-    ```bash
-    python -m venv .venv
-    # Windows
-    .venv\Scripts\activate
-    # Mac/Linux
-    source .venv/bin/activate
-    ```
-4.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-5.  **Migrate database:**
-    ```bash
-    python manage.py migrate
-    ```
-6.  **Create Superuser:**
-    ```bash
-    python manage.py createsuperuser
-    ```
-7.  **Run Server:**
-    ```bash
-    python manage.py runserver
-    ```
-### Example Data
-For use in development, you can load example data by copying example_data_DE.sqlite3 to db.sqlite3
-Username: admin
-Password: 1234
-
 ---
 ---
-
+--->
 <div id="-opencent-deutsch"></div>
 
-# 💸 OpenCent (Deutsch)
+# 💸 OpenCent
 
 **Deine Finanzen. Deine Daten. Deine Kontrolle.**
 
-OpenCent ist eine **Open Source Webanwendung** zur Verwaltung deiner persönlichen Finanzen. Ähnlich wie populäre Apps, aber mit einem entscheidenden Unterschied: **Deine Daten gehören dir.**
+OpenCent ist eine **Open Source Webanwendung** zur Verwaltung deiner persönlichen Finanzen. Ähnlich wie populäre Apps, z.B. Finanzguru, aber mit einem entscheidenden Unterschied: **Deine Daten gehören dir.**
 
 OpenCent läuft auf deinem eigenen Server (Self-Hosted), trackt deine Einnahmen und Ausgaben über mehrere Konten hinweg und bietet detaillierte Analysen – ganz ohne Datenweitergabe an Dritte.
 
@@ -100,65 +38,54 @@ OpenCent läuft auf deinem eigenen Server (Self-Hosted), trackt deine Einnahmen 
 OpenCent wurde entwickelt, um echte Finanzströme realistisch abzubilden:
 
 * **📊 Umfassendes Transaktionsmanagement**
-    * Erfasse Einnahmen und Ausgaben mühelos.
-    * Unterscheide klar zwischen **echten Ausgaben** und **Umbuchungen** zwischen deinen eigenen Konten.
+    * Einfaches Erfassen von Einnahmen und Ausgaben
+    * Unterscheide klar zwischen **echten Ausgaben** und **Umbuchungen** zwischen deinen eigenen Konten
 * **↩️ Intelligente Rückerstattungen**
-    * Habe eine Rückzahlung für eine Retoure erhalten? Markiere Transaktionen als Rückerstattung.
-    * OpenCent verrechnet diese korrekt: Die Rückerstattung bläht dein "Einkommen" nicht künstlich auf und die ursprüngliche Ausgabe verfälscht deine Statistik nicht.
+    * Du hast eine Rückzahlung für eine Retoure erhalten?
+    * OpenCent verrechnet diese korrekt: Die Rückerstattung bläht dein "Einkommen" nicht künstlich auf und die ursprüngliche Ausgabe verfälscht deine Statistik nicht
 * **💳 Multi-Account & Bargeld**
-    * Verwalte beliebig viele Konten (Girokonto, Tagesgeld, Kreditkarte).
-    * Führe ein dediziertes **Bargeldkonto**, um auch physische Ausgaben im Blick zu behalten.
+    * Verwalte beliebig viele Konten (Girokonto, Tagesgeld, Kreditkarte)
+    * Führe ein dediziertes **Bargeldkonto**, um auch physische Ausgaben im Blick zu behalten
 * **📈 Mächtige Analysen**
-    * Visualisiere deine Geldflüsse mit interaktiven Diagrammen.
-    * Integrierte **Sankey-Diagramme** zeigen dir auf einen Blick, woher dein Geld kommt und wohin es fließt.
+    * Visualisiere deine Geldflüsse mit interaktiven Diagrammen
+    * Integrierte **Sankey-Diagramme** zeigen dir auf einen Blick, woher dein Geld kommt und wohin es fließt
 * **🛡️ Privacy First**
-    * Keine Tracker, keine Werbung, keine Datenweitergabe an Banken oder Analysefirmen.
+    * Keine Tracker, keine Werbung, keine Datenweitergabe an Banken oder Analysefirmen
 
 ## 🚀 Installation
 
-Du kannst OpenCent entweder schnell via Docker starten oder manuell installieren.
+Du kannst OpenCent schnell und einfach via Docker installieren:
 
-### Option A: Docker (Empfohlen)
+**1. Installiere Docker auf deinem System**
 
-TBD
+Folge dazu der Anleitung aus der Docker Dokumentation: https://docs.docker.com/engine/install/
 
-### Option B: Manuelle Installation (Django)
+**2. Lade die docker-compose.yml und .env Dateiherunter**
 
-1.  **Repository klonen:**
-    ```bash
-    git clone https://github.com/jjk4/opencent
-    cd opencent
-    ```
-2.  **.env Datei erstellen:**
-    Erstelle eine `.env` Datei, indem du .env.example kopierst und einen SECRET_KEY Wert setzt.
-2.  **Virtuelle Umgebung erstellen & aktivieren:**
-    ```bash
-    python -m venv .venv
-    # Windows
-    .venv\Scripts\activate
-    # Mac/Linux
-    source .venv/bin/activate
-    ```
-3.  **Abhängigkeiten installieren:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-4.  **Datenbank migrieren:**
-    ```bash
-    python manage.py migrate
-    ```
-5.  **Admin-User erstellen:**
-    ```bash
-    python manage.py createsuperuser
-    ```
-6.  **Server starten:**
-    ```bash
-    python manage.py runserver
-    ```
-### Beispieldaten
-Für die Entwicklung kannst du Beispieldaten laden, indem du example_data_DE.sqlite3 nach db.sqlite3 kopierst.
-Username: admin
-Passwort: 1234
+```bash
+curl -O https://raw.githubusercontent.com/jjk4/opencent/refs/heads/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/jjk4/opencent/refs/heads/main/.env.docker.example -o .env
+```
+
+**3. Passe die .env Datei an**
+
+Öffne die `.env` Datei und passe den Schlüssel `SECRET_KEY` an. Du kannst einen sicheren Schlüssel mit folgendem Befehl generieren:
+
+```bash
+python3 -c "import secrets; print(secrets.token_urlsafe(50))"
+```
+Passe außerdem das Datenbankpasswort `DATABASE_PASSWORD` an.
+
+**4. Starte die Anwendung**
+
+```bash
+docker-compose up -d
+```
+
+**5. Zugriff auf OpenCent**
+
+Öffne deinen Browser und gehe zu `http://IP_DEINES_SERVERS:8000`. Du solltest den Einrichtungsassistent von OpenCent sehen.
+
 
 ---
 
