@@ -82,8 +82,13 @@
                                 {% if t.is_refund %}
                                     <i class="bi bi-arrow-return-left me-1"></i>
                                 {% endif %}
-                                
-                                {{ t.description|default:t.receiver }}
+                                {% if t.receiver.is_mine and t.sender.is_mine %}
+                                    {{ t.description|default:"Umbuchung" }}
+                                {% elif t.receiver.is_mine %}
+                                    {{ t.description|default:t.sender }}
+                                {% else %}
+                                    {{ t.description|default:t.receiver }}
+                                {% endif %}
                                 {% if t.has_refunds %}
                                   {% if t.is_fully_refunded %}
                                       <span class="badge bg-secondary ms-2">Erstattet</span>
