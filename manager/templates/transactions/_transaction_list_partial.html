@@ -124,8 +124,7 @@
     {% with current_last_month=transactions_by_month|last %}
     
     <div id="load-more-trigger"
-         hx-get="{% url 'transactions' %}?page={{ page_obj.next_page_number }}&last_month={{ current_last_month.grouper|urlencode }}"
-         hx-trigger="revealed"
+        hx-get="{% url 'transactions' %}?last_month={{ current_last_month.grouper|urlencode }}&page={{ page_obj.next_page_number }}{% for key, values in request.GET.lists %}{% if key != 'page' and key != 'last_month' %}{% for value in values %}&{{ key }}={{ value|urlencode }}{% endfor %}{% endif %}{% endfor %}"         hx-trigger="revealed"
          hx-swap="outerHTML">
          
         <div class="text-center p-3">
