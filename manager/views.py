@@ -9,6 +9,7 @@ from .forms import TransactionForm, AccountForm, CategoryForm, TransactionSplitF
 from datetime import datetime, timedelta
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
+from collections import defaultdict
 import json
 
 month_names = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
@@ -101,40 +102,105 @@ def get_balance_history(request, my_accounts, from_date=None):
         
     return history
 
-def calculate_refunds(request):
-    print("Calculating refunds...")
-    print("----------------------")
-    reset_transactions = []
-    refund_transactions = Transaction.objects.filter(user=request.user)
-    for transaction in refund_transactions:
-        if transaction.is_refund:
-            transaction.remainder_of_refund = transaction.amount
-            transaction.remainder_after_refunds = 0
-            for refund in transaction.is_refund_of:
-                if refund.original_transaction.id not in reset_transactions:
-                    reset_transactions.append(refund.original_transaction.id)
-                    refund.original_transaction.remainder_after_refunds = refund.original_transaction.amount
-                    refund.original_transaction.remainder_of_refund = 0
-                if refund.original_transaction.remainder_after_refunds >= transaction.remainder_of_refund:
-                    refund.original_transaction.remainder_after_refunds -= transaction.remainder_of_refund
-                    transaction.remainder_of_refund = 0
+def calculate_refund_clusters(user, affected_transaction_ids):
+    """
+    Berechnet die Refund-Werte nur für die Netzwerke/Bäume, 
+    in denen sich die affected_transaction_ids befinden.
+    """
+    all_links = list(Refund.objects.filter(original_transaction__user=user).values_list('refund_transaction_id', 'original_transaction_id'))
+    
+    refund_to_originals = defaultdict(list)
+    original_to_refunds = defaultdict(list)
+    
+    for r_id, o_id in all_links:
+        refund_to_originals[r_id].append(o_id)
+        original_to_refunds[o_id].append(r_id)
+        
+    visited_r_ids = set()
+    visited_o_ids = set()
+    
+    def get_cluster(start_id):
+        queue = [start_id]
+        comp_r = set()
+        comp_o = set()
+        
+        while queue:
+            curr = queue.pop(0)
+            
+            if curr in refund_to_originals and curr not in visited_r_ids:
+                visited_r_ids.add(curr)
+                comp_r.add(curr)
+                for o_id in refund_to_originals[curr]:
+                    if o_id not in visited_o_ids:
+                        queue.append(o_id)
+                        
+            if curr in original_to_refunds and curr not in visited_o_ids:
+                visited_o_ids.add(curr)
+                comp_o.add(curr)
+                for r_id in original_to_refunds[curr]:
+                    if r_id not in visited_r_ids:
+                        queue.append(r_id)
+                        
+        return comp_r, comp_o
+
+    transactions_to_update = []
+
+    for t_id in affected_transaction_ids:
+        if t_id in visited_r_ids or t_id in visited_o_ids:
+            continue
+            
+        comp_r, comp_o = get_cluster(t_id)
+        
+        if not comp_r and not comp_o:
+            t = Transaction.objects.get(id=t_id)
+            t.remainder_after_refunds = t.amount
+            t.remainder_of_refund = 0
+            transactions_to_update.append(t)
+            continue
+
+        cluster_refunds = list(Transaction.objects.filter(id__in=comp_r).order_by('timestamp'))
+        cluster_originals = {t.id: t for t in Transaction.objects.filter(id__in=comp_o)}
+        
+        for r_tx in cluster_refunds:
+            r_tx.remainder_of_refund = r_tx.amount
+            r_tx.remainder_after_refunds = 0
+        for o_tx in cluster_originals.values():
+            o_tx.remainder_after_refunds = o_tx.amount
+            o_tx.remainder_of_refund = 0
+            
+        for r_tx in cluster_refunds:
+            for o_id in refund_to_originals[r_tx.id]:
+                o_tx = cluster_originals[o_id]
+                
+                if o_tx.remainder_after_refunds >= r_tx.remainder_of_refund:
+                    o_tx.remainder_after_refunds -= r_tx.remainder_of_refund
+                    r_tx.remainder_of_refund = 0
+                    break
                 else:
-                    transaction.remainder_of_refund -= refund.original_transaction.remainder_after_refunds
-                    refund.original_transaction.remainder_after_refunds = 0
-                refund.original_transaction.save()
-            transaction.save()
-        else:
-            if transaction.id not in reset_transactions:
-                transaction.remainder_after_refunds = transaction.amount
-                transaction.remainder_of_refund = 0
-                transaction.save()
-    return
+                    r_tx.remainder_of_refund -= o_tx.remainder_after_refunds
+                    o_tx.remainder_after_refunds = 0
+                    
+        transactions_to_update.extend(cluster_refunds)
+        transactions_to_update.extend(cluster_originals.values())
+
+    if transactions_to_update:
+        Transaction.objects.bulk_update(
+            transactions_to_update, 
+            ['remainder_of_refund', 'remainder_after_refunds']
+        )
+
 
 def handle_refund_save(transaction, form):
     is_refund = form.cleaned_data.get('is_refund')
     refund_links = form.cleaned_data.get('refund_links')
     
-    Refund.objects.filter(refund_transaction=transaction).delete()
+    affected_ids = {transaction.id}
+    
+    old_refunds = Refund.objects.filter(refund_transaction=transaction)
+    for old in old_refunds:
+        affected_ids.add(old.original_transaction_id)
+        
+    old_refunds.delete()
     
     if is_refund and refund_links:
         for original in refund_links:
@@ -142,6 +208,9 @@ def handle_refund_save(transaction, form):
                 original_transaction=original,
                 refund_transaction=transaction
             )
+            affected_ids.add(original.id)
+            
+    calculate_refund_clusters(transaction.user, affected_ids)
 # ---------------------------------------------------------
 def first_run_setup(request):
     superuser = User.objects.filter(is_superuser=True).first()
@@ -249,9 +318,7 @@ def transaction_add(request, copy_id=None):
                 new_transaction.save()
                 formset.save()
                 handle_refund_save(new_transaction, form)
-                if form.cleaned_data.get('is_refund'):
-                    calculate_refunds(request)
-                return redirect('transactions') 
+                return redirect('transactions')
     else:
         if copy_id:
             original_transaction = get_object_or_404(Transaction, id=copy_id)
@@ -314,8 +381,6 @@ def transaction_edit(request, transaction_id):
             form.save()
             formset.save()
             handle_refund_save(transaction, form)
-            if transaction.is_refund or transaction.has_refunds or form.cleaned_data.get('is_refund'):
-                calculate_refunds(request)
             return redirect('transactions')
     else:
         form = TransactionForm(instance=transaction, user=request.user)
@@ -341,13 +406,19 @@ def transaction_delete(request, transaction_id):
     if transaction.user != request.user: # TODO: Fehlermeldung
         return redirect('transactions')
     if request.method == 'POST':
-        if transaction.is_refund or transaction.has_refunds:
-            recalculate_refunds = True
-        else:
-            recalculate_refunds = False
+        affected_ids = set()
+        
+        for r in transaction.refund_transaction_refunds.all():
+            affected_ids.add(r.original_transaction_id)
+            
+        for r in transaction.original_transaction_refunds.all():
+            affected_ids.add(r.refund_transaction_id)
+
         transaction.delete()
-        if recalculate_refunds:
-            calculate_refunds(request)
+        
+        if affected_ids:
+            calculate_refund_clusters(request.user, affected_ids)
+            
         return redirect('transactions')
         
     context = {
