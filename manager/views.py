@@ -233,7 +233,7 @@ def transaction_detail(request, transaction_id):
     return render(request, 'transactions/detail.html', context)
 
 @login_required
-def transaction_add(request):
+def transaction_add(request, copy_id=None):
     if request.method == 'POST':
         form = TransactionForm(request.POST, user=request.user)
         formset = TransactionSplitFormSet(request.POST, form_kwargs={'user': request.user})
@@ -253,8 +253,40 @@ def transaction_add(request):
                     calculate_refunds(request)
                 return redirect('transactions') 
     else:
-        form = TransactionForm(initial={'timestamp': datetime.now()}, user=request.user)
-        formset = TransactionSplitFormSet(queryset=Transaction.objects.none(), form_kwargs={'user': request.user})
+        if copy_id:
+            original_transaction = get_object_or_404(Transaction, id=copy_id)
+            if original_transaction.user != request.user: # TODO: Fehlermeldung
+                return redirect('transactions')
+            
+            initial_transaction = {
+                'sender': original_transaction.sender,
+                'receiver': original_transaction.receiver,
+                'amount': original_transaction.amount,
+                'description': original_transaction.description,
+                'timestamp': original_transaction.timestamp,
+            }
+            initial_splits = []
+
+            for split in original_transaction.splits.all():
+                initial_splits.append({
+                    'category': split.category,
+                    'amount': split.amount
+                })
+                
+        else:
+            initial_transaction = {
+                'timestamp': datetime.now(),
+            }
+            initial_splits = []
+        form = TransactionForm(initial=initial_transaction, user=request.user)
+
+        TransactionSplitFormSet.extra = len(initial_splits) if len(initial_splits)>0 else 1
+        formset = TransactionSplitFormSet(
+            queryset=Transaction.objects.none(), 
+            initial=initial_splits, 
+            form_kwargs={'user': request.user}
+        )
+        print(initial_splits)
     
     context = {
         'header_data': {

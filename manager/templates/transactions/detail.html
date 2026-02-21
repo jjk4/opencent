@@ -63,6 +63,9 @@
     </div>
 <div class="mt-4 border-top pt-3 d-flex justify-content-end">
     
+    <a href="{% url 'transaction_add' transaction.id %}" class="btn btn-outline-primary me-2">
+        <i class="bi bi-files"></i> Duplizieren
+    </a>
     <a href="{% url 'transaction_edit' transaction.id %}" class="btn btn-outline-primary me-2">
         <i class="bi bi-pencil"></i> Bearbeiten
     </a>
