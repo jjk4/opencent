@@ -7,6 +7,7 @@ from .models import Transaction, Account, Category, Refund
 from django.contrib.auth.models import User
 from .forms import TransactionForm, AccountForm, CategoryForm, TransactionSplitFormSet
 from datetime import datetime, timedelta
+from django.db.models import ProtectedError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
 from collections import defaultdict
@@ -621,15 +622,23 @@ def category_delete(request, category_id):
     if category.user != request.user: # TODO: Fehlermeldung
         return redirect('categories')
     if request.method == 'POST':
-        category.delete()
-        return redirect('categories')
+        try:
+            category.delete()
+        except ProtectedError:
+            error = "Diese Kategorie kann nicht gelöscht werden, da sie noch Transaktionen zugeordnet hat. Bitte entferne die Kategorie von allen zugeordneten Transaktionen, bevor du sie löschst."
+            transactions = Transaction.objects.filter(user=request.user, categories=category).all()
+        else:
+            return redirect('categories')            
+        
         
     context = {
          'header_data': {
             'title': 'Kategorie löschen',
             'selected_tab': 'categories',
         },
-        'category': category
+        'category': category,
+        'error': error if 'error' in locals() else None,
+        'transactions': transactions if 'transactions' in locals() else None,
     }
     return render(request, 'categories/delete.html', context)
 
