@@ -4,8 +4,10 @@ from .models import Account, Transaction, Category, TransactionSplit, Refund
 from decimal import Decimal
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
 from io import BytesIO
 from PIL import Image
+from .views import calculate_refund_clusters
 
 class AccountModelTests(TestCase):
     def setUp(self):
@@ -336,5 +338,129 @@ class CategoryModelTests(TestCase):
         self.assertEqual(len(subcats), 2)
         self.assertIn(child, subcats)
         self.assertIn(grandchild, subcats)
+
+
+class RefundClusterLogicTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='usera', password='pw')
+        self.acc_giro = Account.objects.create(name="Giro", start_balance=0, is_mine=True, user=self.user)
+        self.acc_shop = Account.objects.create(name="Shop", start_balance=0, is_mine=False, user=self.user)
+
+    def test_simple_full_refund_calculation(self):
+        """Tests a simple case where a 100€ transaction is fully refunded with another 100€ transaction, and checks if the remainders are correctly set to 0."""
+        tx_out = Transaction.objects.create(
+            sender=self.acc_giro, receiver=self.acc_shop, amount=Decimal('100.00'), 
+            timestamp=timezone.now(), user=self.user, remainder_after_refunds=Decimal('100.00')
+        )
+        tx_in = Transaction.objects.create(
+            sender=self.acc_shop, receiver=self.acc_giro, amount=Decimal('100.00'), 
+            timestamp=timezone.now(), user=self.user, remainder_of_refund=Decimal('100.00')
+        )
         
+        Refund.objects.create(original_transaction=tx_out, refund_transaction=tx_in)
+
+        calculate_refund_clusters(self.user, {tx_out.id, tx_in.id})
+
+        tx_out.refresh_from_db()
+        tx_in.refresh_from_db()
+
+        self.assertEqual(tx_out.remainder_after_refunds, Decimal('0.00'))
+        self.assertEqual(tx_in.remainder_of_refund, Decimal('0.00'))
+
+    def test_partial_refund_calculation(self):
+        """Tests a case where a 100€ transaction is partially refunded with a 40€ transaction, and checks if the remainders are correctly updated to reflect the partial refund."""
+        tx_out = Transaction.objects.create(
+            sender=self.acc_giro, receiver=self.acc_shop, amount=Decimal('100.00'), 
+            timestamp=timezone.now(), user=self.user, remainder_after_refunds=Decimal('100.00')
+        )
+        tx_in = Transaction.objects.create(
+            sender=self.acc_shop, receiver=self.acc_giro, amount=Decimal('40.00'), 
+            timestamp=timezone.now(), user=self.user, remainder_of_refund=Decimal('40.00')
+        )
+        
+        Refund.objects.create(original_transaction=tx_out, refund_transaction=tx_in)
+        calculate_refund_clusters(self.user, {tx_out.id})
+
+        tx_out.refresh_from_db()
+        tx_in.refresh_from_db()
+
+        self.assertEqual(tx_out.remainder_after_refunds, Decimal('60.00'))
+        self.assertEqual(tx_in.remainder_of_refund, Decimal('0.00'))
+
+    def test_orphaned_transaction_reset(self):
+        """Tests whether the amounts are reset when a cluster is dissolved, i.e., when there are no more refunds linked to an original transaction, the remainder should be reset to the full amount."""
+        tx_out = Transaction.objects.create(
+            sender=self.acc_giro, receiver=self.acc_shop, amount=Decimal('100.00'), 
+            timestamp=timezone.now(), user=self.user, remainder_after_refunds=Decimal('0.00')
+        )
+        
+        calculate_refund_clusters(self.user, {tx_out.id})
+        
+        tx_out.refresh_from_db()
+        self.assertEqual(tx_out.remainder_after_refunds, Decimal('100.00'))
+        
+class GeneralViewTests(TestCase):
+    def setUp(self):
+        User.objects.create_superuser(username='admin', password='pw', email='')
+        self.user = User.objects.create_user(username='usera', password='pw')
+        
+    def test_homepage_loads_correctly(self):
+        """Prüft, ob die Startseite für eingeloggte User korrekt mit dem richtigen Template lädt."""
+        self.client.force_login(self.user)
+        
+        response = self.client.get(reverse('homepage'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'master.html')
+        
+        self.assertContains(response, "Gesamtvermögen")
+        self.assertContains(response, "Meine Konten")
     
+    def test_login_required_redirects(self):
+        """Tests that all protected views redirect to the login page when accessed by an anonymous user."""
+        
+        protected_urls = [
+            ''
+            'accounts',
+            'account_add',
+            'transactions',
+            'transaction_add',
+            'categories',
+            'category_add',
+            'charts',
+            'chart_balance_over_time',
+            'chart_sankey',
+            ('transaction_detail', [999]),
+            ('transaction_edit', [999]),
+            ('transaction_delete', [999]),
+            ('account_detail', [999]),
+            ('account_edit', [999]),
+            ('account_delete', [999]),
+            ('category_detail', [999]),
+            ('category_edit', [999]),
+            ('category_delete', [999]),
+        ]
+
+        
+        for item in protected_urls:
+            if isinstance(item, tuple):
+                url_name, args = item
+                url = reverse(url_name, args=args)
+            else:
+                url_name = item
+                url = reverse(url_name)
+
+            with self.subTest(url_name=url_name):
+                response = self.client.get(url)
+                
+                self.assertEqual(
+                    response.status_code, 
+                    302, 
+                    f"ERROR: The URL '{url}' is not protected! (Status: {response.status_code})"
+                )
+                
+                self.assertTrue(
+                    '/users/login' in response.url, 
+                    f"ERROR: The URL '{url}' redirects to the wrong location: {response.url}"
+                )
