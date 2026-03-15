@@ -1,0 +1,6 @@
+[run]
+omit =
+    manage.py
+    */migrations/*
+    */venv/*
+    opencent/settings.py
