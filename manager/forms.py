@@ -128,9 +128,9 @@ class BaseTransactionSplitFormSet(BaseInlineFormSet):
         transaction_amount = self.instance.amount
         
         if has_splits and transaction_amount is not None:
-             if round(total_split_amount, 2) != round(transaction_amount, 2):
+             if round(total_split_amount, 2) > round(transaction_amount, 2):
                 raise forms.ValidationError(
-                    f"Die Summe der Kategorien ({total_split_amount} €) entspricht nicht dem Gesamtbetrag ({transaction_amount} €)."
+                    f"Die Summe der Kategorien ({total_split_amount} €) darf den Gesamtbetrag ({transaction_amount} €) nicht übersteigen."
                 )
 
 TransactionSplitFormSet = inlineformset_factory(
@@ -156,12 +156,7 @@ class AccountForm(forms.ModelForm):
             'icon': forms.FileInput(attrs={'class': 'form-control'}),
         }
     def clean(self):
-        cleaned_data = super().clean()
-        start_balance = cleaned_data.get('start_balance')
-
-        if start_balance and start_balance < 0:
-            raise forms.ValidationError("Der Anfangssaldo darf nicht negativ sein.")
-            
+        cleaned_data = super().clean()            
         return cleaned_data
     
 class CategoryForm(forms.ModelForm):
@@ -173,4 +168,8 @@ class CategoryForm(forms.ModelForm):
             'parent_category': forms.Select(attrs={'class': 'form-select'}),
             'icon': forms.TextInput(attrs={'class': 'form-control'}),
         }
-        
+    def __init__(self, *args, **kwargs):
+            user = kwargs.pop('user', None)
+            super().__init__(*args, **kwargs)
+            if user:
+                self.fields['parent_category'].queryset = Category.objects.filter(user=user)

@@ -7,18 +7,21 @@ from .models import Transaction, Account, Category, Refund
 from django.contrib.auth.models import User
 from .forms import TransactionForm, AccountForm, CategoryForm, TransactionSplitFormSet
 from datetime import datetime, timedelta
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Q, Sum
+from django.db.models.functions import Coalesce
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models import Q
 from collections import defaultdict
 import json
+from decimal import Decimal
 
 month_names = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
 
 # ------------------- Util functions ----------------------
 def chart_timerange(request):
-    start_date_fallback = Transaction.objects.filter(user=request.user).last().timestamp
-    end_date_fallback = Transaction.objects.filter(user=request.user).first().timestamp
+    last_tx = Transaction.objects.filter(user=request.user).last()
+    start_date_fallback = last_tx.timestamp if last_tx else datetime.now()
+    first_tx = Transaction.objects.filter(user=request.user).first()
+    end_date_fallback = first_tx.timestamp if first_tx else datetime.now()
     # Determine time range
     if request.POST.get('time') == 'custom':
         try:
@@ -55,16 +58,45 @@ def chart_timerange(request):
     return [start_date, end_date]
 
 def chart_startbalance(request, start_date, end_date, account_selected):
-        if account_selected:
-            start_balance = Account.objects.get(id=request.POST.get('account'), user=request.user).start_balance
-            start_balance += sum(t.amount for t in Transaction.objects.all().filter(user=request.user, timestamp__lt=start_date, receiver__id=request.POST.get('account')))
-            start_balance -= sum(t.amount for t in Transaction.objects.all().filter(user=request.user, timestamp__lt=start_date, sender__id=request.POST.get('account')))
-        else:
-            start_balance = sum(account.start_balance for account in Account.objects.filter(is_mine=True, user=request.user))
-            start_balance += sum(t.amount for t in Transaction.objects.all().filter(user=request.user, timestamp__lt=start_date, receiver__is_mine=True))
-            start_balance -= sum(t.amount for t in Transaction.objects.all().filter(user=request.user, timestamp__lt=start_date, sender__is_mine=True))
+    if account_selected:
+        account_id = request.POST.get('account')
+        start_balance = Account.objects.get(id=account_id, user=request.user).start_balance
         
-        return start_balance
+        incoming = Transaction.objects.filter(
+            user=request.user, 
+            timestamp__lt=start_date, 
+            receiver__id=account_id
+        ).aggregate(total=Coalesce(Sum('amount'), Decimal(0)))['total']
+        
+        outgoing = Transaction.objects.filter(
+            user=request.user, 
+            timestamp__lt=start_date, 
+            sender__id=account_id
+        ).aggregate(total=Coalesce(Sum('amount'), Decimal(0)))['total']
+        
+        start_balance = start_balance + incoming - outgoing
+        
+    else:
+        start_balance = Account.objects.filter(
+            is_mine=True, 
+            user=request.user
+        ).aggregate(total=Coalesce(Sum('start_balance'), Decimal(0)))['total']
+        
+        incoming = Transaction.objects.filter(
+            user=request.user, 
+            timestamp__lt=start_date, 
+            receiver__is_mine=True
+        ).aggregate(total=Coalesce(Sum('amount'), Decimal(0)))['total']
+        
+        outgoing = Transaction.objects.filter(
+            user=request.user, 
+            timestamp__lt=start_date, 
+            sender__is_mine=True
+        ).aggregate(total=Coalesce(Sum('amount'), Decimal(0)))['total']
+        
+        start_balance = start_balance + incoming - outgoing
+        
+    return start_balance
 
 def chart_transactions(request, start_date, end_date, account_selected):
         transactions = Transaction.objects.all().filter(user=request.user, timestamp__gte=start_date, timestamp__lte=end_date).order_by('timestamp')
@@ -287,10 +319,10 @@ def transactions(request):
 def transaction_detail(request, transaction_id):
     transaction = get_object_or_404(
         Transaction.objects.prefetch_related('splits__category'), 
-        id=transaction_id
+        id=transaction_id,
+        user=request.user
     )
-    if transaction.user != request.user: # TODO: Fehlermeldung
-        return redirect('transactions')
+
     context = {
         'header_data': {
             'title': (transaction.description or f"Transaktion {transaction.id}") + " Details",
@@ -322,9 +354,7 @@ def transaction_add(request, copy_id=None):
                 return redirect('transactions')
     else:
         if copy_id:
-            original_transaction = get_object_or_404(Transaction, id=copy_id)
-            if original_transaction.user != request.user: # TODO: Fehlermeldung
-                return redirect('transactions')
+            original_transaction = get_object_or_404(Transaction, id=copy_id, user=request.user)
             
             initial_transaction = {
                 'sender': original_transaction.sender,
@@ -368,9 +398,8 @@ def transaction_add(request, copy_id=None):
 
 @login_required
 def transaction_edit(request, transaction_id):
-    transaction = get_object_or_404(Transaction, id=transaction_id)
-    if transaction.user != request.user: # TODO: Fehlermeldung
-        return redirect('transactions')
+    transaction = get_object_or_404(Transaction, id=transaction_id, user=request.user)
+
     if request.method == 'POST':
         form = TransactionForm(request.POST, instance=transaction, user=request.user)
         formset = TransactionSplitFormSet(
@@ -403,9 +432,8 @@ def transaction_edit(request, transaction_id):
 
 @login_required
 def transaction_delete(request, transaction_id):
-    transaction = get_object_or_404(Transaction, id=transaction_id)
-    if transaction.user != request.user: # TODO: Fehlermeldung
-        return redirect('transactions')
+    transaction = get_object_or_404(Transaction, id=transaction_id, user=request.user)
+
     if request.method == 'POST':
         affected_ids = set()
         
@@ -469,9 +497,7 @@ def accounts(request):
 
 @login_required
 def account_detail(request, account_id):
-    account = Account.objects.get(id=account_id)
-    if account.user != request.user: # TODO: Fehlermeldung
-        return redirect('accounts')
+    account = get_object_or_404(Account, id=account_id, user=request.user)
     account.current_balance = account.get_current_balance()
     context = {
         'header_data': {
@@ -506,9 +532,7 @@ def account_add(request):
 
 @login_required
 def account_edit(request, account_id):
-    account = get_object_or_404(Account, id=account_id)
-    if account.user != request.user: # TODO: Fehlermeldung
-        return redirect('accounts')
+    account = get_object_or_404(Account, id=account_id, user=request.user)
     if request.method == 'POST':
         form = AccountForm(request.POST, request.FILES, instance=account)
         if form.is_valid():
@@ -529,9 +553,8 @@ def account_edit(request, account_id):
 
 @login_required
 def account_delete(request, account_id):
-    account = get_object_or_404(Account, id=account_id)
-    if account.user != request.user: # TODO: Fehlermeldung
-        return redirect('accounts')
+    account = get_object_or_404(Account, id=account_id, user=request.user)
+
     if request.method == 'POST':
         account.delete()
         return redirect('accounts')
@@ -559,9 +582,7 @@ def categories(request):
 
 @login_required
 def category_detail(request, category_id):
-    category = Category.objects.get(id=category_id)
-    if category.user != request.user: # TODO: Fehlermeldung
-        return redirect('categories')
+    category = Category.objects.get(id=category_id, user=request.user)
     context = {
         'header_data': {
             'title': category.name + " Details",
@@ -574,7 +595,7 @@ def category_detail(request, category_id):
 @login_required
 def category_add(request):
     if request.method == 'POST':
-        form = CategoryForm(request.POST)
+        form = CategoryForm(request.POST, user=request.user)
         
         if form.is_valid():
             instance = form.save(commit=False)
@@ -582,7 +603,7 @@ def category_add(request):
             instance.save()
             return redirect('categories') 
     else:
-        form = CategoryForm()
+        form = CategoryForm(user=request.user)
     
     context = {
         'header_data': {
@@ -595,16 +616,14 @@ def category_add(request):
 
 @login_required
 def category_edit(request, category_id):
-    category = get_object_or_404(Category, id=category_id)
-    if category.user != request.user: # TODO: Fehlermeldung
-        return redirect('categories')
+    category = get_object_or_404(Category, id=category_id, user=request.user)
     if request.method == 'POST':
-        form = CategoryForm(request.POST, instance=category)
+        form = CategoryForm(request.POST, instance=category, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('categories')
     else:
-        form = CategoryForm(instance=category)
+        form = CategoryForm(instance=category, user=request.user)
     
     context = {
         'header_data': {
@@ -618,9 +637,8 @@ def category_edit(request, category_id):
 
 @login_required
 def category_delete(request, category_id):
-    category = get_object_or_404(Category, id=category_id)
-    if category.user != request.user: # TODO: Fehlermeldung
-        return redirect('categories')
+    category = get_object_or_404(Category, id=category_id, user=request.user)
+
     if request.method == 'POST':
         try:
             category.delete()

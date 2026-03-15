@@ -20,17 +20,52 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h4 class="card-title mb-4">Erste Schritte</h4>
-                    <p class="card-text">Willkommen bei OpenCent! Es sieht so aus, als ob Sie OpenCent zum ersten Mal starten. Bitte erstellen Sie ein Superuser-Konto, um fortzufahren zu können.</p>
-                    <form method="post" action="">
+                        <p class="card-text text-muted mb-4">Willkommen bei OpenCent! Es sieht so aus, als ob Sie OpenCent zum ersten Mal starten. Bitte erstellen Sie ein Superuser-Konto, um fortfahren zu können.</p>                    <form method="post" action="" id="setupForm">
                         {% csrf_token %}
-                        <input type="text" name="username" class="form-control mb-3" placeholder="Benutzername" required />
-                        <input type="password" name="password" class="form-control mb-3" placeholder="Passwort" required />
-                        <button type="submit" class="btn btn-primary mt-3">Superuser-Konto erstellen</button>
+                        
+                        <div class="mb-3">
+                            <label for="username" class="form-label visually-hidden">Benutzername</label>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Benutzername" required autocomplete="username" />
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label visually-hidden">Passwort</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Passwort" required autocomplete="new-password" minlength="8" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password_confirm" class="form-label visually-hidden">Passwort wiederholen</label>
+                            <input type="password" id="password_confirm" class="form-control" placeholder="Passwort wiederholen" required autocomplete="new-password" minlength="8" />
+                            <div class="invalid-feedback">
+                                Die Passwörter stimmen nicht überein!
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 py-2">
+                            <i class="bi bi-person-plus-fill me-2"></i> Superuser-Konto erstellen
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('setupForm').addEventListener('submit', function(event) {
+        var pwd = document.getElementById('password').value;
+        var pwdConfirm = document.getElementById('password_confirm');
+        
+        if (pwd !== pwdConfirm.value) {
+            event.preventDefault();
+            pwdConfirm.classList.add('is-invalid');
+        } else {
+            pwdConfirm.classList.remove('is-invalid');
+        }
+    });
+
+    document.getElementById('password_confirm').addEventListener('input', function() {
+        this.classList.remove('is-invalid');
+    });
+</script>
 {% endif %}
 {% endblock %}

@@ -45,7 +45,29 @@ class Transaction(models.Model):
     @property
     def is_fully_refunded(self):
         return self.remainder_after_refunds == 0
+    
+    @property
+    def type(self):
+        if self.sender.is_mine and self.receiver.is_mine:
+            return 'TRANSFER' 
+        elif self.sender.is_mine and not self.receiver.is_mine:
+            return 'EXPENSE'
+        elif not self.sender.is_mine and self.receiver.is_mine:
+            return 'INCOME'
+        return 'EXTERNAL'
 
+    @property
+    def ui_color_class(self):
+        if self.has_refunds:
+            return "list-group-item-secondary text-decoration-line-through opacity-75" if self.is_fully_refunded else "list-group-item-danger"
+        if self.is_refund:
+            return "list-group-item-secondary text-decoration-line-through opacity-75" if self.remainder_of_refund == 0 else "list-group-item-success"
+        
+        if self.receiver.is_mine and not self.sender.is_mine:
+            return "list-group-item-success"
+        if self.sender.is_mine and not self.receiver.is_mine:
+            return "list-group-item-danger"
+        return "list-group-item-secondary"
     
     # Helper functions for categories
     @property
