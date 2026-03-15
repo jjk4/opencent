@@ -25,6 +25,13 @@
     {% endif %}
 </div>
 <div class="mb-3">
+    <label class="form-label">Kontonummer</label>
+    {{ form.account_nr }}
+    {% if form.account_nr.errors %}
+        <div class="text-danger small">{{ form.account_nr.errors }}</div>
+    {% endif %}
+</div>
+<div class="mb-3">
     <label class="form-label">Anfangssaldo (€)</label>
     {{ form.start_balance }}
     {% if form.start_balance.errors %}

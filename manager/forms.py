@@ -145,10 +145,11 @@ TransactionSplitFormSet = inlineformset_factory(
 class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
-        fields = ['name', 'start_balance', 'is_mine', 'is_closed', 'icon']
+        fields = ['name', 'start_balance', 'is_mine', 'is_closed', 'icon', 'account_nr']
         
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'account_nr': forms.TextInput(attrs={'class': 'form-control'}),
             'start_balance': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'is_mine': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'is_closed': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
