@@ -1,0 +1,142 @@
+{% extends 'master.html' %}
+{% load humanize %}
+{% block content %}
+
+<h1>Suche nach "{{ query }}"</h1>
+
+
+<hr>
+<h2>Konten</h2>
+{% if accounts %}
+    <p class="text-muted mb-4">{{ accounts|length }} Konten gefunden.</p>
+    <div class="list-group ms-2">
+        {% for a in accounts %}
+            <a href="{% url 'account_detail' a.id %}" 
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-3 py-3">
+                <div class="d-flex align-items-center">
+                    {% if a.icon %}
+                    <img src="{{ a.icon.url }}" alt="Konto Icon" style="width: 40px; height: 40px; object-fit: contain;" class="me-3">
+                    {% else %}
+                    <i class="bi bi-bank fs-4 opacity-75 me-3"></i>
+                    {% endif %}
+                    <div>
+                        <div class="fw-bold">{{ a.name }}</div>
+                        <small class="opacity-75">{{ a.description }}</small>
+                    </div>
+                </div>
+                {% if a.is_mine %}
+                    <span class="fw-bold text-nowrap ms-3">{{ a.get_current_balance }} €</span>
+                {%endif%}
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted">Keine Konten gefunden.</p>
+{% endif %}
+<hr>
+<h2>Kategorien</h2>
+{% if categories %}
+    <p class="text-muted mb-4">{{ categories|length }} Kategorien gefunden.</p>
+    <div class="list-group ms-2">
+        {% for c in categories %}
+            <a href="{% url 'category_detail' c.id %}" 
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-3 py-3">
+                <div class="d-flex align-items-center">
+                    <i class="{{ c.icon|default:'bi bi-tags' }} fs-4 opacity-75 me-3"></i>
+                    <div>
+                        <div class="fw-bold">{{ c.name }}</div>
+                        <small class="opacity-75">{{ c.description }}</small>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted">Keine Kategorien gefunden.</p>
+{% endif %}
+<hr>
+<h2>Transaktionen</h2>
+{% if transactions %}
+    <p class="text-muted mb-4">{{ transactions|length }} Transaktionen gefunden.</p>
+    <div class="list-group ms-2">
+        {% for t in transactions %}
+            <a href="{% url 'transaction_detail' t.id %}" 
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-3 py-3 {{ t.ui_color_class }}">
+                
+                <div class="d-flex align-items-center">
+                    
+                    <div class="me-3 text-center" style="min-width: 40px;">
+                        {% if t.sender.is_mine and t.receiver.is_mine %}
+                            <i class="bi bi-arrow-left-right fs-4 opacity-75"></i>
+                        {% else %}
+                            {% if t.sender.is_mine and t.receiver.icon %}
+                            <img src="{{ t.receiver.icon.url }}" alt="Konto Icon" style="width: 40px; height: 40px; object-fit: contain;">
+                            {% elif t.receiver.is_mine and t.sender.icon %}
+                            <img src="{{ t.sender.icon.url }}" alt="Konto Icon" style="width: 40px; height: 40px; object-fit: contain;">
+                            {% else %}
+                                {% with split_count=t.splits.all|length %}
+                                
+                                    {% if split_count > 1 %}
+                                        <i class="bi bi-pie-chart fs-4 opacity-75" 
+                                        title="Mehrere Kategorien: {% for s in t.splits.all %}{{ s.category.name }} ({{ s.amount|floatformat:0 }}€){% if not forloop.last %}, {% endif %}{% endfor %}"
+                                        data-bs-toggle="tooltip">
+                                        </i>
+
+                                    {% elif split_count == 1 %}
+                                        {% with first_split=t.splits.all|first %}
+                                            <i class="{{ first_split.category.icon|default:'bi bi-tags' }} fs-4 opacity-75" 
+                                            title="{{ first_split.category.name }}">
+                                            </i>
+                                        {% endwith %}
+                                    {% endif %}
+                                
+                                {% endwith %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <div class="fw-bold">
+                            {% if t.is_refund %}
+                                <i class="bi bi-arrow-return-left me-1"></i>
+                            {% endif %}
+                            {% if t.receiver.is_mine and t.sender.is_mine %}
+                                {{ t.description|default:"Umbuchung" }}
+                            {% elif t.receiver.is_mine %}
+                                {{ t.description|default:t.sender }}
+                            {% else %}
+                                {{ t.description|default:t.receiver }}
+                            {% endif %}
+                            {% if t.has_refunds %}
+                                {% if t.is_fully_refunded %}
+                                    <span class="badge bg-secondary ms-2">Erstattet</span>
+                                {% else %}
+                                <span class="badge bg-secondary ms-2">Teil-Erstattet</span>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <small class="opacity-75">{{ t.sender.name }} &rarr; {{ t.receiver.name }}</small>
+                    </div>
+                </div>
+                
+                <span class="fw-bold text-nowrap ms-3">
+                    {% if t.has_refunds %}
+                    {% if t.remainder_after_refunds == 0 %}  
+                        {{ t.amount }} €
+                    {% else %}
+                        {{ t.remainder_after_refunds }} € <span class="text-decoration-line-through text-muted small">{{ t.amount }} €</span>
+                    {% endif %}
+                    {% elif t.is_refund %}
+                    {{ t.remainder_of_refund }} € <span class="text-decoration-line-through text-muted small">{{ t.amount }} €</span>
+                    {% else %}
+                    {{ t.amount }} €
+                    {% endif %}
+                </span>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted">Keine Transaktionen gefunden.</p>
+{% endif %}
+
+{% endblock %}

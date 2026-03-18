@@ -1,0 +1,67 @@
+{% if is_empty %}
+    {% elif has_results %}
+    <ul class="dropdown-menu show position-absolute w-100 shadow-sm mt-1" style="display: block; top: 100%; z-index: 1050;">
+        
+        {% if accounts %}
+            <li class="dropdown-header text-primary fw-bold">Konten</li>
+            {% for a in accounts %}
+                <li>
+                    <a class="dropdown-item d-flex align-items-center" href="{% url 'account_detail' a.id %}">
+                        {% if a.icon %}
+                            <img src="{{ a.icon.url }}" alt="Icon" style="width: 20px; height: 20px; object-fit: contain;" class="me-2">
+                        {% else %}
+                            <i class="bi bi-bank opacity-75 me-2"></i>
+                        {% endif %}
+                        <span class="text-truncate">{{ a.name }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+            {% if categories or transactions %}<li><hr class="dropdown-divider"></li>{% endif %}
+        {% endif %}
+
+        {% if categories %}
+            <li class="dropdown-header text-primary fw-bold">Kategorien</li>
+            {% for c in categories %}
+                <li>
+                    <a class="dropdown-item d-flex align-items-center" href="{% url 'category_detail' c.id %}">
+                        <i class="{{ c.icon|default:'bi bi-tags' }} opacity-75 me-2"></i>
+                        <span class="text-truncate">{{ c.name }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+            {% if transactions %}<li><hr class="dropdown-divider"></li>{% endif %}
+        {% endif %}
+
+        {% if transactions %}
+            <li class="dropdown-header text-primary fw-bold">Transaktionen</li>
+            {% for t in transactions %}
+                <li>
+                    <a class="dropdown-item d-flex align-items-center justify-content-between" href="{% url 'transaction_detail' t.id %}">
+                        <div class="d-flex align-items-center text-truncate pe-3">
+                            {% if t.is_refund %}
+                                <i class="bi bi-arrow-return-left text-muted me-2"></i>
+                            {% elif t.sender.is_mine and t.receiver.is_mine %}
+                                <i class="bi bi-arrow-left-right text-muted me-2"></i>
+                            {% else %}
+                                <i class="bi bi-cash-coin text-muted me-2"></i>
+                            {% endif %}
+                            <span class="text-truncate">{{ t.description|default:"Umbuchung" }}</span>
+                        </div>
+                        <span class="fw-bold small text-nowrap">{{ t.amount }} €</span>
+                    </a>
+                </li>
+            {% endfor %}
+        {% endif %}
+
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item text-center text-muted small py-2" href="{% url 'search' %}?q={{ query }}">
+                <i class="bi bi-search me-1"></i> Alle Ergebnisse für "{{ query }}" anzeigen
+            </a>
+        </li>
+    </ul>
+{% else %}
+    <ul class="dropdown-menu show position-absolute w-100 shadow-sm mt-1" style="display: block; top: 100%; z-index: 1050;">
+        <li><span class="dropdown-item text-muted">Keine Ergebnisse gefunden.</span></li>
+    </ul>
+{% endif %}

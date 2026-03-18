@@ -40,9 +40,32 @@
               <a class="nav-link {% if header_data.selected_tab == 'categories' %}active{% endif %}" href="/categories"><i class="bi bi-tags"></i> Kategorien</a>
             </li>
             {% endif %}
-          </ul> <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-            <input type="search" name="search" class="form-control" placeholder="Suchen..." aria-label="Search" />
-          </form> <div class="dropdown text-end">
+          </ul>
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 position-relative" role="search" action="{% url 'search' %}" method="get">
+              <input type="search" 
+                    name="q" 
+                    class="form-control" 
+                    placeholder="Suchen..." 
+                    aria-label="Search" 
+                    autocomplete="off"
+                    style="min-width: 300px; max-width: 100%;" 
+                    hx-get="{% url 'quicksearch' %}" 
+                    hx-trigger="input changed delay:400ms, search" 
+                    hx-target="#search-results" />
+              
+              <div id="search-results" class="position-absolute" style="z-index: 1050; width: 100%;"></div>
+            </form>
+
+            <script>
+              document.addEventListener('click', function(event) {
+                const searchResults = document.getElementById('search-results');
+                const searchForm = document.querySelector('form[role="search"]');
+                if (!searchForm.contains(event.target)) {
+                  searchResults.innerHTML = '';
+                }
+              });
+            </script>
+           <div class="dropdown text-end">
             <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Benutzermenü"><i class="bi bi-person-circle"></i></a> <ul class="dropdown-menu text-small" style="">
               {% if user.is_authenticated %}
                 {% if request.user.is_superuser or request.user.is_staff%}

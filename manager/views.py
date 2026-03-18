@@ -661,6 +661,56 @@ def category_delete(request, category_id):
     return render(request, 'categories/delete.html', context)
 
 @login_required
+def search(request):
+    query = request.GET.get('q', '')
+    transactions = Transaction.objects.filter(
+        Q(description__icontains=query) | 
+        Q(sender__name__icontains=query) | 
+        Q(receiver__name__icontains=query),
+        user=request.user
+    ).select_related('sender', 'receiver').prefetch_related('splits__category')
+    accounts = Account.objects.filter(user=request.user, name__icontains=query)
+    categories = Category.objects.filter(user=request.user, name__icontains=query)
+    
+    context = {
+        'header_data': {
+            'title': f'Suche: {query}',
+            'selected_tab': 'home',
+        },
+        'transactions': transactions,
+        'accounts': accounts,
+        'categories': categories,
+        'query': query,
+    }
+    return render(request, 'search.html', context)
+
+@login_required
+def quicksearch(request):
+    query = request.GET.get('q', '').strip()
+    
+    if not query or len(query) < 2:
+        return render(request, 'elements/quicksearch_results.html', {'is_empty': True})
+
+    transactions = Transaction.objects.filter(
+        Q(description__icontains=query) | 
+        Q(sender__name__icontains=query) | 
+        Q(receiver__name__icontains=query),
+        user=request.user
+    ).select_related('sender', 'receiver')[:3]
+
+    accounts = Account.objects.filter(user=request.user, name__icontains=query)[:3]
+    categories = Category.objects.filter(user=request.user, name__icontains=query)[:3]
+    
+    context = {
+        'transactions': transactions,
+        'accounts': accounts,
+        'categories': categories,
+        'query': query,
+        'has_results': bool(transactions or accounts or categories)
+    }
+    return render(request, 'elements/quicksearch_results.html', context)
+
+@login_required
 def charts(request):
     template = loader.get_template('charts/index.html')
     context = {
