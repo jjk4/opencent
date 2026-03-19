@@ -68,7 +68,7 @@
     <hr class="my-4">
 
     <h4>Rückerstattung</h4>
-    <p class="text-muted small">Ist dieser Betrag eine Rückzahlung für eine frühere Ausgabe?</p>
+    <p class="text-body-secondary small">Ist dieser Betrag eine Rückzahlung für eine frühere Ausgabe?</p>
 
     <div class="mb-3">
         <div class="form-check">
@@ -82,7 +82,7 @@
     <div id="refund-selection-container" style="display: none;" class="mb-3">
         <label class="form-label small">Ursprüngliche Transaktion(en)</label>
         {{ form.refund_links }}
-        <div class="form-text text-muted small">
+        <div class="form-text text-body-secondary small">
             Halten Sie Strg (Windows) oder Cmd (Mac) gedrückt, um mehrere Transaktionen auszuwählen.
         </div>
         {% if form.refund_links.errors %}
@@ -93,7 +93,7 @@
     <hr class="my-4">
 
     <h4>Kategorien & Aufteilung</h4>
-    <p class="text-muted small">Die Summe der Kategorien muss exakt dem Gesamtbetrag entsprechen.</p>
+    <p class="text-body-secondary small">Die Summe der Kategorien muss exakt dem Gesamtbetrag entsprechen.</p>
 
     {{ formset.management_form }}
 

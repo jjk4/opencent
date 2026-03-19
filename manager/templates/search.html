@@ -8,7 +8,7 @@
 <hr>
 <h2>Konten</h2>
 {% if accounts %}
-    <p class="text-muted mb-4">{{ accounts|length }} Konten gefunden.</p>
+    <p class="text-body-secondary mb-4">{{ accounts|length }} Konten gefunden.</p>
     <div class="list-group ms-2">
         {% for a in accounts %}
             <a href="{% url 'account_detail' a.id %}" 
@@ -31,12 +31,12 @@
         {% endfor %}
     </div>
 {% else %}
-    <p class="text-muted">Keine Konten gefunden.</p>
+    <p class="text-body-secondary">Keine Konten gefunden.</p>
 {% endif %}
 <hr>
 <h2>Kategorien</h2>
 {% if categories %}
-    <p class="text-muted mb-4">{{ categories|length }} Kategorien gefunden.</p>
+    <p class="text-body-secondary mb-4">{{ categories|length }} Kategorien gefunden.</p>
     <div class="list-group ms-2">
         {% for c in categories %}
             <a href="{% url 'category_detail' c.id %}" 
@@ -52,12 +52,12 @@
         {% endfor %}
     </div>
 {% else %}
-    <p class="text-muted">Keine Kategorien gefunden.</p>
+    <p class="text-body-secondary">Keine Kategorien gefunden.</p>
 {% endif %}
 <hr>
 <h2>Transaktionen</h2>
 {% if transactions %}
-    <p class="text-muted mb-4">{{ transactions|length }} Transaktionen gefunden.</p>
+    <p class="text-body-secondary mb-4">{{ transactions|length }} Transaktionen gefunden.</p>
     <div class="list-group ms-2">
         {% for t in transactions %}
             <a href="{% url 'transaction_detail' t.id %}" 
@@ -109,9 +109,9 @@
                             {% endif %}
                             {% if t.has_refunds %}
                                 {% if t.is_fully_refunded %}
-                                    <span class="badge bg-secondary ms-2">Erstattet</span>
+                                    <span class="badge text-bg-secondary ms-2">Erstattet</span>
                                 {% else %}
-                                <span class="badge bg-secondary ms-2">Teil-Erstattet</span>
+                                    <span class="badge text-bg-secondary ms-2">Teil-Erstattet</span>
                                 {% endif %}
                             {% endif %}
                         </div>
@@ -121,22 +121,22 @@
                 
                 <span class="fw-bold text-nowrap ms-3">
                     {% if t.has_refunds %}
-                    {% if t.remainder_after_refunds == 0 %}  
-                        {{ t.amount }} €
-                    {% else %}
-                        {{ t.remainder_after_refunds }} € <span class="text-decoration-line-through text-muted small">{{ t.amount }} €</span>
-                    {% endif %}
+                        {% if t.remainder_after_refunds == 0 %}  
+                            {{ t.amount }} €
+                        {% else %}
+                            {{ t.remainder_after_refunds }} € <span class="text-decoration-line-through text-body-secondary small">{{ t.amount }} €</span>
+                        {% endif %}
                     {% elif t.is_refund %}
-                    {{ t.remainder_of_refund }} € <span class="text-decoration-line-through text-muted small">{{ t.amount }} €</span>
+                        {{ t.remainder_of_refund }} € <span class="text-decoration-line-through text-body-secondary small">{{ t.amount }} €</span>
                     {% else %}
-                    {{ t.amount }} €
+                        {{ t.amount }} €
                     {% endif %}
                 </span>
             </a>
         {% endfor %}
     </div>
 {% else %}
-    <p class="text-muted">Keine Transaktionen gefunden.</p>
+    <p class="text-body-secondary">Keine Transaktionen gefunden.</p>
 {% endif %}
 
 {% endblock %}

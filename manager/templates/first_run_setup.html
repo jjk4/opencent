@@ -20,7 +20,9 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h4 class="card-title mb-4">Erste Schritte</h4>
-                        <p class="card-text text-muted mb-4">Willkommen bei OpenCent! Es sieht so aus, als ob Sie OpenCent zum ersten Mal starten. Bitte erstellen Sie ein Superuser-Konto, um fortfahren zu können.</p>                    <form method="post" action="" id="setupForm">
+                        <p class="card-text text-body-secondary mb-4">Willkommen bei OpenCent! Es sieht so aus, als ob Sie OpenCent zum ersten Mal starten. Bitte erstellen Sie ein Superuser-Konto, um fortfahren zu können.</p>                    
+                        
+                        <form method="post" action="" id="setupForm">
                         {% csrf_token %}
                         
                         <div class="mb-3">

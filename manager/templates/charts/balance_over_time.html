@@ -1,37 +1,41 @@
 {% extends 'charts/chart_common.html' %}
 {% load l10n %}
 {% block chart_title %}Kontostand über Zeit{% endblock %}
+
 {% block chart_content %}
-  <div id="chart"></div>
   <script>
-    var options = {
-          series: [{
-          name: 'Gesamt',
-          data: [
-            {% for balance in balances_over_time %}
-              [new Date({{ balance.date|unlocalize }}000), {{ balance.balance|unlocalize }}]{% if not forloop.last %},{% endif %}
-            {% endfor %}
-          ]
-        }],
-          chart: {
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        const getCurrentTheme = () => document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light';
+
+        var options = {
+            series: [{
+                name: 'Gesamt',
+                data: [
+                    {% for balance in balances_over_time %}
+                    [new Date({{ balance.date|unlocalize }}000), {{ balance.balance|unlocalize }}]{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            }],
+            chart: {
                 type: 'area',
                 height: 300,
                 fontFamily: 'inherit',
+                background: 'transparent',
                 toolbar: {
-                    show: true // Versteckt das Menü oben rechts am Chart
+                    show: true 
                 },
-          zoom: {
-            type: 'x',
-            enabled: true,
-            autoScaleYaxis: true
-          },
+                zoom: {
+                    type: 'x',
+                    enabled: true,
+                    autoScaleYaxis: true
+                },
             },
             dataLabels: {
                 enabled: false
             },
             stroke: {
                 curve: 'stepline',
-                
                 width: 2
             },
             xaxis: {
@@ -48,9 +52,9 @@
                 }
             },
             theme: {
-                mode: 'light', 
+                mode: getCurrentTheme(), 
             },
-            colors: ['#0d6efd'], // Bootstrap Primary Blue
+            colors: ['#0d6efd'],
             fill: {
                 type: 'gradient',
             },
@@ -63,5 +67,20 @@
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
+
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === "data-bs-theme") {
+                    chart.updateOptions({
+                        theme: {
+                            mode: getCurrentTheme()
+                        }
+                    });
+                }
+            });
+        });
+        
+        observer.observe(document.documentElement, { attributes: true });
+    });
   </script>
 {% endblock %}

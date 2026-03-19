@@ -3,19 +3,19 @@
 {% block content %}
 <div class="container mt-5">
     <div class="card border-danger mx-auto" style="max-width: 500px;">
-        <div class="card-header bg-danger text-white">
+        <div class="card-header text-bg-danger">
             <h5 class="mb-0">Löschen bestätigen</h5>
         </div>
         <div class="card-body text-center p-4">
             <p class="lead">Möchtest du die Transaktion wirklich löschen?</p>
             
-            <div class="alert alert-light border">
+            <div class="bg-body-tertiary border rounded p-3 mb-3">
                 <strong>{{ transaction.description|default:"Keine Beschreibung" }}</strong><br>
                 {{ transaction.amount }} €<br>
-                <small class="text-muted">{{ transaction.timestamp|date:"d.m.Y" }}</small>
+                <small class="text-body-secondary">{{ transaction.timestamp|date:"d.m.Y" }}</small>
             </div>
             
-            <p class="text-danger small">Dies kann nicht rückgängig gemacht werden.</p>
+            <p class="text-danger-emphasis small">Dies kann nicht rückgängig gemacht werden.</p>
 
             <form method="post">
                 {% csrf_token %}

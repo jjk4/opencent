@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-3 text-center border-end">
-                            <h6 class="text-muted text-uppercase ls-1">Gesamtvermögen</h6>
+                            <h6 class="text-body-secondary text-uppercase ls-1">Gesamtvermögen</h6>
                             <h2 class="display-6 fw-bold {% if total_balance >= 0 %}text-success{% else %}text-danger{% endif %}">
                                 {{ total_balance|floatformat:2|intcomma }} €
                             </h2>
@@ -31,15 +31,15 @@
         {% for account in accounts %}
         {% with balance=account.get_current_balance %}
             <div class="col-md-6 col-lg-4 mb-4">
-                <a href="{% url 'account_detail' account.id %}" class="text-decoration-none text-dark">
+                <a href="{% url 'account_detail' account.id %}" class="text-decoration-none text-body">
                     
                     <div class="card h-100 shadow-sm border-0 
                         {% if balance > 0 %}
-                            alert-success
+                            bg-success-subtle text-success-emphasis
                         {% elif balance < 0 %}
-                            alert-danger
+                            bg-danger-subtle text-danger-emphasis
                         {% else %}
-                            bg-light border
+                            bg-body-tertiary border
                         {% endif %}">
                         
                         <div class="card-body">
@@ -55,7 +55,7 @@
                                 {% endif %}
                             </div>
                             
-                            <hr class="opacity-25 my-3">
+                            <hr class="opacity-25 my-3 {% if balance > 0 %}border-success{% elif balance < 0 %}border-danger{% endif %}">
                             
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="small text-uppercase fw-bold opacity-75">Aktuell</span>
@@ -69,10 +69,10 @@
             </div>
         {% endwith %}
         {% empty %}
-            <div class="col-12 text-center py-5 bg-light rounded shadow-sm border">
-                <i class="bi bi-bank text-muted" style="font-size: 3rem;"></i>
+            <div class="col-12 text-center py-5 bg-body-tertiary rounded shadow-sm border">
+                <i class="bi bi-bank text-body-secondary" style="font-size: 3rem;"></i>
                 <h5 class="mt-3 fw-bold">Noch keine Konten hinterlegt</h5>
-                <p class="text-muted">Lege dein erstes Konto an, um deine Finanzen zu tracken.</p>
+                <p class="text-body-secondary">Lege dein erstes Konto an, um deine Finanzen zu tracken.</p>
                 <a href="{% url 'account_add' %}" class="btn btn-primary mt-2">
                     <i class="bi bi-plus-circle"></i> Konto hinzufügen
                 </a>
@@ -84,16 +84,16 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Daten aus Django holen (safe filter ist wichtig!)
         const rawData = {{ balances_over_time_json|safe }};
 
-        // Daten für ApexCharts mappen: [ { x: Datum, y: Betrag }, ... ]
         const seriesData = rawData.map(item => {
             return {
-                x: new Date(item.date).getTime(), // Timestamp ist am besten für Apex
+                x: new Date(item.date).getTime(),
                 y: item.balance
             };
         });
+
+        const getCurrentTheme = () => document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light';
 
         var options = {
             series: [{
@@ -105,20 +105,20 @@
                 height: 300,
                 fontFamily: 'inherit',
                 toolbar: {
-                    show: true // Versteckt das Menü oben rechts am Chart
+                    show: true
                 },
-          zoom: {
-            type: 'x',
-            enabled: true,
-            autoScaleYaxis: true
-          },
+                zoom: {
+                    type: 'x',
+                    enabled: true,
+                    autoScaleYaxis: true
+                },
+                background: 'transparent'
             },
             dataLabels: {
                 enabled: false
             },
             stroke: {
                 curve: 'stepline',
-                
                 width: 2
             },
             xaxis: {
@@ -135,9 +135,9 @@
                 }
             },
             theme: {
-                mode: 'light', 
+                mode: getCurrentTheme(), 
             },
-            colors: ['#0d6efd'], // Bootstrap Primary Blue
+            colors: ['#0d6efd'],
             fill: {
                 type: 'gradient',
             },
@@ -150,6 +150,20 @@
 
         var chart = new ApexCharts(document.querySelector("#balanceChart"), options);
         chart.render();
+
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === "data-bs-theme") {
+                    chart.updateOptions({
+                        theme: {
+                            mode: getCurrentTheme()
+                        }
+                    });
+                }
+            });
+        });
+        
+        observer.observe(document.documentElement, { attributes: true });
     });
 </script>
 

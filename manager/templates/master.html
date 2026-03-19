@@ -12,13 +12,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://unpkg.com/htmx.org@2.0.7"></script>
-
+    <script>
+      const getPreferredTheme = () => {
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme) {
+          return storedTheme;
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+      document.documentElement.setAttribute('data-bs-theme', getPreferredTheme());
+    </script>
   </head>
   <body>
     <header class="p-3 mb-3 border-bottom">
       <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 me-0 me-lg-2 link-body-emphasis text-decoration-none text-dark">
+          <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 me-0 me-lg-2 link-body-emphasis text-decoration-none text-body">
             <img src="{% static 'logos/logo.webp' %}" alt="OpenCent Logo" width="40" height="40" class="me-2" />
             <span class="fs-4 fw-bold">OpenCent</span>
           </a>
@@ -65,28 +74,33 @@
                 }
               });
             </script>
-           <div class="dropdown text-end">
-            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Benutzermenü"><i class="bi bi-person-circle"></i></a> <ul class="dropdown-menu text-small" style="">
-              {% if user.is_authenticated %}
-                {% if request.user.is_superuser or request.user.is_staff%}
-                <li>
-                  <a class="dropdown-item" href="/admin/">Admin-Bereich</a>
-                </li>
+            <div class="d-flex align-items-center text-end">
+            <button id="theme-toggle" class="btn btn-link link-body-emphasis text-decoration-none me-3" aria-label="Dark Mode umschalten">
+              <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
+            </button>
+            <div class="dropdown">
+              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Benutzermenü"><i class="bi bi-person-circle"></i></a> <ul class="dropdown-menu text-small" style="">
+                {% if user.is_authenticated %}
+                  {% if request.user.is_superuser or request.user.is_staff%}
+                  <li>
+                    <a class="dropdown-item" href="/admin/">Admin-Bereich</a>
+                  </li>
+                  {% endif %}
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li> <li>
+                    <form method="post" action="{% url 'logout' %}">
+                      {% csrf_token %}
+                      <button type="submit" class="dropdown-item">Logout</button>
+                    </form>
+                  </li>
+                {% else %}
+                  <li>
+                    <a class="dropdown-item" href="/users/login">Login</a>
+                  </li>
                 {% endif %}
-                <li>
-                  <hr class="dropdown-divider" />
-                </li> <li>
-                  <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="dropdown-item">Logout</button>
-                  </form>
-                </li>
-              {% else %}
-                <li>
-                  <a class="dropdown-item" href="/users/login">Login</a>
-                </li>
-              {% endif %}
-            </ul>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -100,5 +114,31 @@
         </div>
       </div>
     </main>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const toggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        const setTheme = (theme) => {
+          document.documentElement.setAttribute('data-bs-theme', theme);
+          localStorage.setItem('theme', theme);
+          if (theme === 'dark') {
+            themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+          } else {
+            themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
+          }
+        };
+
+        if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
+           themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+          const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          setTheme(newTheme);
+        });
+      });
+    </script>
   </body>
 </html>
