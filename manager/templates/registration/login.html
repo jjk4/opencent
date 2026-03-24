@@ -1,4 +1,5 @@
 {% extends "master.html" %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-5">
@@ -7,25 +8,25 @@
       
       <div class="card shadow-sm">
         <div class="card-header text-bg-primary text-center">
-          <h4 class="mb-0">Anmelden</h4>
+          <h4 class="mb-0">{% trans "Login" %}</h4>
         </div>
         
         <div class="card-body p-4">
 
           {% if form.errors %}
             <div class="alert alert-danger" role="alert">
-              Dein Benutzername und Passwort stimmen nicht überein. Bitte versuche es erneut.
+              {% trans "Your username and password didn't match. Please try again." %}
             </div>
           {% endif %}
 
           {% if next %}
             {% if user.is_authenticated %}
               <div class="alert alert-warning" role="alert">
-                Dein Konto hat keinen Zugriff auf diese Seite. Bitte melde dich mit einem passenden Konto an.
+                {% trans "Your account doesn't have access to this page. Please log in with a suitable account." %}
               </div>
             {% else %}
               <div class="alert alert-info" role="alert">
-                Bitte melde dich an, um diese Seite zu sehen.
+                {% trans "Please log in to view this page." %}
               </div>
             {% endif %}
           {% endif %}
@@ -35,20 +36,20 @@
             
             <div class="mb-3 input-group-hack">
               <label for="{{ form.username.id_for_label }}" class="form-label">
-                {{ form.username.label }}
+                {% trans "Username" %}
               </label>
               {{ form.username }}
             </div>
 
             <div class="mb-3 input-group-hack">
               <label for="{{ form.password.id_for_label }}" class="form-label">
-                {{ form.password.label }}
+                {% trans "Password" %}
               </label>
               {{ form.password }}
             </div>
 
             <div class="d-grid gap-2 mt-4">
-              <input type="submit" class="btn btn-primary" value="Login">
+              <input type="submit" class="btn btn-primary" value="{% trans 'Login' %}">
             </div>
             
             <input type="hidden" name="next" value="{{ next }}">

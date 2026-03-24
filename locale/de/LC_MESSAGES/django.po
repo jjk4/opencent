@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 11:17+0100\n"
+"POT-Creation-Date: 2026-03-24 11:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,11 +44,13 @@ msgstr ""
 
 #: manager/templates/first_run_setup.html:52
 #: manager/templates/first_run_setup.html:53
+#: manager/templates/registration/login.html:39
 msgid "Username"
 msgstr "Benutzername"
 
 #: manager/templates/first_run_setup.html:57
 #: manager/templates/first_run_setup.html:58
+#: manager/templates/registration/login.html:46
 msgid "Password"
 msgstr "Passwort"
 
@@ -147,8 +149,24 @@ msgid "Logout"
 msgstr "Ausloggen"
 
 #: manager/templates/master.html:106
+#: manager/templates/registration/login.html:11
+#: manager/templates/registration/login.html:52
 msgid "Login"
 msgstr "Einloggen"
+
+#: manager/templates/registration/login.html:18
+msgid "Your username and password didn't match. Please try again."
+msgstr "Dein Benutzername und Passwort stimmen nicht überein. Bitte versuche es erneut."
+
+#: manager/templates/registration/login.html:25
+msgid ""
+"Your account doesn't have access to this page. Please log in with a suitable "
+"account."
+msgstr "Dein Konto hat keinen Zugriff auf diese Seite. Bitte logge dich mit einem geeigneten Konto ein."
+
+#: manager/templates/registration/login.html:29
+msgid "Please log in to view this page."
+msgstr "Bitte logge dich ein, um diese Seite anzuzeigen."
 
 #: manager/templates/search.html:6
 msgid "Search for"
