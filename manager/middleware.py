@@ -10,7 +10,9 @@ class FirstRunSetupMiddleware:
     def __call__(self, request):
         setup_url = reverse('first_run_setup')
         
-        if request.path.startswith('/static/') or request.path.startswith('/media/'):
+        allowed_prefixes = ('/static/', '/media/', '/i18n/')
+        
+        if request.path.startswith(allowed_prefixes):
              return self.get_response(request)
 
         if request.path == setup_url:
@@ -36,5 +38,4 @@ class UserLanguageMiddleware:
             
         response = self.get_response(request)
         
-        translation.deactivate()
         return response

@@ -1,50 +1,73 @@
 {% extends 'master.html' %}
+{% load i18n %} 
+
 {% block content %}
 {% if superuser_exists %}
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="alert alert-info text-center" role="alert">
-                <h4 class="alert-heading">Setup abgeschlossen!</h4>
-                <p>Das Setup wurde bereits abgeschlossen!</p>
+                <h4 class="alert-heading">{% trans "Setup complete!" %}</h4>
+                <p>{% trans "The setup has already been completed!" %}</p>
                 <hr>
-                <a href="/users/login" class="btn btn-primary mt-3">Zum Login</a>
+                <a href="/users/login" class="btn btn-primary mt-3">{% trans "Go to login" %}</a>
             </div>
         </div>
     </div>
 </div>
 {% else %}
 <div class="container mt-5">
+    
+    <div class="row justify-content-center mb-2">
+        <div class="col-md-6 d-flex justify-content-end">
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="/">
+                
+                <select name="language" class="form-select form-select-sm shadow-sm" style="width: auto;" onchange="this.form.submit()">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    
+                    {% for lang in LANGUAGES %}
+                        <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+                            {{ lang.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="card-title mb-4">Erste Schritte</h4>
-                        <p class="card-text text-body-secondary mb-4">Willkommen bei OpenCent! Es sieht so aus, als ob Sie OpenCent zum ersten Mal starten. Bitte erstellen Sie ein Superuser-Konto, um fortfahren zu können.</p>                    
+            <div class="card shadow-sm border-0 bg-body-tertiary">
+                <div class="card-body p-4">
+                    <h4 class="card-title fw-bold mb-4">{% trans "Getting Started" %}</h4>
+                        <p class="card-text text-body-secondary mb-4">{% trans "Welcome to OpenCent! It looks like you are starting OpenCent for the first time. Please create a superuser account to continue." %}</p>                    
                         
                         <form method="post" action="" id="setupForm">
                         {% csrf_token %}
                         
                         <div class="mb-3">
-                            <label for="username" class="form-label visually-hidden">Benutzername</label>
-                            <input type="text" id="username" name="username" class="form-control" placeholder="Benutzername" required autocomplete="username" />
+                            <label for="username" class="form-label visually-hidden">{% trans "Username" %}</label>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="{% trans 'Username' %}" required autocomplete="username" />
                         </div>
                         
                         <div class="mb-3">
-                            <label for="password" class="form-label visually-hidden">Passwort</label>
-                            <input type="password" id="password" name="password" class="form-control" placeholder="Passwort" required autocomplete="new-password" minlength="8" />
+                            <label for="password" class="form-label visually-hidden">{% trans "Password" %}</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="{% trans 'Password' %}" required autocomplete="new-password" minlength="8" />
                         </div>
 
                         <div class="mb-4">
-                            <label for="password_confirm" class="form-label visually-hidden">Passwort wiederholen</label>
-                            <input type="password" id="password_confirm" class="form-control" placeholder="Passwort wiederholen" required autocomplete="new-password" minlength="8" />
+                            <label for="password_confirm" class="form-label visually-hidden">{% trans "Confirm password" %}</label>
+                            <input type="password" id="password_confirm" class="form-control" placeholder="{% trans 'Confirm password' %}" required autocomplete="new-password" minlength="8" />
                             <div class="invalid-feedback">
-                                Die Passwörter stimmen nicht überein!
+                                {% trans "The passwords do not match!" %}
                             </div>
                         </div>
                         
                         <button type="submit" class="btn btn-primary w-100 py-2">
-                            <i class="bi bi-person-plus-fill me-2"></i> Superuser-Konto erstellen
+                            <i class="bi bi-person-plus-fill me-2"></i> {% trans "Create superuser account" %}
                         </button>
                     </form>
                 </div>

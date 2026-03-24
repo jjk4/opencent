@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 09:55+0100\n"
+"POT-Creation-Date: 2026-03-24 10:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,51 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: manager/templates/first_run_setup.html:10
+msgid "Setup complete!"
+msgstr ""
+
+#: manager/templates/first_run_setup.html:11
+msgid "The setup has already been completed!"
+msgstr ""
+
+#: manager/templates/first_run_setup.html:13
+msgid "Go to login"
+msgstr ""
+
+#: manager/templates/first_run_setup.html:45
+msgid "Getting Started"
+msgstr ""
+
+#: manager/templates/first_run_setup.html:46
+msgid ""
+"Welcome to OpenCent! It looks like you are starting OpenCent for the first "
+"time. Please create a superuser account to continue."
+msgstr ""
+
+#: manager/templates/first_run_setup.html:52
+#: manager/templates/first_run_setup.html:53
+msgid "Username"
+msgstr ""
+
+#: manager/templates/first_run_setup.html:57
+#: manager/templates/first_run_setup.html:58
+msgid "Password"
+msgstr ""
+
+#: manager/templates/first_run_setup.html:62
+#: manager/templates/first_run_setup.html:63
+msgid "Confirm password"
+msgstr ""
+
+#: manager/templates/first_run_setup.html:65
+msgid "The passwords do not match!"
+msgstr ""
+
+#: manager/templates/first_run_setup.html:70
+msgid "Create superuser account"
+msgstr ""
 
 #: manager/templates/master.html:41
 msgid "Home"

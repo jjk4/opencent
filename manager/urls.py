@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -23,6 +23,7 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('quicksearch/', views.quicksearch, name='quicksearch'),
     path('user_settings/', views.user_settings, name='user_settings'),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('charts/', views.charts, name='charts'),
     path('charts/balance_over_time/', views.chart_balance_over_time, name='chart_balance_over_time'),
     path('charts/sankey/', views.chart_sankey, name='chart_sankey'),
