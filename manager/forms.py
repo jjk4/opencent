@@ -1,10 +1,11 @@
 from django import forms
 from django.forms import inlineformset_factory, BaseInlineFormSet
+from django.utils.translation import gettext_lazy as _
 from .models import Transaction, Account, Category, TransactionSplit
 
 class TransactionForm(forms.ModelForm):
     is_refund = forms.BooleanField(
-        label="Ist eine Rückerstattung", 
+        label=_("Is a refund"), 
         required=False, 
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
     )
@@ -12,12 +13,12 @@ class TransactionForm(forms.ModelForm):
     refund_links = forms.ModelMultipleChoiceField(
         queryset=Transaction.objects.none(),
         required=False,
-        label="Ursprüngliche Transaktion(en)",
+        label=_("Original transaction(s)"),
         widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5'})
     )
 
     timestamp = forms.DateTimeField(
-        label="Datum & Zeit",
+        label=_("Date & Time"),
         widget=forms.DateTimeInput(
             attrs={'type': 'datetime-local', 'class': 'form-control'},
             format='%Y-%m-%dT%H:%M'
@@ -49,8 +50,8 @@ class TransactionForm(forms.ModelForm):
 
         grouped_choices = [
             ('', '---------'), 
-            ('Meine Konten', get_choices(my_accounts)),
-            ('Externe Konten', get_choices(other_accounts)),
+            (_('My Accounts'), get_choices(my_accounts)),
+            (_('External Accounts'), get_choices(other_accounts)),
         ]
 
         self.fields['sender'].choices = grouped_choices
@@ -79,14 +80,14 @@ class TransactionForm(forms.ModelForm):
         is_refund = cleaned_data.get('is_refund')
         refund_links = cleaned_data.get('refund_links')
 
-        if sender == receiver:
-            raise forms.ValidationError("Sender und Empfänger können nicht identisch sein.")
+        if sender and receiver and sender == receiver:
+            raise forms.ValidationError(_("Sender and receiver cannot be identical."))
             
         if amount and amount < 0:
-             raise forms.ValidationError("Der Betrag darf nicht negativ sein.")
+             raise forms.ValidationError(_("The amount cannot be negative."))
         
         if is_refund and not refund_links:
-            self.add_error('refund_links', "Bitte wählen Sie mindestens eine ursprüngliche Transaktion aus.")
+            self.add_error('refund_links', _("Please select at least one original transaction."))
              
         return cleaned_data
 
@@ -96,7 +97,7 @@ class TransactionSplitForm(forms.ModelForm):
         fields = ['category', 'amount']
         widgets = {
             'category': forms.Select(attrs={'class': 'form-select'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': 'Betrag'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': _('Amount')}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -130,7 +131,10 @@ class BaseTransactionSplitFormSet(BaseInlineFormSet):
         if has_splits and transaction_amount is not None:
              if round(total_split_amount, 2) > round(transaction_amount, 2):
                 raise forms.ValidationError(
-                    f"Die Summe der Kategorien ({total_split_amount} €) darf den Gesamtbetrag ({transaction_amount} €) nicht übersteigen."
+                    _("The sum of the categories (%(split_amount)s €) cannot exceed the total amount (%(total_amount)s €).") % {
+                        'split_amount': total_split_amount,
+                        'total_amount': transaction_amount
+                    }
                 )
 
 TransactionSplitFormSet = inlineformset_factory(

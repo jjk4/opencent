@@ -77,22 +77,24 @@ class Transaction(models.Model):
     # Helper functions for categories
     @property
     def assigned_amount(self):
-        """Summe aller Kategorien-Splits"""
+        """Sum of all category splits"""
         return self.splits.aggregate(sum=models.Sum('amount'))['sum'] or Decimal(0)
 
     @property
     def unassigned_amount(self):
-        """Wieviel vom Betrag ist noch keiner Kategorie zugeordnet?"""
+        """How much of the amount is not yet assigned to a category?"""
         remainder = self.amount - self.assigned_amount
         return max(Decimal(0), remainder)
 
     @property
     def is_fully_categorized(self):
-        """Prüft, ob die Summe der Splits exakt dem Transaktionsbetrag entspricht"""
+        """Checks if the sum of the splits exactly matches the transaction amount"""
         return self.amount == self.assigned_amount
     
     class Meta:
         ordering = ['-timestamp']
+        verbose_name = _("Transaction")
+        verbose_name_plural = _("Transactions")
 
 class TransactionSplit(models.Model):
     transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE, related_name='splits')
@@ -101,8 +103,8 @@ class TransactionSplit(models.Model):
     
     class Meta:
         unique_together = ('transaction', 'category')
-        verbose_name = "Transaction Split"
-        verbose_name_plural = "Transaction Splits"
+        verbose_name = _("Transaction Split")
+        verbose_name_plural = _("Transaction Splits")
 
     def __str__(self):
         return f"{self.transaction.id} - {self.category.name}: {self.amount} €"
@@ -111,6 +113,10 @@ class Refund(models.Model):
     original_transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE, related_name='original_transaction_refunds')
     refund_transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE, related_name='refund_transaction_refunds')
     
+    class Meta:
+        verbose_name = _("Refund")
+        verbose_name_plural = _("Refunds")
+
     def __str__(self):
         return f"Refund of {self.original_transaction.id} by {self.refund_transaction.id}"
     
@@ -154,7 +160,7 @@ class Account(models.Model):
                         self.icon.save(new_filename, ContentFile(buffer.getvalue()), save=False)
                 
                 except Exception as e:
-                    print(f"Fehler bei der Bildverarbeitung: {e}")
+                    print(f"Error during image processing: {e}")
 
         super().save(*args, **kwargs)
 
@@ -163,6 +169,8 @@ class Account(models.Model):
     
     class Meta:
         ordering = ['name']
+        verbose_name = _("Account")
+        verbose_name_plural = _("Accounts")
     
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -171,7 +179,8 @@ class Category(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     
     class Meta:
-        verbose_name_plural = "Categories"
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
     
     def get_all_subcategories_recursive(self):
         subcategories = []
@@ -187,9 +196,9 @@ class Category(models.Model):
     
 class UserSettings(models.Model):
     THEME_CHOICES = [
-        ('auto', 'System-Standard'),
-        ('light', 'Hell'),
-        ('dark', 'Dunkel'),
+        ('auto', _('System Default')),
+        ('light', _('Light')),
+        ('dark', _('Dark')),
     ]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='settings')
@@ -202,8 +211,12 @@ class UserSettings(models.Model):
     
     theme = models.CharField(max_length=10, choices=THEME_CHOICES, default='auto')
 
+    class Meta:
+        verbose_name = _("User Setting")
+        verbose_name_plural = _("User Settings")
+
     def __str__(self):
-        return f"Einstellungen von {self.user.username}"
+        return f"Settings for {self.user.username}"
 
 @receiver(post_save, sender=User)
 def create_user_settings(sender, instance, created, **kwargs):

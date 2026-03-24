@@ -4,6 +4,7 @@ from django.template import loader
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.conf import settings as django_settings
+from django.utils.translation import gettext as _
 from .models import Transaction, Account, Category, Refund, UserSettings
 from django.contrib.auth.models import User
 from .forms import TransactionForm, AccountForm, CategoryForm, TransactionSplitFormSet
@@ -14,8 +15,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from collections import defaultdict
 import json
 from decimal import Decimal
-
-month_names = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
 
 # ------------------- Util functions ----------------------
 def chart_timerange(request):
@@ -120,7 +119,7 @@ def get_balance_history(request, my_accounts, from_date=None):
         transactions = transactions.filter(timestamp__gte=from_date)
 
     if not transactions.exists():
-         return [{'date': 'Start', 'balance': float(current_balance)}]
+         return [{'date': _('Start'), 'balance': float(current_balance)}]
 
     for t in transactions:
         if t.receiver in my_accounts:
@@ -245,6 +244,7 @@ def handle_refund_save(transaction, form):
             affected_ids.add(original.id)
             
     calculate_refund_clusters(transaction.user, affected_ids)
+
 # ---------------------------------------------------------
 def first_run_setup(request):
     superuser = User.objects.filter(is_superuser=True).first()
@@ -258,7 +258,7 @@ def first_run_setup(request):
 
     context = {
         'header_data': {
-            'title': 'Einrichtungsassistent',
+            'title': _('Setup Assistant'),
             'selected_tab': 'home',
         },
         'superuser_exists': superuser_exists,
@@ -302,7 +302,7 @@ def transactions(request):
     context = {
         'page_obj': page_obj,
         'header_data': {
-            'title': 'Transaktionen',
+            'title': _('Transactions'),
             'selected_tab': 'transactions',
         },
         'transaction_list': transaction_list,
@@ -326,7 +326,7 @@ def transaction_detail(request, transaction_id):
 
     context = {
         'header_data': {
-            'title': (transaction.description or f"Transaktion {transaction.id}") + " Details",
+            'title': f"{transaction.description or _('Transaction')} {transaction.id} - {_('Details')}",
             'selected_tab': 'transactions',
         },
         'transaction': transaction,
@@ -385,11 +385,10 @@ def transaction_add(request, copy_id=None):
             initial=initial_splits, 
             form_kwargs={'user': request.user}
         )
-        print(initial_splits)
     
     context = {
         'header_data': {
-            'title': 'Neue Transaktion',
+            'title': _('New Transaction'),
             'selected_tab': 'transactions',
         },
         'form': form,
@@ -422,7 +421,7 @@ def transaction_edit(request, transaction_id):
     
     context = {
         'header_data': {
-            'title': 'Transaktion bearbeiten',
+            'title': _('Edit Transaction'),
             'selected_tab': 'transactions',
         },
         'form': form,
@@ -453,7 +452,7 @@ def transaction_delete(request, transaction_id):
         
     context = {
          'header_data': {
-            'title': 'Transaktion löschen',
+            'title': _('Delete Transaction'),
             'selected_tab': 'transactions',
         },
         'transaction': transaction
@@ -473,7 +472,7 @@ def homepage(request):
 
     context = {
         'header_data': {
-            'title': 'Startseite',
+            'title': _('Home'),
             'selected_tab': 'home',
         },
         'accounts': account_list,
@@ -489,7 +488,7 @@ def accounts(request):
     account_list = Account.objects.filter(user=request.user)
     context = {
         'header_data': {
-            'title': 'Konten',
+            'title': _('Accounts'),
             'selected_tab': 'accounts',
         },
         'accounts': account_list,
@@ -502,7 +501,7 @@ def account_detail(request, account_id):
     account.current_balance = account.get_current_balance()
     context = {
         'header_data': {
-            'title': account.name + " Details",
+            'title': f"{account.name} {_('Details')}",
             'selected_tab': 'accounts',
         },
         'account': account,
@@ -524,7 +523,7 @@ def account_add(request):
     
     context = {
         'header_data': {
-            'title': 'Neues Konto',
+            'title': _('New Account'),
             'selected_tab': 'accounts',
         },
         'form': form,
@@ -544,7 +543,7 @@ def account_edit(request, account_id):
     
     context = {
         'header_data': {
-            'title': 'Konto bearbeiten',
+            'title': _('Edit Account'),
             'selected_tab': 'accounts',
         },
         'form': form,
@@ -562,7 +561,7 @@ def account_delete(request, account_id):
         
     context = {
          'header_data': {
-            'title': 'Konto löschen',
+            'title': _('Delete Account'),
             'selected_tab': 'accounts',
         },
         'account': account
@@ -574,7 +573,7 @@ def categories(request):
     categories = Category.objects.filter(parent_category__isnull=True, user=request.user)
     context = {
         'header_data': {
-            'title': "Kategorien",
+            'title': _('Categories'),
             'selected_tab': 'categories',
         },
         'categories': categories,
@@ -586,7 +585,7 @@ def category_detail(request, category_id):
     category = Category.objects.get(id=category_id, user=request.user)
     context = {
         'header_data': {
-            'title': category.name + " Details",
+            'title': f"{category.name} {_('Details')}",
             'selected_tab': 'categories',
         },
         'category': category,
@@ -608,7 +607,7 @@ def category_add(request):
     
     context = {
         'header_data': {
-            'title': 'Neue Kategorie',
+            'title': _('New Category'),
             'selected_tab': 'categories',
         },
         'form': form,
@@ -628,7 +627,7 @@ def category_edit(request, category_id):
     
     context = {
         'header_data': {
-            'title': 'Kategorie bearbeiten',
+            'title': _('Edit Category'),
             'selected_tab': 'categories',
         },
         'form': form,
@@ -644,7 +643,7 @@ def category_delete(request, category_id):
         try:
             category.delete()
         except ProtectedError:
-            error = "Diese Kategorie kann nicht gelöscht werden, da sie noch Transaktionen zugeordnet hat. Bitte entferne die Kategorie von allen zugeordneten Transaktionen, bevor du sie löschst."
+            error = _("This category cannot be deleted because it is still assigned to transactions. Please remove the category from all assigned transactions before deleting it.")
             transactions = Transaction.objects.filter(user=request.user, categories=category).all()
         else:
             return redirect('categories')            
@@ -652,7 +651,7 @@ def category_delete(request, category_id):
         
     context = {
          'header_data': {
-            'title': 'Kategorie löschen',
+            'title': _('Delete Category'),
             'selected_tab': 'categories',
         },
         'category': category,
@@ -675,7 +674,7 @@ def search(request):
     
     context = {
         'header_data': {
-            'title': f'Suche: {query}',
+            'title': _('Search: %s') % query,
             'selected_tab': 'home',
         },
         'transactions': transactions,
@@ -730,7 +729,7 @@ def user_settings(request):
 
     context = {
         'header_data': {
-            'title': 'Benutzereinstellungen',
+            'title': _('User Settings'),
             'selected_tab': '',
         },
         'settings': user_settings_obj
@@ -742,7 +741,7 @@ def charts(request):
     template = loader.get_template('charts/index.html')
     context = {
         'header_data': {
-            'title': "Analyse",
+            'title': _('Analysis'),
             'selected_tab': 'analysis',
         },
     }
@@ -781,7 +780,7 @@ def chart_balance_over_time(request):
    
     context = {
         'header_data': {
-            'title': "Diagramme",
+            'title': _('Charts'),
             'selected_tab': 'analysis',
         },
         'accounts': Account.objects.filter(is_mine=True, user=request.user),
@@ -801,8 +800,8 @@ def chart_sankey(request):
         
         transactions = chart_transactions(request, start_date, end_date, account_selected).prefetch_related('splits__category')
 
-        income_by_category = {-2: {'name': 'Nicht kategorisiert', 'amount': 0, 'parent': None}}
-        expenses_by_category = {-1: {'name': 'Nicht kategorisiert', 'amount': 0, 'parent': None}}
+        income_by_category = {-2: {'name': _('Uncategorized'), 'amount': 0, 'parent': None}}
+        expenses_by_category = {-1: {'name': _('Uncategorized'), 'amount': 0, 'parent': None}}
         
         total_income = 0
         total_expenses = 0
@@ -883,7 +882,7 @@ def chart_sankey(request):
     
     context = {
         'header_data': {
-            'title': "Diagramme",
+            'title': _('Charts'),
             'selected_tab': 'analysis',
         },
         'accounts': Account.objects.filter(is_mine=True, user=request.user),
