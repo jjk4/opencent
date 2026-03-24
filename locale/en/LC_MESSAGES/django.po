@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 10:09+0100\n"
+"POT-Creation-Date: 2026-03-24 10:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,44 +63,132 @@ msgstr ""
 msgid "Create superuser account"
 msgstr ""
 
-#: manager/templates/master.html:41
+#: manager/templates/index.html:14 manager/templates/index.html:101
+msgid "Total Wealth"
+msgstr ""
+
+#: manager/templates/index.html:29
+msgid "My Accounts"
+msgstr ""
+
+#: manager/templates/index.html:53 manager/templates/search.html:20
+#: manager/templates/search.html:81 manager/templates/search.html:83
+msgid "Account Icon"
+msgstr ""
+
+#: manager/templates/index.html:62
+msgid "Current"
+msgstr ""
+
+#: manager/templates/index.html:75
+msgid "No accounts found"
+msgstr ""
+
+#: manager/templates/index.html:76
+msgid "Create your first account to start tracking your finances."
+msgstr ""
+
+#: manager/templates/index.html:78
+msgid "Add account"
+msgstr ""
+
+#: manager/templates/master.html:35
+msgid "OpenCent Logo"
+msgstr ""
+
+#: manager/templates/master.html:42
 msgid "Home"
 msgstr ""
 
-#: manager/templates/master.html:44
+#: manager/templates/master.html:45 manager/templates/search.html:9
 msgid "Accounts"
 msgstr ""
 
-#: manager/templates/master.html:47
+#: manager/templates/master.html:48 manager/templates/search.html:64
 msgid "Transactions"
 msgstr ""
 
-#: manager/templates/master.html:50
+#: manager/templates/master.html:51
 msgid "Analysis"
 msgstr ""
 
-#: manager/templates/master.html:53
+#: manager/templates/master.html:54 manager/templates/search.html:40
 msgid "Categories"
 msgstr ""
 
-#: manager/templates/master.html:61
+#: manager/templates/master.html:62
 msgid "Search..."
 msgstr ""
 
-#: manager/templates/master.html:87
-msgid "Admin"
+#: manager/templates/master.html:63
+msgid "Search"
 msgstr ""
 
-#: manager/templates/master.html:90 manager/templates/user_settings.html:6
+#: manager/templates/master.html:84
+msgid "User menu"
+msgstr ""
+
+#: manager/templates/master.html:91
+msgid "Admin Panel"
+msgstr ""
+
+#: manager/templates/master.html:94 manager/templates/user_settings.html:6
 msgid "Settings"
 msgstr ""
 
-#: manager/templates/master.html:96
+#: manager/templates/master.html:101
 msgid "Logout"
 msgstr ""
 
-#: manager/templates/master.html:101
+#: manager/templates/master.html:106
 msgid "Login"
+msgstr ""
+
+#: manager/templates/search.html:6
+msgid "Search for"
+msgstr ""
+
+#: manager/templates/search.html:12
+#, python-format
+msgid "%(count)s accounts found."
+msgstr ""
+
+#: manager/templates/search.html:36
+msgid "No accounts found."
+msgstr ""
+
+#: manager/templates/search.html:43
+#, python-format
+msgid "%(count)s categories found."
+msgstr ""
+
+#: manager/templates/search.html:60
+msgid "No categories found."
+msgstr ""
+
+#: manager/templates/search.html:67
+#, python-format
+msgid "%(count)s transactions found."
+msgstr ""
+
+#: manager/templates/search.html:89
+msgid "Multiple categories"
+msgstr ""
+
+#: manager/templates/search.html:112
+msgid "Transfer"
+msgstr ""
+
+#: manager/templates/search.html:120
+msgid "Refunded"
+msgstr ""
+
+#: manager/templates/search.html:122
+msgid "Partially Refunded"
+msgstr ""
+
+#: manager/templates/search.html:147
+msgid "No transactions found."
 msgstr ""
 
 #: manager/templates/user_settings.html:12

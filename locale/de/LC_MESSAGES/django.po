@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 10:09+0100\n"
+"POT-Creation-Date: 2026-03-24 10:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,7 @@ msgstr "Einrichtung abgeschlossen!"
 #: manager/templates/first_run_setup.html:11
 msgid "The setup has already been completed!"
 msgstr "Die Einrichtung wurde bereits abgeschlossen!"
+
 #: manager/templates/first_run_setup.html:13
 msgid "Go to login"
 msgstr "Zum Login"
@@ -37,7 +38,9 @@ msgstr "Erste Schritte"
 msgid ""
 "Welcome to OpenCent! It looks like you are starting OpenCent for the first "
 "time. Please create a superuser account to continue."
-msgstr "Willkommen bei OpenCent! Es sieht so aus, als würdest du OpenCent zum ersten Mal starten. Bitte erstelle ein Superuser-Konto, um fortzufahren."
+msgstr ""
+"Willkommen bei OpenCent! Es sieht so aus, als würdest du OpenCent zum ersten "
+"Mal starten. Bitte erstelle ein Superuser-Konto, um fortzufahren."
 
 #: manager/templates/first_run_setup.html:52
 #: manager/templates/first_run_setup.html:53
@@ -62,45 +65,144 @@ msgstr "Die Passwörter stimmen nicht überein!"
 msgid "Create superuser account"
 msgstr "Superuser-Konto erstellen"
 
-#: manager/templates/master.html:41
+#: manager/templates/index.html:14 manager/templates/index.html:101
+msgid "Total Wealth"
+msgstr "Gesamtvermögen"
+
+#: manager/templates/index.html:29
+#| msgid "Accounts"
+msgid "My Accounts"
+msgstr "Meine Konten"
+
+#: manager/templates/index.html:53 manager/templates/search.html:20
+#: manager/templates/search.html:81 manager/templates/search.html:83
+#| msgid "Accounts"
+msgid "Account Icon"
+msgstr "Konto Icon"
+
+#: manager/templates/index.html:62
+msgid "Current"
+msgstr "Aktuell"
+
+#: manager/templates/index.html:75
+#| msgid "No accounts found."
+msgid "No accounts found"
+msgstr "Keine Konten gefunden."
+
+#: manager/templates/index.html:76
+msgid "Create your first account to start tracking your finances."
+msgstr "Lege dein erstes Konto an, um deine Finanzen zu verfolgen."
+
+#: manager/templates/index.html:78
+#| msgid "Accounts"
+msgid "Add account"
+msgstr "Konto hinzufügen"
+
+#: manager/templates/master.html:35
+msgid "OpenCent Logo"
+msgstr "OpenCent Logo"
+
+#: manager/templates/master.html:42
 msgid "Home"
 msgstr "Startseite"
 
-#: manager/templates/master.html:44
+#: manager/templates/master.html:45 manager/templates/search.html:9
 msgid "Accounts"
 msgstr "Konten"
 
-#: manager/templates/master.html:47
+#: manager/templates/master.html:48 manager/templates/search.html:64
 msgid "Transactions"
 msgstr "Transaktionen"
 
-#: manager/templates/master.html:50
+#: manager/templates/master.html:51
 msgid "Analysis"
 msgstr "Analyse"
 
-#: manager/templates/master.html:53
+#: manager/templates/master.html:54 manager/templates/search.html:40
 msgid "Categories"
 msgstr "Kategorien"
 
-#: manager/templates/master.html:61
+#: manager/templates/master.html:62
 msgid "Search..."
 msgstr "Suche..."
 
-#: manager/templates/master.html:87
-msgid "Admin"
+#: manager/templates/master.html:63
+#| msgid "Search..."
+msgid "Search"
+msgstr "Suche"
+
+#: manager/templates/master.html:84
+#| msgid "Username"
+msgid "User menu"
+msgstr "Benutzermenü"
+
+#: manager/templates/master.html:91
+#| msgid "Admin"
+msgid "Admin Panel"
 msgstr "Admin"
 
-#: manager/templates/master.html:90 manager/templates/user_settings.html:6
+#: manager/templates/master.html:94 manager/templates/user_settings.html:6
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: manager/templates/master.html:96
+#: manager/templates/master.html:101
 msgid "Logout"
 msgstr "Ausloggen"
 
-#: manager/templates/master.html:101
+#: manager/templates/master.html:106
 msgid "Login"
 msgstr "Einloggen"
+
+#: manager/templates/search.html:6
+#| msgid "Search..."
+msgid "Search for"
+msgstr "Suche nach"
+
+#: manager/templates/search.html:12
+#, python-format
+msgid "%(count)s accounts found."
+msgstr "%(count)s Konten gefunden."
+
+#: manager/templates/search.html:36
+msgid "No accounts found."
+msgstr "Keine Konten gefunden."
+
+#: manager/templates/search.html:43
+#, python-format
+msgid "%(count)s categories found."
+msgstr "%(count)s Kategorien gefunden."
+
+#: manager/templates/search.html:60
+#| msgid "Categories"
+msgid "No categories found."
+msgstr "Keine Kategorien gefunden."
+
+#: manager/templates/search.html:67
+#, python-format
+msgid "%(count)s transactions found."
+msgstr "%(count)s Transaktionen gefunden."
+
+#: manager/templates/search.html:89
+#| msgid "Categories"
+msgid "Multiple categories"
+msgstr "Mehrere Kategorien"
+
+#: manager/templates/search.html:112
+msgid "Transfer"
+msgstr "Umbuchung"
+
+#: manager/templates/search.html:120
+msgid "Refunded"
+msgstr "Rückerstattet"
+
+#: manager/templates/search.html:122
+msgid "Partially Refunded"
+msgstr "Teilweise Rückerstattet"
+
+#: manager/templates/search.html:147
+#| msgid "Transactions"
+msgid "No transactions found."
+msgstr "Keine Transaktionen gefunden."
 
 #: manager/templates/user_settings.html:12
 msgid "Appearance"

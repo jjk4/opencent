@@ -32,9 +32,10 @@
       <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
           <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 me-0 me-lg-2 link-body-emphasis text-decoration-none text-body">
-            <img src="{% static 'logos/logo.webp' %}" alt="OpenCent Logo" width="40" height="40" class="me-2" />
+            <img src="{% static 'logos/logo.webp' %}" alt="{% trans 'OpenCent Logo' %}" width="40" height="40" class="me-2" />
             <span class="fs-4 fw-bold">OpenCent</span>
           </a>
+
           <ul class="nav nav-pills col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
             {% if user.is_authenticated %}
             <li class="nav-item">
@@ -59,7 +60,7 @@
                     name="q" 
                     class="form-control" 
                     placeholder="{% trans 'Search...' %}" 
-                    aria-label="Search" 
+                    aria-label="{% trans 'Search' %}" 
                     autocomplete="off"
                     style="min-width: 300px; max-width: 100%;" 
                     hx-get="{% url 'quicksearch' %}" 
@@ -73,24 +74,28 @@
               document.addEventListener('click', function(event) {
                 const searchResults = document.getElementById('search-results');
                 const searchForm = document.querySelector('form[role="search"]');
-                if (!searchForm.contains(event.target)) {
+                if (searchForm && !searchForm.contains(event.target)) {
                   searchResults.innerHTML = '';
                 }
               });
             </script>
             <div class="d-flex align-items-center text-end">
             <div class="dropdown">
-              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Benutzermenü"><i class="bi bi-person-circle"></i></a> <ul class="dropdown-menu text-small" style="">
+              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{% trans 'User menu' %}">
+                <i class="bi bi-person-circle"></i>
+              </a> 
+              <ul class="dropdown-menu text-small">
                 {% if user.is_authenticated %}
                   {% if request.user.is_superuser or request.user.is_staff%}
                   <li>
-                    <a class="dropdown-item" href="/admin/"><i class="bi bi-shield-lock me-2 opacity-75"></i> {% trans "Admin" %}</a>
+                    <a class="dropdown-item" href="/admin/"><i class="bi bi-shield-lock me-2 opacity-75"></i> {% trans "Admin Panel" %}</a>
                   </li>
                   {% endif %}
                   <li><a class="dropdown-item" href="{% url 'user_settings' %}"><i class="bi bi-gear me-2 opacity-75"></i> {% trans "Settings" %}</a></li>
                   <li>
                     <hr class="dropdown-divider" />
-                  </li> <li>
+                  </li> 
+                  <li>
                     <form method="post" action="{% url 'logout' %}">
                       {% csrf_token %}
                       <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2 opacity-75"></i> {% trans "Logout" %}</button>
@@ -98,7 +103,7 @@
                   </li>
                 {% else %}
                   <li>
-                    <a class="dropdown-item" href="/users/login">{% trans "Login" %}</a>
+                    <a class="dropdown-item" href="/users/login"><i class="bi bi-box-arrow-in-right me-2 opacity-75"></i> {% trans "Login" %}</a>
                   </li>
                 {% endif %}
               </ul>
@@ -111,7 +116,6 @@
       <div class="row">
         <div class="col-12">
           {% block content %}
-
           {% endblock %}
         </div>
       </div>

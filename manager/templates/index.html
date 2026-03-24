@@ -1,5 +1,6 @@
 {% extends 'master.html' %}
 {% load humanize %}
+{% load i18n %}
 {% block content %}
 
 <div class="container mt-4">
@@ -10,7 +11,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-3 text-center border-end">
-                            <h6 class="text-body-secondary text-uppercase ls-1">Gesamtvermögen</h6>
+                            <h6 class="text-body-secondary text-uppercase ls-1">{% trans "Total Wealth" %}</h6>
                             <h2 class="display-6 fw-bold {% if total_balance >= 0 %}text-success{% else %}text-danger{% endif %}">
                                 {{ total_balance|floatformat:2|intcomma }} €
                             </h2>
@@ -25,7 +26,7 @@
         </div>
     </div>
 
-    <h4 class="mb-3">Meine Konten</h4>
+    <h4 class="mb-3">{% trans "My Accounts" %}</h4>
     
     <div class="row">
         {% for account in accounts %}
@@ -49,7 +50,7 @@
                                     <p class="card-text small opacity-75 mb-0">{{ account.account_nr|default:"" }}</p>
                                 </div>
                                 {% if account.icon %}
-                                    <img src="{{ account.icon.url }}" alt="Konto Icon" style="width: 40px; height: 40px; object-fit: contain;">
+                                    <img src="{{ account.icon.url }}" alt="{% trans 'Account Icon' %}" style="width: 40px; height: 40px; object-fit: contain;">
                                 {% else %}
                                     <i class="bi bi-wallet2 fs-4 opacity-50"></i>
                                 {% endif %}
@@ -58,7 +59,7 @@
                             <hr class="opacity-25 my-3 {% if balance > 0 %}border-success{% elif balance < 0 %}border-danger{% endif %}">
                             
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="small text-uppercase fw-bold opacity-75">Aktuell</span>
+                                <span class="small text-uppercase fw-bold opacity-75">{% trans "Current" %}</span>
                                 <span class="fs-4 fw-bold">
                                     {{ balance|floatformat:2|intcomma }} €
                                 </span>
@@ -71,10 +72,10 @@
         {% empty %}
             <div class="col-12 text-center py-5 bg-body-tertiary rounded shadow-sm border">
                 <i class="bi bi-bank text-body-secondary" style="font-size: 3rem;"></i>
-                <h5 class="mt-3 fw-bold">Noch keine Konten hinterlegt</h5>
-                <p class="text-body-secondary">Lege dein erstes Konto an, um deine Finanzen zu tracken.</p>
+                <h5 class="mt-3 fw-bold">{% trans "No accounts found" %}</h5>
+                <p class="text-body-secondary">{% trans "Create your first account to start tracking your finances." %}</p>
                 <a href="{% url 'account_add' %}" class="btn btn-primary mt-2">
-                    <i class="bi bi-plus-circle"></i> Konto hinzufügen
+                    <i class="bi bi-plus-circle"></i> {% trans "Add account" %}
                 </a>
             </div>
         {% endfor %}
@@ -97,7 +98,7 @@
 
         var options = {
             series: [{
-                name: 'Gesamtvermögen',
+                name: '{% trans "Total Wealth" %}',
                 data: seriesData
             }],
             chart: {
