@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.conf import settings as django_settings
 from django.utils.translation import gettext as _
+from django.utils import timezone
 from .models import Transaction, Account, Category, Refund, UserSettings
 from django.contrib.auth.models import User
 from .forms import TransactionForm, AccountForm, CategoryForm, TransactionSplitFormSet
@@ -19,35 +20,36 @@ from decimal import Decimal
 # ------------------- Util functions ----------------------
 def chart_timerange(request):
     last_tx = Transaction.objects.filter(user=request.user).last()
-    start_date_fallback = last_tx.timestamp if last_tx else datetime.now()
+    start_date_fallback = last_tx.timestamp if last_tx else timezone.now()
     first_tx = Transaction.objects.filter(user=request.user).first()
-    end_date_fallback = first_tx.timestamp if first_tx else datetime.now()
+    end_date_fallback = first_tx.timestamp if first_tx else timezone.now()
+    
     # Determine time range
     if request.POST.get('time') == 'custom':
         try:
-            start_date = datetime.strptime(request.POST.get('start_date'), '%Y-%m-%dT%H:%M')
-            end_date = datetime.strptime(request.POST.get('end_date'), '%Y-%m-%dT%H:%M')
+            start_date = timezone.make_aware(datetime.strptime(request.POST.get('start_date'), '%Y-%m-%dT%H:%M'))
+            end_date = timezone.make_aware(datetime.strptime(request.POST.get('end_date'), '%Y-%m-%dT%H:%M'))
         except ValueError:
             start_date = start_date_fallback
             end_date = end_date_fallback
 
     else:
         if request.POST.get('time') == 'this-month':
-            now = datetime.now()
-            start_date = datetime(now.year, now.month, 1)
-            end_date = datetime(now.year, now.month + 1, 1) if now.month < 12 else datetime(now.year + 1, 1, 1)
+            now = timezone.now()
+            start_date = timezone.make_aware(datetime(now.year, now.month, 1))
+            end_date = timezone.make_aware(datetime(now.year, now.month + 1, 1) if now.month < 12 else datetime(now.year + 1, 1, 1))
         elif request.POST.get('time') == 'last-month':
-            now = datetime.now()
-            start_date = datetime(now.year, now.month - 1, 1) if now.month > 1 else datetime(now.year - 1, 12, 1)
-            end_date = datetime(now.year, now.month, 1)
+            now = timezone.now()
+            start_date = timezone.make_aware(datetime(now.year, now.month - 1, 1) if now.month > 1 else datetime(now.year - 1, 12, 1))
+            end_date = timezone.make_aware(datetime(now.year, now.month, 1))
         elif request.POST.get('time') == 'this-year':
-            now = datetime.now()
-            start_date = datetime(now.year, 1, 1)
-            end_date = datetime(now.year + 1, 1, 1)
+            now = timezone.now()
+            start_date = timezone.make_aware(datetime(now.year, 1, 1))
+            end_date = timezone.make_aware(datetime(now.year + 1, 1, 1))
         elif request.POST.get('time') == 'last-year':
-            now = datetime.now()
-            start_date = datetime(now.year - 1, 1, 1)
-            end_date = datetime(now.year, 1, 1)
+            now = timezone.now()
+            start_date = timezone.make_aware(datetime(now.year - 1, 1, 1))
+            end_date = timezone.make_aware(datetime(now.year, 1, 1))
         elif request.POST.get('time') == 'all-time':
             start_date = start_date_fallback
             end_date = end_date_fallback
@@ -374,7 +376,7 @@ def transaction_add(request, copy_id=None):
                 
         else:
             initial_transaction = {
-                'timestamp': datetime.now(),
+                'timestamp': timezone.now(),
             }
             initial_splits = []
         form = TransactionForm(initial=initial_transaction, user=request.user)
@@ -466,7 +468,7 @@ def homepage(request):
     
     total_balance = sum(acc.get_current_balance() for acc in all_accounts)
 
-    today_last_year = datetime.now() - timedelta(days=365)
+    today_last_year = timezone.now() - timedelta(days=365)
     
     chart_data = get_balance_history(request, account_list, today_last_year)
 
