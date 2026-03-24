@@ -1,6 +1,8 @@
 {% extends 'charts/chart_common.html' %}
 {% load l10n %}
-{% block chart_title %}Kontostand über Zeit{% endblock %}
+{% load i18n %}
+
+{% block chart_title %}{% trans "Account Balance over Time" %}{% endblock %}
 
 {% block chart_content %}
   <script>
@@ -10,7 +12,7 @@
 
         var options = {
             series: [{
-                name: 'Gesamt',
+                name: '{% trans "Total" %}',
                 data: [
                     {% for balance in balances_over_time %}
                     [new Date({{ balance.date|unlocalize }}000), {{ balance.balance|unlocalize }}]{% if not forloop.last %},{% endif %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 11:23+0100\n"
+"POT-Creation-Date: 2026-03-24 11:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,123 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: manager/templates/charts/balance_over_time.html:5
+msgid "Account Balance over Time"
+msgstr "Kontostand über Zeit"
+
+#: manager/templates/charts/balance_over_time.html:15
+msgid "Total"
+msgstr "Gesamt"
+
+#: manager/templates/charts/chart_common.html:5
+msgid "Back to chart overview"
+msgstr "Zurück zur Diagrammübersicht"
+
+#: manager/templates/charts/chart_common.html:12
+msgid "Period:"
+msgstr "Zeitraum:"
+
+#: manager/templates/charts/chart_common.html:14
+msgid "---- Please select ----"
+msgstr "---- Bitte auswählen ----"
+
+#: manager/templates/charts/chart_common.html:15
+msgid "This month"
+msgstr "Diesen Monat"
+
+#: manager/templates/charts/chart_common.html:16
+msgid "Last month"
+msgstr "Letzten Monat"
+
+#: manager/templates/charts/chart_common.html:17
+msgid "This year"
+msgstr "Dieses Jahr"
+
+#: manager/templates/charts/chart_common.html:18
+msgid "Last year"
+msgstr "Letztes Jahr"
+
+#: manager/templates/charts/chart_common.html:19
+msgid "All time"
+msgstr "Gesamte Zeit"
+
+#: manager/templates/charts/chart_common.html:20
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
+#: manager/templates/charts/chart_common.html:25
+msgid "Start date"
+msgstr "Startdatum"
+
+#: manager/templates/charts/chart_common.html:28
+msgid "End date"
+msgstr "Enddatum"
+
+#: manager/templates/charts/chart_common.html:33
+msgid "Account"
+msgstr "Konto"
+
+#: manager/templates/charts/chart_common.html:35
+msgid "All accounts"
+msgstr "Alle Konten"
+
+#: manager/templates/charts/chart_common.html:41
+msgid "Apply"
+msgstr "Anwenden"
+
+#: manager/templates/charts/index.html:25 manager/templates/master.html:51
+msgid "Analysis"
+msgstr "Analyse"
+
+#: manager/templates/charts/index.html:33
+msgid "Account Balance"
+msgstr "Kontostand"
+
+#: manager/templates/charts/index.html:34
+msgid "Shows the absolute account balance over a selected period of time"
+msgstr "Zeigt den absoluten Kontostand über einen ausgewählten Zeitraum"
+
+#: manager/templates/charts/index.html:46
+msgid "Income/Expense Sankey"
+msgstr "Einnahmen/Ausgaben Sankey"
+
+#: manager/templates/charts/index.html:47
+msgid "Shows income and expenses by category in a Sankey diagram"
+msgstr "Zeigt Einnahmen und Ausgaben nach Kategorie in einem Sankey-Diagramm"
+
+#: manager/templates/charts/index.html:71
+msgid "Preview"
+msgstr "Vorschau"
+
+#: manager/templates/charts/index.html:110
+msgid "Salary"
+msgstr "Lohn"
+
+#: manager/templates/charts/index.html:110
+msgid "Gifts"
+msgstr "Geschenke"
+
+#: manager/templates/charts/index.html:111
+#: manager/templates/charts/sankey.html:17
+msgid "Budget"
+msgstr "Budget"
+
+#: manager/templates/charts/index.html:112
+msgid "Rent"
+msgstr "Miete"
+
+#: manager/templates/charts/index.html:112
+msgid "Food"
+msgstr "Essen"
+
+#: manager/templates/charts/index.html:112
+msgid "Hobby"
+msgstr "Hobby"
+
+#: manager/templates/charts/sankey.html:5
+msgid "Income-Expense Sankey"
+msgstr "Einnahmen/Ausgaben Sankey"
 
 #: manager/templates/elements/categories/category_item.html:16
 msgid "Toggle subcategories"
@@ -145,10 +262,6 @@ msgstr "OpenCent Logo"
 #: manager/templates/master.html:42
 msgid "Home"
 msgstr "Startseite"
-
-#: manager/templates/master.html:51
-msgid "Analysis"
-msgstr "Analyse"
 
 #: manager/templates/master.html:62
 msgid "Search..."

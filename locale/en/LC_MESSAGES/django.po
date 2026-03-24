@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 11:22+0100\n"
+"POT-Creation-Date: 2026-03-24 11:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,123 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: manager/templates/charts/balance_over_time.html:5
+msgid "Account Balance over Time"
+msgstr ""
+
+#: manager/templates/charts/balance_over_time.html:15
+msgid "Total"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:5
+msgid "Back to chart overview"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:12
+msgid "Period:"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:14
+msgid "---- Please select ----"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:15
+msgid "This month"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:16
+msgid "Last month"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:17
+msgid "This year"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:18
+msgid "Last year"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:19
+msgid "All time"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:20
+msgid "Custom"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:25
+msgid "Start date"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:28
+msgid "End date"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:33
+msgid "Account"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:35
+msgid "All accounts"
+msgstr ""
+
+#: manager/templates/charts/chart_common.html:41
+msgid "Apply"
+msgstr ""
+
+#: manager/templates/charts/index.html:25 manager/templates/master.html:51
+msgid "Analysis"
+msgstr ""
+
+#: manager/templates/charts/index.html:33
+msgid "Account Balance"
+msgstr ""
+
+#: manager/templates/charts/index.html:34
+msgid "Shows the absolute account balance over a selected period of time"
+msgstr ""
+
+#: manager/templates/charts/index.html:46
+msgid "Income/Expense Sankey"
+msgstr ""
+
+#: manager/templates/charts/index.html:47
+msgid "Shows income and expenses by category in a Sankey diagram"
+msgstr ""
+
+#: manager/templates/charts/index.html:71
+msgid "Preview"
+msgstr ""
+
+#: manager/templates/charts/index.html:110
+msgid "Salary"
+msgstr ""
+
+#: manager/templates/charts/index.html:110
+msgid "Gifts"
+msgstr ""
+
+#: manager/templates/charts/index.html:111
+#: manager/templates/charts/sankey.html:17
+msgid "Budget"
+msgstr ""
+
+#: manager/templates/charts/index.html:112
+msgid "Rent"
+msgstr ""
+
+#: manager/templates/charts/index.html:112
+msgid "Food"
+msgstr ""
+
+#: manager/templates/charts/index.html:112
+msgid "Hobby"
+msgstr ""
+
+#: manager/templates/charts/sankey.html:5
+msgid "Income-Expense Sankey"
+msgstr ""
 
 #: manager/templates/elements/categories/category_item.html:16
 msgid "Toggle subcategories"
@@ -142,10 +259,6 @@ msgstr ""
 
 #: manager/templates/master.html:42
 msgid "Home"
-msgstr ""
-
-#: manager/templates/master.html:51
-msgid "Analysis"
 msgstr ""
 
 #: manager/templates/master.html:62
