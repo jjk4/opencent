@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 11:19+0100\n"
+"POT-Creation-Date: 2026-03-24 11:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: manager/templates/elements/categories/category_item.html:16
+msgid "Toggle subcategories"
+msgstr ""
+
+#: manager/templates/elements/quicksearch_results.html:8
+#: manager/templates/master.html:45 manager/templates/search.html:9
+msgid "Accounts"
+msgstr ""
+
+#: manager/templates/elements/quicksearch_results.html:13
+msgid "Icon"
+msgstr ""
+
+#: manager/templates/elements/quicksearch_results.html:25
+#: manager/templates/master.html:54 manager/templates/search.html:40
+#: manager/templates/transactions/detail.html:19
+msgid "Categories"
+msgstr ""
+
+#: manager/templates/elements/quicksearch_results.html:38
+#: manager/templates/master.html:48 manager/templates/search.html:64
+#: manager/templates/transactions/index.html:5
+msgid "Transactions"
+msgstr ""
+
+#: manager/templates/elements/quicksearch_results.html:50
+#: manager/templates/search.html:112
+#: manager/templates/transactions/_transaction_list_partial.html:62
+msgid "Transfer"
+msgstr ""
+
+#: manager/templates/elements/quicksearch_results.html:61
+#, python-format
+msgid "Show all results for \"%(query)s\""
+msgstr ""
+
+#: manager/templates/elements/quicksearch_results.html:67
+msgid "No results found."
+msgstr ""
 
 #: manager/templates/first_run_setup.html:10
 msgid "Setup complete!"
@@ -104,22 +144,8 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: manager/templates/master.html:45 manager/templates/search.html:9
-msgid "Accounts"
-msgstr ""
-
-#: manager/templates/master.html:48 manager/templates/search.html:64
-#: manager/templates/transactions/index.html:5
-msgid "Transactions"
-msgstr ""
-
 #: manager/templates/master.html:51
 msgid "Analysis"
-msgstr ""
-
-#: manager/templates/master.html:54 manager/templates/search.html:40
-#: manager/templates/transactions/detail.html:19
-msgid "Categories"
 msgstr ""
 
 #: manager/templates/master.html:62
@@ -196,11 +222,6 @@ msgstr ""
 #: manager/templates/search.html:89
 #: manager/templates/transactions/_transaction_list_partial.html:39
 msgid "Multiple categories"
-msgstr ""
-
-#: manager/templates/search.html:112
-#: manager/templates/transactions/_transaction_list_partial.html:62
-msgid "Transfer"
 msgstr ""
 
 #: manager/templates/search.html:120

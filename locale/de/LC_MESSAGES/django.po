@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 11:19+0100\n"
+"POT-Creation-Date: 2026-03-24 11:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: manager/templates/elements/categories/category_item.html:16
+msgid "Toggle subcategories"
+msgstr "Unterkategorien ein-/ausblenden"
+
+#: manager/templates/elements/quicksearch_results.html:8
+#: manager/templates/master.html:45 manager/templates/search.html:9
+msgid "Accounts"
+msgstr "Konten"
+
+#: manager/templates/elements/quicksearch_results.html:13
+msgid "Icon"
+msgstr "Icon"
+
+#: manager/templates/elements/quicksearch_results.html:25
+#: manager/templates/master.html:54 manager/templates/search.html:40
+#: manager/templates/transactions/detail.html:19
+msgid "Categories"
+msgstr "Kategorien"
+
+#: manager/templates/elements/quicksearch_results.html:38
+#: manager/templates/master.html:48 manager/templates/search.html:64
+#: manager/templates/transactions/index.html:5
+msgid "Transactions"
+msgstr "Transaktionen"
+
+#: manager/templates/elements/quicksearch_results.html:50
+#: manager/templates/search.html:112
+#: manager/templates/transactions/_transaction_list_partial.html:62
+msgid "Transfer"
+msgstr "Umbuchung"
+
+#: manager/templates/elements/quicksearch_results.html:61
+#, python-format
+msgid "Show all results for \"%(query)s\""
+msgstr "Alle Ergebnisse für \"%(query)s\" anzeigen"
+
+#: manager/templates/elements/quicksearch_results.html:67
+msgid "No results found."
+msgstr "Keine Ergebnisse gefunden."
 
 #: manager/templates/first_run_setup.html:10
 msgid "Setup complete!"
@@ -106,23 +146,9 @@ msgstr "OpenCent Logo"
 msgid "Home"
 msgstr "Startseite"
 
-#: manager/templates/master.html:45 manager/templates/search.html:9
-msgid "Accounts"
-msgstr "Konten"
-
-#: manager/templates/master.html:48 manager/templates/search.html:64
-#: manager/templates/transactions/index.html:5
-msgid "Transactions"
-msgstr "Transaktionen"
-
 #: manager/templates/master.html:51
 msgid "Analysis"
 msgstr "Analyse"
-
-#: manager/templates/master.html:54 manager/templates/search.html:40
-#: manager/templates/transactions/detail.html:19
-msgid "Categories"
-msgstr "Kategorien"
 
 #: manager/templates/master.html:62
 msgid "Search..."
@@ -156,13 +182,17 @@ msgstr "Einloggen"
 
 #: manager/templates/registration/login.html:18
 msgid "Your username and password didn't match. Please try again."
-msgstr "Dein Benutzername und Passwort stimmen nicht überein. Bitte versuche es erneut."
+msgstr ""
+"Dein Benutzername und Passwort stimmen nicht überein. Bitte versuche es "
+"erneut."
 
 #: manager/templates/registration/login.html:25
 msgid ""
 "Your account doesn't have access to this page. Please log in with a suitable "
 "account."
-msgstr "Dein Konto hat keinen Zugriff auf diese Seite. Bitte logge dich mit einem geeigneten Konto ein."
+msgstr ""
+"Dein Konto hat keinen Zugriff auf diese Seite. Bitte logge dich mit einem "
+"geeigneten Konto ein."
 
 #: manager/templates/registration/login.html:29
 msgid "Please log in to view this page."
@@ -199,11 +229,6 @@ msgstr "%(count)s Transaktionen gefunden."
 #: manager/templates/transactions/_transaction_list_partial.html:39
 msgid "Multiple categories"
 msgstr "Mehrere Kategorien"
-
-#: manager/templates/search.html:112
-#: manager/templates/transactions/_transaction_list_partial.html:62
-msgid "Transfer"
-msgstr "Umbuchung"
 
 #: manager/templates/search.html:120
 #: manager/templates/transactions/_transaction_list_partial.html:70

@@ -1,14 +1,16 @@
+{% load i18n %}
+
 {% if is_empty %}
     {% elif has_results %}
     <ul class="dropdown-menu show position-absolute w-100 shadow-sm mt-1" style="display: block; top: 100%; z-index: 1050;">
         
         {% if accounts %}
-            <li class="dropdown-header text-primary-emphasis fw-bold">Konten</li>
+            <li class="dropdown-header text-primary-emphasis fw-bold">{% trans "Accounts" %}</li>
             {% for a in accounts %}
                 <li>
                     <a class="dropdown-item d-flex align-items-center" href="{% url 'account_detail' a.id %}">
                         {% if a.icon %}
-                            <img src="{{ a.icon.url }}" alt="Icon" style="width: 20px; height: 20px; object-fit: contain;" class="me-2">
+                            <img src="{{ a.icon.url }}" alt="{% trans 'Icon' %}" style="width: 20px; height: 20px; object-fit: contain;" class="me-2">
                         {% else %}
                             <i class="bi bi-bank opacity-75 me-2"></i>
                         {% endif %}
@@ -20,7 +22,7 @@
         {% endif %}
 
         {% if categories %}
-            <li class="dropdown-header text-primary-emphasis fw-bold">Kategorien</li>
+            <li class="dropdown-header text-primary-emphasis fw-bold">{% trans "Categories" %}</li>
             {% for c in categories %}
                 <li>
                     <a class="dropdown-item d-flex align-items-center" href="{% url 'category_detail' c.id %}">
@@ -33,7 +35,7 @@
         {% endif %}
 
         {% if transactions %}
-            <li class="dropdown-header text-primary-emphasis fw-bold">Transaktionen</li>
+            <li class="dropdown-header text-primary-emphasis fw-bold">{% trans "Transactions" %}</li>
             {% for t in transactions %}
                 <li>
                     <a class="dropdown-item d-flex align-items-center justify-content-between" href="{% url 'transaction_detail' t.id %}">
@@ -45,7 +47,7 @@
                             {% else %}
                                 <i class="bi bi-cash-coin text-body-secondary me-2"></i>
                             {% endif %}
-                            <span class="text-truncate">{{ t.description|default:"Umbuchung" }}</span>
+                            <span class="text-truncate">{{ t.description|default:_("Transfer") }}</span>
                         </div>
                         <span class="fw-bold small text-nowrap">{{ t.amount }} €</span>
                     </a>
@@ -56,12 +58,12 @@
         <li><hr class="dropdown-divider"></li>
         <li>
             <a class="dropdown-item text-center text-body-secondary small py-2" href="{% url 'search' %}?q={{ query }}">
-                <i class="bi bi-search me-1"></i> Alle Ergebnisse für "{{ query }}" anzeigen
+                <i class="bi bi-search me-1"></i> {% blocktranslate %}Show all results for "{{ query }}"{% endblocktranslate %}
             </a>
         </li>
     </ul>
 {% else %}
     <ul class="dropdown-menu show position-absolute w-100 shadow-sm mt-1" style="display: block; top: 100%; z-index: 1050;">
-        <li><span class="dropdown-item text-body-secondary">Keine Ergebnisse gefunden.</span></li>
+        <li><span class="dropdown-item text-body-secondary">{% trans "No results found." %}</span></li>
     </ul>
 {% endif %}
