@@ -31,6 +31,15 @@ jobs:
           pip install Pillow 
           pip install coverage
 
+      - name: Compile Translations
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gettext
+          python manage.py compilemessages
+        env:
+          SECRET_KEY: "django-insecure-test-key"
+          DEBUG: "False"
+
       - name: Run Tests
         run: |
           coverage run --source='.' manage.py test

@@ -1,7 +1,9 @@
 {% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,19 +38,19 @@
           <ul class="nav nav-pills col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
             {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link {% if header_data.selected_tab == 'home' %}active{% endif %}" href="/"><i class="bi bi-house-fill"></i> Startseite</a>
+              <a class="nav-link {% if header_data.selected_tab == 'home' %}active{% endif %}" href="/"><i class="bi bi-house-fill"></i> {% trans "Home" %}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if header_data.selected_tab == 'accounts' %}active{% endif %}" href="/accounts"><i class="bi bi-bank"></i> Konten</a>
+              <a class="nav-link {% if header_data.selected_tab == 'accounts' %}active{% endif %}" href="/accounts"><i class="bi bi-bank"></i> {% trans "Accounts" %}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if header_data.selected_tab == 'transactions' %}active{% endif %}" href="/transactions"><i class="bi bi-cash-coin"></i> Transaktionen</a>
+              <a class="nav-link {% if header_data.selected_tab == 'transactions' %}active{% endif %}" href="/transactions"><i class="bi bi-cash-coin"></i> {% trans "Transactions" %}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if header_data.selected_tab == 'analysis' %}active{% endif %}" href="/charts"><i class="bi bi-bar-chart"></i> Analyse</a>
+              <a class="nav-link {% if header_data.selected_tab == 'analysis' %}active{% endif %}" href="/charts"><i class="bi bi-bar-chart"></i> {% trans "Analysis" %}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if header_data.selected_tab == 'categories' %}active{% endif %}" href="/categories"><i class="bi bi-tags"></i> Kategorien</a>
+              <a class="nav-link {% if header_data.selected_tab == 'categories' %}active{% endif %}" href="/categories"><i class="bi bi-tags"></i> {% trans "Categories" %}</a>
             </li>
             {% endif %}
           </ul>
@@ -56,7 +58,7 @@
               <input type="search" 
                     name="q" 
                     class="form-control" 
-                    placeholder="Suchen..." 
+                    placeholder="{% trans 'Search...' %}" 
                     aria-label="Search" 
                     autocomplete="off"
                     style="min-width: 300px; max-width: 100%;" 
@@ -82,21 +84,21 @@
                 {% if user.is_authenticated %}
                   {% if request.user.is_superuser or request.user.is_staff%}
                   <li>
-                    <a class="dropdown-item" href="/admin/"><i class="bi bi-shield-lock me-2 opacity-75"></i> Admin-Bereich</a>
+                    <a class="dropdown-item" href="/admin/"><i class="bi bi-shield-lock me-2 opacity-75"></i> {% trans "Admin" %}</a>
                   </li>
                   {% endif %}
-                  <li><a class="dropdown-item" href="{% url 'settings' %}"><i class="bi bi-gear me-2 opacity-75"></i> Einstellungen</a></li>
+                  <li><a class="dropdown-item" href="{% url 'user_settings' %}"><i class="bi bi-gear me-2 opacity-75"></i> {% trans "Settings" %}</a></li>
                   <li>
                     <hr class="dropdown-divider" />
                   </li> <li>
                     <form method="post" action="{% url 'logout' %}">
                       {% csrf_token %}
-                      <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2 opacity-75"></i> Logout</button>
+                      <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2 opacity-75"></i> {% trans "Logout" %}</button>
                     </form>
                   </li>
                 {% else %}
                   <li>
-                    <a class="dropdown-item" href="/users/login">Login</a>
+                    <a class="dropdown-item" href="/users/login">{% trans "Login" %}</a>
                   </li>
                 {% endif %}
               </ul>

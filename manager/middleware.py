@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.utils import translation
 
 class FirstRunSetupMiddleware:
     def __init__(self, get_response):
@@ -20,3 +21,20 @@ class FirstRunSetupMiddleware:
             return redirect('first_run_setup')
 
         return self.get_response(request)
+
+
+class UserLanguageMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.user.is_authenticated and hasattr(request.user, 'settings'):
+            user_language = request.user.settings.language
+            
+            translation.activate(user_language)
+            request.LANGUAGE_CODE = translation.get_language()
+            
+        response = self.get_response(request)
+        
+        translation.deactivate()
+        return response

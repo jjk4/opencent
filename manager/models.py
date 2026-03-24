@@ -8,6 +8,8 @@ from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 
 class Transaction(models.Model):
     sender = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='sent_transactions', null=False, blank=False, db_index=True)
@@ -191,6 +193,12 @@ class UserSettings(models.Model):
     ]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='settings')
+
+    language = models.CharField(
+        max_length=10, 
+        choices=settings.LANGUAGES, 
+        default=settings.LANGUAGE_CODE
+    )
     
     theme = models.CharField(max_length=10, choices=THEME_CHOICES, default='auto')
 

@@ -25,7 +25,7 @@ FROM python:3.13-slim
 
 # Install the runtime library for Postgres
 RUN apt-get update && \
-    apt-get install -y libpq5 netcat-openbsd && \
+    apt-get install -y libpq5 netcat-openbsd gettext && \
     rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m -r appuser && \
@@ -41,6 +41,8 @@ WORKDIR /app
  
 # Copy application code
 COPY --chown=appuser:appuser . .
+
+RUN SECRET_KEY="dummy-key-for-build" python manage.py compilemessages
 
 COPY --chown=appuser:appuser docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh

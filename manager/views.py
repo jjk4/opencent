@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.conf import settings as django_settings
 from .models import Transaction, Account, Category, Refund, UserSettings
 from django.contrib.auth.models import User
 from .forms import TransactionForm, AccountForm, CategoryForm, TransactionSplitFormSet
@@ -712,20 +713,27 @@ def quicksearch(request):
 
 @login_required
 def user_settings(request):
-    settings, created = UserSettings.objects.get_or_create(user=request.user)
+    user_settings_obj, created = UserSettings.objects.get_or_create(user=request.user)
     
     if request.method == 'POST':
         theme = request.POST.get('theme')
         if theme in ['light', 'dark', 'auto']:
-            settings.theme = theme
-            settings.save()
+            user_settings_obj.theme = theme
+
+        language = request.POST.get('language')
+        if language in dict(django_settings.LANGUAGES).keys():
+            user_settings_obj.language = language
+
+        user_settings_obj.save()
+
+        return redirect('user_settings')
 
     context = {
         'header_data': {
-            'title': f'Benutzereinstellungen',
+            'title': 'Benutzereinstellungen',
             'selected_tab': '',
         },
-        'settings': settings
+        'settings': user_settings_obj
     }
     return render(request, 'user_settings.html', context)
 

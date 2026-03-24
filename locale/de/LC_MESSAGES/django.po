@@ -1,0 +1,101 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-24 09:55+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: manager/templates/master.html:41
+msgid "Home"
+msgstr "Startseite"
+
+#: manager/templates/master.html:44
+msgid "Accounts"
+msgstr "Konten"
+
+#: manager/templates/master.html:47
+msgid "Transactions"
+msgstr "Transaktionen"
+
+#: manager/templates/master.html:50
+msgid "Analysis"
+msgstr "Analyse"
+
+#: manager/templates/master.html:53
+msgid "Categories"
+msgstr "Kategorien"
+
+#: manager/templates/master.html:61
+msgid "Search..."
+msgstr "Suche..."
+
+#: manager/templates/master.html:87
+msgid "Admin"
+msgstr "Admin"
+
+#: manager/templates/master.html:90 manager/templates/user_settings.html:6
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: manager/templates/master.html:96
+msgid "Logout"
+msgstr "Ausloggen"
+
+#: manager/templates/master.html:101
+msgid "Login"
+msgstr "Einloggen"
+
+#: manager/templates/user_settings.html:12
+msgid "Appearance"
+msgstr "Erscheinungsbild"
+
+#: manager/templates/user_settings.html:13
+msgid ""
+"Choose your preferred design for OpenCent. This setting will be saved across "
+"devices for your account."
+msgstr "Wähle dein bevorzugtes Design für OpenCent. Diese Einstellung wird auf allen Geräten für deinen Account gespeichert."
+
+#: manager/templates/user_settings.html:19
+msgid "System Default (Auto)"
+msgstr "Systemstandard (Auto)"
+
+#: manager/templates/user_settings.html:27
+msgid "Light"
+msgstr "Hell"
+
+#: manager/templates/user_settings.html:35
+msgid "Dark"
+msgstr "Dunkel"
+
+#: manager/templates/user_settings.html:39
+msgid "Language"
+msgstr "Sprache"
+
+#: manager/templates/user_settings.html:40
+msgid "Choose the display language for your account."
+msgstr "Wähle die Anzeigesprache für deinen Account."
+
+#: manager/templates/user_settings.html:60
+msgid "Save changes"
+msgstr "Änderungen speichern"
+
+#: opencent/settings.py:141
+msgid "German"
+msgstr "Deutsch"
+
+#: opencent/settings.py:142
+msgid "English"
+msgstr "Englisch"
