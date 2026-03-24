@@ -78,11 +78,11 @@ msgstr "Transaktionen"
 
 #: manager/models.py:106
 msgid "Transaction Split"
-msgstr "Transaktion Split"
+msgstr "Transaktions-Split"
 
 #: manager/models.py:107
 msgid "Transaction Splits"
-msgstr "Transaktion Splits"
+msgstr "Transaktions-Splits"
 
 #: manager/models.py:117 manager/templates/transactions/add.html:71
 msgid "Refund"
@@ -144,7 +144,7 @@ msgstr "Neues Konto"
 
 #: manager/templates/accounts/add.html:23
 msgid "Account name"
-msgstr "Konto Name"
+msgstr "Kontoname"
 
 #: manager/templates/accounts/add.html:31
 msgid "Account number"
@@ -164,7 +164,7 @@ msgstr "Konto geschlossen?"
 
 #: manager/templates/accounts/add.html:71
 msgid "Account Icon (Optional)"
-msgstr "Konto Icon (optional)"
+msgstr "Konto-Icon (optional)"
 
 #: manager/templates/accounts/add.html:75
 msgid "Current Icon"
@@ -224,11 +224,11 @@ msgstr "Zurück"
 
 #: manager/templates/accounts/detail.html:15
 msgid "Current Balance:"
-msgstr "Kontostand"
+msgstr "Kontostand:"
 
 #: manager/templates/accounts/detail.html:18
 msgid "Account Number:"
-msgstr "Konto"
+msgstr "Kontonummer:"
 
 #: manager/templates/accounts/detail.html:26
 #: manager/templates/categories/detail.html:39
@@ -259,7 +259,7 @@ msgstr "Neues Konto hinzufügen"
 
 #: manager/templates/accounts/index.html:10
 msgid "My active accounts:"
-msgstr "Meine aktiven Konten"
+msgstr "Meine aktiven Konten:"
 
 #: manager/templates/accounts/index.html:14
 #: manager/templates/accounts/index.html:49
@@ -285,11 +285,11 @@ msgstr "Keine Konten gefunden."
 
 #: manager/templates/accounts/index.html:45
 msgid "My closed accounts:"
-msgstr "Meine geschlossenen Konten"
+msgstr "Meine geschlossenen Konten:"
 
 #: manager/templates/accounts/index.html:80
 msgid "External accounts:"
-msgstr "Externe Konten"
+msgstr "Externe Konten:"
 
 #: manager/templates/categories/add.html:6 manager/views.py:630
 msgid "Edit Category"
@@ -301,7 +301,7 @@ msgstr "Neue Kategorie"
 
 #: manager/templates/categories/add.html:20
 msgid "Category name"
-msgstr "Kategorie Name"
+msgstr "Kategoriename"
 
 #: manager/templates/categories/add.html:27
 msgid "Parent category (optional)"
@@ -350,7 +350,7 @@ msgstr "Fehler beim Laden der Icons"
 
 #: manager/templates/categories/delete.html:12
 msgid "Affected transactions"
-msgstr "Betroffnene Transaktionen"
+msgstr "Betroffene Transaktionen"
 
 #: manager/templates/categories/delete.html:20
 msgid "Back to category"
@@ -362,7 +362,7 @@ msgstr "Möchtest du diese Kategorie wirklich löschen?"
 
 #: manager/templates/categories/detail.html:16
 msgid "Parent category"
-msgstr "Übergeordnete Kategorie:"
+msgstr "Übergeordnete Kategorie"
 
 #: manager/templates/categories/detail.html:21
 msgid "Subcategories"
@@ -567,7 +567,7 @@ msgstr "Gesamtvermögen"
 #: manager/templates/transactions/_transaction_list_partial.html:31
 #: manager/templates/transactions/_transaction_list_partial.html:33
 msgid "Account Icon"
-msgstr "Konto Icon"
+msgstr "Konto-Icon"
 
 #: manager/templates/index.html:62
 msgid "Current"
@@ -575,7 +575,7 @@ msgstr "Aktuell"
 
 #: manager/templates/index.html:75
 msgid "No accounts found"
-msgstr "Keine Konten gefunden."
+msgstr "Keine Konten gefunden"
 
 #: manager/templates/index.html:76
 msgid "Create your first account to start tracking your finances."
@@ -673,7 +673,7 @@ msgstr "Rückerstattet"
 #: manager/templates/search.html:122
 #: manager/templates/transactions/_transaction_list_partial.html:72
 msgid "Partially Refunded"
-msgstr "Teilweise Rückerstattet"
+msgstr "Teilweise rückerstattet"
 
 #: manager/templates/search.html:147
 #: manager/templates/transactions/index.html:22
@@ -699,7 +699,7 @@ msgstr "Vom Konto (Sender)"
 
 #: manager/templates/transactions/add.html:36
 msgid "To Account (Receiver)"
-msgstr "Nach Konto (Empfänger)"
+msgstr "Auf Konto (Empfänger)"
 
 #: manager/templates/transactions/add.html:63
 #: manager/templates/transactions/detail.html:35
@@ -759,7 +759,7 @@ msgstr ""
 
 #: manager/templates/transactions/detail.html:42
 msgid "Transaction ID"
-msgstr "Transaktions ID"
+msgstr "Transaktions-ID"
 
 #: manager/templates/transactions/detail.html:42
 #: manager/templates/transactions/detail.html:55
@@ -772,7 +772,7 @@ msgstr "Diese Transaktion hat folgende Rückerstattungen:"
 
 #: manager/templates/transactions/detail.html:55
 msgid "Refund ID"
-msgstr "Rückerstattungs ID"
+msgstr "Rückerstattungs-ID"
 
 #: manager/templates/transactions/detail.html:68
 msgid "Duplicate"
