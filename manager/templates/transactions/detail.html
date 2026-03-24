@@ -1,7 +1,8 @@
 {% extends 'master.html' %}
+{% load i18n %}
 
 {% block content %}
-<button onclick="history.back()" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Zurück</button><br>
+<button onclick="history.back()" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> {% trans "Back" %}</button><br>
     <div class="card mt-3"> 
         <div class="card-body shadow-sm"> 
             <h5 class="card-title"> 
@@ -12,10 +13,10 @@
                     <a href="{% url 'account_detail' transaction.receiver.id %}"><i class="bi bi-box-arrow-up-right"></i></a>
             
             </h5>
-            <p class="card-text"><i>Datum:</i> <strong>{{ transaction.timestamp|date:"d.m.Y H:i" }}</strong></p>
-            <p class="card-text"><i>Betrag:</i> <strong>{{ transaction.amount }} €</strong></p>
+            <p class="card-text"><i>{% trans "Date" %}:</i> <strong>{{ transaction.timestamp|date:"d.m.Y H:i" }}</strong></p>
+            <p class="card-text"><i>{% trans "Amount" %}:</i> <strong>{{ transaction.amount }} €</strong></p>
             <div class="mb-3">
-                <i>Kategorien:</i>
+                <i>{% trans "Categories" %}:</i>
                 <ul class="list-group-flush mt-1">
                     {% for split in transaction.splits.all %}
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-1 bg-transparent border-bottom-0">
@@ -26,19 +27,19 @@
                         <span class="fw-bold text-body-secondary">{{ split.amount }} €</span>
                     </li>
                     {% empty %}
-                    <li class="text-body-secondary small">Keine Kategorie zugewiesen</li>
+                    <li class="text-body-secondary small">{% trans "No categories assigned" %}</li>
                     {% endfor %}
                 </ul>
             </div>
             {% if transaction.description %}
-                <p class="card-text"><i>Beschreibung:</i> <br> {{ transaction.description }}</p>
+                <p class="card-text"><i>{% trans "Description" %}:</i> <br> {{ transaction.description }}</p>
             {% endif %}
             {% if is_refund_of %}
-                <p class="card-text text-warning-emphasis">Diese Transaktion ist eine Rückerstattung von folgenden Transaktionen:</p>
+                <p class="card-text text-warning-emphasis">{% trans "This transaction is a refund for the following transactions:" %}</p>
                 <ul>
                     {% for refund in is_refund_of %}
                     <li>
-                        Transaktion ID {{ refund.original_transaction.id }}: {{ refund.original_transaction.amount }} € am {{ refund.original_transaction.timestamp|date:"d.m.Y H:i" }}
+                        {% trans "Transaction ID" %} {{ refund.original_transaction.id }}: {{ refund.original_transaction.amount }} € {% trans "on" %} {{ refund.original_transaction.timestamp|date:"d.m.Y H:i" }}
                         <a href="{% url 'transaction_detail' refund.original_transaction.id %}">
                             <i class="bi bi-box-arrow-up-right"></i>
                         </a>
@@ -47,11 +48,11 @@
                 </ul>
             {% endif %}
             {% if refunds %}
-                <p class="card-text text-success-emphasis">Diese Transaktion hat folgende Rückerstattungen:</p>
+                <p class="card-text text-success-emphasis">{% trans "This transaction has the following refunds:" %}</p>
                 <ul>
                     {% for refund in refunds %}
                     <li>
-                        Rückerstattung ID {{ refund.refund_transaction.id }}: {{ refund.refund_transaction.amount }} € am {{ refund.refund_transaction.timestamp|date:"d.m.Y H:i" }}
+                        {% trans "Refund ID" %} {{ refund.refund_transaction.id }}: {{ refund.refund_transaction.amount }} € {% trans "on" %} {{ refund.refund_transaction.timestamp|date:"d.m.Y H:i" }}
                         <a href="{% url 'transaction_detail' refund.refund_transaction.id %}">
                             <i class="bi bi-box-arrow-up-right"></i>
                         </a>
@@ -64,14 +65,14 @@
 <div class="mt-4 border-top pt-3 d-flex justify-content-end">
     
     <a href="{% url 'transaction_add' transaction.id %}" class="btn btn-outline-primary me-2">
-        <i class="bi bi-files"></i> Duplizieren
+        <i class="bi bi-files"></i> {% trans "Duplicate" %}
     </a>
     <a href="{% url 'transaction_edit' transaction.id %}" class="btn btn-outline-primary me-2">
-        <i class="bi bi-pencil"></i> Bearbeiten
+        <i class="bi bi-pencil"></i> {% trans "Edit" %}
     </a>
     
     <a href="{% url 'transaction_delete' transaction.id %}" class="btn btn-outline-danger">
-        <i class="bi bi-trash"></i> Löschen
+        <i class="bi bi-trash"></i> {% trans "Delete" %}
     </a>
 
 </div>

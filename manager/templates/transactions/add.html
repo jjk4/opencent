@@ -1,11 +1,12 @@
 {% extends 'master.html' %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-4">
     {% if is_edit %}
-        <h1>Transaktion bearbeiten</h1>
+        <h1>{% trans "Edit Transaction" %}</h1>
     {% else %}
-        <h1>Neue Transaktion</h1>
+        <h1>{% trans "New Transaction" %}</h1>
     {% endif %}
     
     <form method="post" id="transaction-form">
@@ -24,7 +25,7 @@
 
     <div class="row">
         <div class="col-md-6 mb-3">
-            <label class="form-label">Von Konto (Sender)</label>
+            <label class="form-label">{% trans "From Account (Sender)" %}</label>
             {{ form.sender }}
             {% if form.sender.errors %}
                 <div class="text-danger small">{{ form.sender.errors }}</div>
@@ -32,7 +33,7 @@
         </div>
 
         <div class="col-md-6 mb-3">
-            <label class="form-label">Nach Konto (Empfänger)</label>
+            <label class="form-label">{% trans "To Account (Receiver)" %}</label>
             {{ form.receiver }}
             {% if form.receiver.errors %}
                 <div class="text-danger small">{{ form.receiver.errors }}</div>
@@ -42,7 +43,7 @@
 
     <div class="row">
         <div class="col-md-6 mb-3">
-            <label class="form-label">Betrag (€)</label>
+            <label class="form-label">{% trans "Amount" %} (€)</label>
             {{ form.amount }}
             {% if form.amount.errors %}
                 <div class="text-danger small">{{ form.amount.errors }}</div>
@@ -50,7 +51,7 @@
         </div>
 
         <div class="col-md-6 mb-3">
-            <label class="form-label">Datum & Zeit</label>
+            <label class="form-label">{% trans "Date & Time" %}</label>
             {{ form.timestamp }} 
             {% if form.timestamp.errors %}
                 <div class="text-danger small">{{ form.timestamp.errors }}</div>
@@ -59,7 +60,7 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Beschreibung</label>
+        <label class="form-label">{% trans "Description" %}</label>
         {{ form.description }}
         {% if form.description.errors %}
             <div class="text-danger small">{{ form.description.errors }}</div>
@@ -67,23 +68,23 @@
     </div>
     <hr class="my-4">
 
-    <h4>Rückerstattung</h4>
-    <p class="text-body-secondary small">Ist dieser Betrag eine Rückzahlung für eine frühere Ausgabe?</p>
+    <h4>{% trans "Refund" %}</h4>
+    <p class="text-body-secondary small">{% trans "Is this amount a refund for a previous expense?" %}</p>
 
     <div class="mb-3">
         <div class="form-check">
             {{ form.is_refund }}
             <label class="form-check-label" for="{{ form.is_refund.id_for_label }}">
-                Diese Transaktion als Rückerstattung markieren
+                {% trans "Mark this transaction as a refund" %}
             </label>
         </div>
     </div>
 
     <div id="refund-selection-container" style="display: none;" class="mb-3">
-        <label class="form-label small">Ursprüngliche Transaktion(en)</label>
+        <label class="form-label small">{% trans "Original transaction(s)" %}</label>
         {{ form.refund_links }}
         <div class="form-text text-body-secondary small">
-            Halten Sie Strg (Windows) oder Cmd (Mac) gedrückt, um mehrere Transaktionen auszuwählen.
+            {% trans "Hold Ctrl (Windows) or Cmd (Mac) to select multiple transactions." %}
         </div>
         {% if form.refund_links.errors %}
             <div class="text-danger small">{{ form.refund_links.errors }}</div>
@@ -92,8 +93,8 @@
 
     <hr class="my-4">
 
-    <h4>Kategorien & Aufteilung</h4>
-    <p class="text-body-secondary small">Die Summe der Kategorien muss exakt dem Gesamtbetrag entsprechen.</p>
+    <h4>{% trans "Categories & Splitting" %}</h4>
+    <p class="text-body-secondary small">{% trans "The sum of the categories must exactly match the total amount." %}</p>
 
     {{ formset.management_form }}
 
@@ -106,7 +107,7 @@
                 {% endfor %}
 
                 <div class="col-md-6">
-                    <label class="form-label small">Kategorie</label>
+                    <label class="form-label small">{% trans "Category" %}</label>
                     {{ split_form.category }}
                     {% if split_form.category.errors %}
                         <div class="text-danger small">{{ split_form.category.errors }}</div>
@@ -114,7 +115,7 @@
                 </div>
                 
                 <div class="col-md-4">
-                    <label class="form-label small">Betrag</label>
+                    <label class="form-label small">{% trans "Amount" %}</label>
                     {{ split_form.amount }}
                     {% if split_form.amount.errors %}
                         <div class="text-danger small">{{ split_form.amount.errors }}</div>
@@ -126,7 +127,7 @@
                         <div class="form-check">
                             {{ split_form.DELETE }}
                             <label class="form-check-label small" for="{{ split_form.DELETE.id_for_label }}">
-                                Löschen
+                                {% trans "Delete" %}
                             </label>
                         </div>
                     {% endif %}
@@ -136,17 +137,17 @@
     </div>
 
     <button type="button" id="add-split-btn" class="btn btn-outline-secondary btn-sm mt-2 mb-4">
-        <i class="bi bi-plus-circle"></i> Weitere Kategorie hinzufügen
+        <i class="bi bi-plus-circle"></i> {% trans "Add another category" %}
     </button>
 
 
     <div class="d-flex justify-content-end border-top pt-3">
-        <a href="{% url 'transactions' %}" class="btn btn-secondary me-2">Abbrechen</a>
+        <a href="{% url 'transactions' %}" class="btn btn-secondary me-2">{% trans "Cancel" %}</a>
         <button type="submit" class="btn btn-primary">
             {% if is_edit %}
-                Änderungen speichern
+                {% trans "Save changes" %}
             {% else %}
-                Transaktion hinzufügen
+                {% trans "Add transaction" %}
             {% endif %}
         </button>
     </div>
@@ -157,18 +158,18 @@
 <div id="empty-form-template" style="display:none;">
     <div class="row mb-2 split-row align-items-end">
         <div class="col-md-6">
-            <label class="form-label small">Kategorie</label>
+            <label class="form-label small">{% trans "Category" %}</label>
             {{ formset.empty_form.category }}
         </div>
         <div class="col-md-4">
-            <label class="form-label small">Betrag</label>
+            <label class="form-label small">{% trans "Amount" %}</label>
             {{ formset.empty_form.amount }}
         </div>
         <div class="col-md-2">
             {% if formset.can_delete %}
                 <div class="form-check">
                     {{ formset.empty_form.DELETE }}
-                    <label class="form-check-label small">Löschen</label>
+                    <label class="form-check-label small">{% trans "Delete" %}</label>
                 </div>
             {% endif %}
         </div>
@@ -184,20 +185,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     addBtn.addEventListener('click', function(e) {
         e.preventDefault();
-
         let formCount = parseInt(totalFormsInput.value);
-
         let newRowHtml = template.innerHTML;
-
         newRowHtml = newRowHtml.replace(/__prefix__/g, formCount);
-
         const newDiv = document.createElement('div');
         newDiv.innerHTML = newRowHtml;
-        
         while (newDiv.firstChild) {
             container.appendChild(newDiv.firstChild);
         }
-
         totalFormsInput.value = formCount + 1;
     });
 

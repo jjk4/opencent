@@ -1,12 +1,17 @@
 {% extends 'master.html' %}
+{% load i18n %}
 
 {% block content %}
-  <h1>Transaktionen</h1>
+  <h1>{% trans "Transactions" %}</h1>
 
-  <a href="{% url 'transaction_add' %}" class="btn btn-primary mb-3">Neue Transaktion</a>
+  <a href="{% url 'transaction_add' %}" class="btn btn-primary mb-3">
+    <i class="bi bi-plus-circle me-1"></i> {% trans "New Transaction" %}
+  </a>
   
   {% if is_filter_active %}
-    <a href="{% url 'transactions' %}" class="btn btn-outline-secondary mb-3">Filter zurücksetzen</a>
+    <a href="{% url 'transactions' %}" class="btn btn-outline-secondary mb-3">
+      {% trans "Reset filters" %}
+    </a>
   {% endif %}
 
   <div id="transaction-list-container">
@@ -14,7 +19,7 @@
   </div>
 
   {% if not page_obj.object_list %}
-      <p class="mt-3 text-body-secondary">Keine Transaktionen gefunden.</p>
+      <p class="mt-3 text-body-secondary">{% trans "No transactions found." %}</p>
   {% endif %}
 
 {% endblock %}

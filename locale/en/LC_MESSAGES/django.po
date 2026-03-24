@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 10:47+0100\n"
+"POT-Creation-Date: 2026-03-24 11:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,6 +73,8 @@ msgstr ""
 
 #: manager/templates/index.html:53 manager/templates/search.html:20
 #: manager/templates/search.html:81 manager/templates/search.html:83
+#: manager/templates/transactions/_transaction_list_partial.html:31
+#: manager/templates/transactions/_transaction_list_partial.html:33
 msgid "Account Icon"
 msgstr ""
 
@@ -105,6 +107,7 @@ msgid "Accounts"
 msgstr ""
 
 #: manager/templates/master.html:48 manager/templates/search.html:64
+#: manager/templates/transactions/index.html:5
 msgid "Transactions"
 msgstr ""
 
@@ -113,6 +116,7 @@ msgid "Analysis"
 msgstr ""
 
 #: manager/templates/master.html:54 manager/templates/search.html:40
+#: manager/templates/transactions/detail.html:19
 msgid "Categories"
 msgstr ""
 
@@ -172,23 +176,187 @@ msgid "%(count)s transactions found."
 msgstr ""
 
 #: manager/templates/search.html:89
+#: manager/templates/transactions/_transaction_list_partial.html:39
 msgid "Multiple categories"
 msgstr ""
 
 #: manager/templates/search.html:112
+#: manager/templates/transactions/_transaction_list_partial.html:62
 msgid "Transfer"
 msgstr ""
 
 #: manager/templates/search.html:120
+#: manager/templates/transactions/_transaction_list_partial.html:70
 msgid "Refunded"
 msgstr ""
 
 #: manager/templates/search.html:122
+#: manager/templates/transactions/_transaction_list_partial.html:72
 msgid "Partially Refunded"
 msgstr ""
 
 #: manager/templates/search.html:147
+#: manager/templates/transactions/index.html:22
 msgid "No transactions found."
+msgstr ""
+
+#: manager/templates/transactions/_transaction_list_partial.html:108
+msgid "Loading more..."
+msgstr ""
+
+#: manager/templates/transactions/add.html:7
+msgid "Edit Transaction"
+msgstr ""
+
+#: manager/templates/transactions/add.html:9
+#: manager/templates/transactions/index.html:8
+msgid "New Transaction"
+msgstr ""
+
+#: manager/templates/transactions/add.html:28
+msgid "From Account (Sender)"
+msgstr ""
+
+#: manager/templates/transactions/add.html:36
+msgid "To Account (Receiver)"
+msgstr ""
+
+#: manager/templates/transactions/add.html:46
+#: manager/templates/transactions/add.html:118
+#: manager/templates/transactions/add.html:165
+#: manager/templates/transactions/detail.html:17
+msgid "Amount"
+msgstr ""
+
+#: manager/templates/transactions/add.html:54
+msgid "Date & Time"
+msgstr ""
+
+#: manager/templates/transactions/add.html:63
+#: manager/templates/transactions/detail.html:35
+msgid "Description"
+msgstr ""
+
+#: manager/templates/transactions/add.html:71
+msgid "Refund"
+msgstr ""
+
+#: manager/templates/transactions/add.html:72
+msgid "Is this amount a refund for a previous expense?"
+msgstr ""
+
+#: manager/templates/transactions/add.html:78
+msgid "Mark this transaction as a refund"
+msgstr ""
+
+#: manager/templates/transactions/add.html:84
+msgid "Original transaction(s)"
+msgstr ""
+
+#: manager/templates/transactions/add.html:87
+msgid "Hold Ctrl (Windows) or Cmd (Mac) to select multiple transactions."
+msgstr ""
+
+#: manager/templates/transactions/add.html:96
+msgid "Categories & Splitting"
+msgstr ""
+
+#: manager/templates/transactions/add.html:97
+msgid "The sum of the categories must exactly match the total amount."
+msgstr ""
+
+#: manager/templates/transactions/add.html:110
+#: manager/templates/transactions/add.html:161
+msgid "Category"
+msgstr ""
+
+#: manager/templates/transactions/add.html:130
+#: manager/templates/transactions/add.html:172
+#: manager/templates/transactions/detail.html:75
+msgid "Delete"
+msgstr ""
+
+#: manager/templates/transactions/add.html:140
+msgid "Add another category"
+msgstr ""
+
+#: manager/templates/transactions/add.html:145
+#: manager/templates/transactions/delete.html:24
+msgid "Cancel"
+msgstr ""
+
+#: manager/templates/transactions/add.html:148
+#: manager/templates/user_settings.html:60
+msgid "Save changes"
+msgstr ""
+
+#: manager/templates/transactions/add.html:150
+msgid "Add transaction"
+msgstr ""
+
+#: manager/templates/transactions/delete.html:8
+msgid "Confirm deletion"
+msgstr ""
+
+#: manager/templates/transactions/delete.html:11
+msgid "Do you really want to delete this transaction?"
+msgstr ""
+
+#: manager/templates/transactions/delete.html:14
+msgid "No description"
+msgstr ""
+
+#: manager/templates/transactions/delete.html:19
+msgid "This action cannot be undone."
+msgstr ""
+
+#: manager/templates/transactions/delete.html:25
+msgid "Yes, delete permanently"
+msgstr ""
+
+#: manager/templates/transactions/detail.html:5
+msgid "Back"
+msgstr ""
+
+#: manager/templates/transactions/detail.html:16
+msgid "Date"
+msgstr ""
+
+#: manager/templates/transactions/detail.html:30
+msgid "No categories assigned"
+msgstr ""
+
+#: manager/templates/transactions/detail.html:38
+msgid "This transaction is a refund for the following transactions:"
+msgstr ""
+
+#: manager/templates/transactions/detail.html:42
+msgid "Transaction ID"
+msgstr ""
+
+#: manager/templates/transactions/detail.html:42
+#: manager/templates/transactions/detail.html:55
+msgid "on"
+msgstr ""
+
+#: manager/templates/transactions/detail.html:51
+msgid "This transaction has the following refunds:"
+msgstr ""
+
+#: manager/templates/transactions/detail.html:55
+msgid "Refund ID"
+msgstr ""
+
+#: manager/templates/transactions/detail.html:68
+msgid "Duplicate"
+msgstr ""
+
+#: manager/templates/transactions/detail.html:71
+msgid "Edit"
+msgstr ""
+
+#: manager/templates/transactions/index.html:13
+msgid "Reset filters"
 msgstr ""
 
 #: manager/templates/user_settings.html:12
@@ -219,10 +387,6 @@ msgstr ""
 
 #: manager/templates/user_settings.html:40
 msgid "Choose the display language for your account."
-msgstr ""
-
-#: manager/templates/user_settings.html:60
-msgid "Save changes"
 msgstr ""
 
 #: opencent/settings.py:141

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 10:47+0100\n"
+"POT-Creation-Date: 2026-03-24 11:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,13 +70,13 @@ msgid "Total Wealth"
 msgstr "Gesamtvermögen"
 
 #: manager/templates/index.html:29
-#| msgid "Accounts"
 msgid "My Accounts"
 msgstr "Meine Konten"
 
 #: manager/templates/index.html:53 manager/templates/search.html:20
 #: manager/templates/search.html:81 manager/templates/search.html:83
-#| msgid "Accounts"
+#: manager/templates/transactions/_transaction_list_partial.html:31
+#: manager/templates/transactions/_transaction_list_partial.html:33
 msgid "Account Icon"
 msgstr "Konto Icon"
 
@@ -85,7 +85,6 @@ msgid "Current"
 msgstr "Aktuell"
 
 #: manager/templates/index.html:75
-#| msgid "No accounts found."
 msgid "No accounts found"
 msgstr "Keine Konten gefunden."
 
@@ -94,7 +93,6 @@ msgid "Create your first account to start tracking your finances."
 msgstr "Lege dein erstes Konto an, um deine Finanzen zu verfolgen."
 
 #: manager/templates/index.html:78
-#| msgid "Accounts"
 msgid "Add account"
 msgstr "Konto hinzufügen"
 
@@ -111,6 +109,7 @@ msgid "Accounts"
 msgstr "Konten"
 
 #: manager/templates/master.html:48 manager/templates/search.html:64
+#: manager/templates/transactions/index.html:5
 msgid "Transactions"
 msgstr "Transaktionen"
 
@@ -119,6 +118,7 @@ msgid "Analysis"
 msgstr "Analyse"
 
 #: manager/templates/master.html:54 manager/templates/search.html:40
+#: manager/templates/transactions/detail.html:19
 msgid "Categories"
 msgstr "Kategorien"
 
@@ -127,17 +127,14 @@ msgid "Search..."
 msgstr "Suche..."
 
 #: manager/templates/master.html:63
-#| msgid "Search..."
 msgid "Search"
 msgstr "Suche"
 
 #: manager/templates/master.html:84
-#| msgid "Username"
 msgid "User menu"
 msgstr "Benutzermenü"
 
 #: manager/templates/master.html:91
-#| msgid "Admin"
 msgid "Admin Panel"
 msgstr "Admin"
 
@@ -154,7 +151,6 @@ msgid "Login"
 msgstr "Einloggen"
 
 #: manager/templates/search.html:6
-#| msgid "Search..."
 msgid "Search for"
 msgstr "Suche nach"
 
@@ -173,7 +169,6 @@ msgid "%(count)s categories found."
 msgstr "%(count)s Kategorien gefunden."
 
 #: manager/templates/search.html:60
-#| msgid "Categories"
 msgid "No categories found."
 msgstr "Keine Kategorien gefunden."
 
@@ -183,26 +178,191 @@ msgid "%(count)s transactions found."
 msgstr "%(count)s Transaktionen gefunden."
 
 #: manager/templates/search.html:89
-#| msgid "Categories"
+#: manager/templates/transactions/_transaction_list_partial.html:39
 msgid "Multiple categories"
 msgstr "Mehrere Kategorien"
 
 #: manager/templates/search.html:112
+#: manager/templates/transactions/_transaction_list_partial.html:62
 msgid "Transfer"
 msgstr "Umbuchung"
 
 #: manager/templates/search.html:120
+#: manager/templates/transactions/_transaction_list_partial.html:70
 msgid "Refunded"
 msgstr "Rückerstattet"
 
 #: manager/templates/search.html:122
+#: manager/templates/transactions/_transaction_list_partial.html:72
 msgid "Partially Refunded"
 msgstr "Teilweise Rückerstattet"
 
 #: manager/templates/search.html:147
-#| msgid "Transactions"
+#: manager/templates/transactions/index.html:22
 msgid "No transactions found."
 msgstr "Keine Transaktionen gefunden."
+
+#: manager/templates/transactions/_transaction_list_partial.html:108
+msgid "Loading more..."
+msgstr "Lade mehr..."
+
+#: manager/templates/transactions/add.html:7
+msgid "Edit Transaction"
+msgstr "Transaktion bearbeiten"
+
+#: manager/templates/transactions/add.html:9
+#: manager/templates/transactions/index.html:8
+msgid "New Transaction"
+msgstr "Neue Transaktion"
+
+#: manager/templates/transactions/add.html:28
+msgid "From Account (Sender)"
+msgstr "Vom Konto (Sender)"
+
+#: manager/templates/transactions/add.html:36
+msgid "To Account (Receiver)"
+msgstr "Nach Konto (Empfänger)"
+
+#: manager/templates/transactions/add.html:46
+#: manager/templates/transactions/add.html:118
+#: manager/templates/transactions/add.html:165
+#: manager/templates/transactions/detail.html:17
+msgid "Amount"
+msgstr "Betrag"
+
+#: manager/templates/transactions/add.html:54
+msgid "Date & Time"
+msgstr "Datum & Uhrzeit"
+
+#: manager/templates/transactions/add.html:63
+#: manager/templates/transactions/detail.html:35
+msgid "Description"
+msgstr "Beschreibung"
+
+#: manager/templates/transactions/add.html:71
+msgid "Refund"
+msgstr "Rückerstattung"
+
+#: manager/templates/transactions/add.html:72
+msgid "Is this amount a refund for a previous expense?"
+msgstr "Ist dieser Betrag eine Rückerstattung für eine frühere Ausgabe?"
+
+#: manager/templates/transactions/add.html:78
+msgid "Mark this transaction as a refund"
+msgstr "Diese Transaktion als Rückerstattung markieren"
+
+#: manager/templates/transactions/add.html:84
+msgid "Original transaction(s)"
+msgstr "Ursprüngliche Transaktion(en)"
+
+#: manager/templates/transactions/add.html:87
+msgid "Hold Ctrl (Windows) or Cmd (Mac) to select multiple transactions."
+msgstr ""
+"Halte Strg (Windows) oder Cmd (Mac) gedrückt, um mehrere Transaktionen "
+"auszuwählen."
+
+#: manager/templates/transactions/add.html:96
+msgid "Categories & Splitting"
+msgstr "Kategorien und Aufteilung"
+
+#: manager/templates/transactions/add.html:97
+msgid "The sum of the categories must exactly match the total amount."
+msgstr "Die Summe der Kategorien muss genau dem Gesamtbetrag entsprechen."
+
+#: manager/templates/transactions/add.html:110
+#: manager/templates/transactions/add.html:161
+msgid "Category"
+msgstr "Kategorie"
+
+#: manager/templates/transactions/add.html:130
+#: manager/templates/transactions/add.html:172
+#: manager/templates/transactions/detail.html:75
+msgid "Delete"
+msgstr "Löschen"
+
+#: manager/templates/transactions/add.html:140
+msgid "Add another category"
+msgstr "Weitere Kategorie hinzufügen"
+
+#: manager/templates/transactions/add.html:145
+#: manager/templates/transactions/delete.html:24
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: manager/templates/transactions/add.html:148
+#: manager/templates/user_settings.html:60
+msgid "Save changes"
+msgstr "Änderungen speichern"
+
+#: manager/templates/transactions/add.html:150
+msgid "Add transaction"
+msgstr "Transaktion hinzufügen"
+
+#: manager/templates/transactions/delete.html:8
+msgid "Confirm deletion"
+msgstr "Löschen bestätigen"
+
+#: manager/templates/transactions/delete.html:11
+msgid "Do you really want to delete this transaction?"
+msgstr "Möchtest du diese Transaktion wirklich löschen?"
+
+#: manager/templates/transactions/delete.html:14
+msgid "No description"
+msgstr "Keine Beschreibung"
+
+#: manager/templates/transactions/delete.html:19
+msgid "This action cannot be undone."
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
+
+#: manager/templates/transactions/delete.html:25
+msgid "Yes, delete permanently"
+msgstr "Ja, unwiderruflich löschen"
+
+#: manager/templates/transactions/detail.html:5
+msgid "Back"
+msgstr "Zurück"
+
+#: manager/templates/transactions/detail.html:16
+msgid "Date"
+msgstr "Datum"
+
+#: manager/templates/transactions/detail.html:30
+msgid "No categories assigned"
+msgstr "Keine Kategorien zugewiesen"
+
+#: manager/templates/transactions/detail.html:38
+msgid "This transaction is a refund for the following transactions:"
+msgstr ""
+"Diese Transaktion ist eine Rückerstattung für die folgenden Transaktionen:"
+
+#: manager/templates/transactions/detail.html:42
+msgid "Transaction ID"
+msgstr "Transaktions ID"
+
+#: manager/templates/transactions/detail.html:42
+#: manager/templates/transactions/detail.html:55
+msgid "on"
+msgstr "am"
+
+#: manager/templates/transactions/detail.html:51
+msgid "This transaction has the following refunds:"
+msgstr "Diese Transaktion hat folgende Rückerstattungen:"
+
+#: manager/templates/transactions/detail.html:55
+msgid "Refund ID"
+msgstr "Rückerstattungs ID"
+
+#: manager/templates/transactions/detail.html:68
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+#: manager/templates/transactions/detail.html:71
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: manager/templates/transactions/index.html:13
+msgid "Reset filters"
+msgstr "Filter zurücksetzen"
 
 #: manager/templates/user_settings.html:12
 msgid "Appearance"
@@ -235,10 +395,6 @@ msgstr "Sprache"
 #: manager/templates/user_settings.html:40
 msgid "Choose the display language for your account."
 msgstr "Wähle die Anzeigesprache für deinen Account."
-
-#: manager/templates/user_settings.html:60
-msgid "Save changes"
-msgstr "Änderungen speichern"
 
 #: opencent/settings.py:141
 msgid "German"
