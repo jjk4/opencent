@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from .models import Transaction, Account, Category, Refund
+from .models import Transaction, Account, Category, Refund, UserSettings
 from django.contrib.auth.models import User
 from .forms import TransactionForm, AccountForm, CategoryForm, TransactionSplitFormSet
 from datetime import datetime, timedelta
@@ -709,6 +709,25 @@ def quicksearch(request):
         'has_results': bool(transactions or accounts or categories)
     }
     return render(request, 'elements/quicksearch_results.html', context)
+
+@login_required
+def user_settings(request):
+    settings, created = UserSettings.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        theme = request.POST.get('theme')
+        if theme in ['light', 'dark', 'auto']:
+            settings.theme = theme
+            settings.save()
+
+    context = {
+        'header_data': {
+            'title': f'Benutzereinstellungen',
+            'selected_tab': '',
+        },
+        'settings': settings
+    }
+    return render(request, 'user_settings.html', context)
 
 @login_required
 def charts(request):

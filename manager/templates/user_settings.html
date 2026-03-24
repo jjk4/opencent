@@ -1,0 +1,41 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Einstellungen</h1>
+
+    <div class="row">            
+        <h5 class="card-title fw-bold mb-3"><i class="bi bi-palette me-2 opacity-75"></i> Erscheinungsbild</h5>
+        <p class="text-body-secondary small mb-4">Wähle dein bevorzugtes Design für OpenCent. Diese Einstellung wird geräteübergreifend für dein Konto gespeichert.</p>
+
+        <form method="post" action="{% url 'settings' %}">
+            {% csrf_token %}
+            
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="theme" id="themeAuto" value="auto" 
+                        {% if settings.theme == 'auto' %}checked{% endif %}>
+                <label class="form-check-label" for="themeAuto">
+                    <i class="bi bi-circle-half me-1 opacity-75"></i> System-Standard (Auto)
+                </label>
+            </div>
+            
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="theme" id="themeLight" value="light" 
+                        {% if settings.theme == 'light' %}checked{% endif %}>
+                <label class="form-check-label" for="themeLight">
+                    <i class="bi bi-sun-fill me-1 opacity-75"></i> Hell
+                </label>
+            </div>
+            
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="theme" id="themeDark" value="dark" 
+                        {% if settings.theme == 'dark' %}checked{% endif %}>
+                <label class="form-check-label" for="themeDark">
+                    <i class="bi bi-moon-stars-fill me-1 opacity-75"></i> Dunkel
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Änderungen speichern</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

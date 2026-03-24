@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="de">
   <head>
@@ -12,16 +13,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://unpkg.com/htmx.org@2.0.7"></script>
+    {% with user_theme=request.user.settings.theme|default:"auto" %}
     <script>
-      const getPreferredTheme = () => {
-        const storedTheme = localStorage.getItem('theme');
-        if (storedTheme) {
-          return storedTheme;
-        }
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      };
-      document.documentElement.setAttribute('data-bs-theme', getPreferredTheme());
+      const userTheme = "{{ user_theme }}";
+      if (userTheme === 'auto') {
+        const sysTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-bs-theme', sysTheme);
+      } else {
+        document.documentElement.setAttribute('data-bs-theme', userTheme);
+      }
     </script>
+    {% endwith %}
   </head>
   <body>
     <header class="p-3 mb-3 border-bottom">
@@ -75,23 +77,21 @@
               });
             </script>
             <div class="d-flex align-items-center text-end">
-            <button id="theme-toggle" class="btn btn-link link-body-emphasis text-decoration-none me-3" aria-label="Dark Mode umschalten">
-              <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
-            </button>
             <div class="dropdown">
               <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Benutzermenü"><i class="bi bi-person-circle"></i></a> <ul class="dropdown-menu text-small" style="">
                 {% if user.is_authenticated %}
                   {% if request.user.is_superuser or request.user.is_staff%}
                   <li>
-                    <a class="dropdown-item" href="/admin/">Admin-Bereich</a>
+                    <a class="dropdown-item" href="/admin/"><i class="bi bi-shield-lock me-2 opacity-75"></i> Admin-Bereich</a>
                   </li>
                   {% endif %}
+                  <li><a class="dropdown-item" href="{% url 'settings' %}"><i class="bi bi-gear me-2 opacity-75"></i> Einstellungen</a></li>
                   <li>
                     <hr class="dropdown-divider" />
                   </li> <li>
                     <form method="post" action="{% url 'logout' %}">
                       {% csrf_token %}
-                      <button type="submit" class="dropdown-item">Logout</button>
+                      <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2 opacity-75"></i> Logout</button>
                     </form>
                   </li>
                 {% else %}
@@ -114,31 +114,5 @@
         </div>
       </div>
     </main>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const toggleBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-
-        const setTheme = (theme) => {
-          document.documentElement.setAttribute('data-bs-theme', theme);
-          localStorage.setItem('theme', theme);
-          if (theme === 'dark') {
-            themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
-          } else {
-            themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
-          }
-        };
-
-        if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
-           themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
-        }
-
-        toggleBtn.addEventListener('click', () => {
-          const currentTheme = document.documentElement.getAttribute('data-bs-theme');
-          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-          setTheme(newTheme);
-        });
-      });
-    </script>
   </body>
 </html>

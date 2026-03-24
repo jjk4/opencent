@@ -5,6 +5,9 @@ from PIL import Image, ImageOps  # Wichtig für Bildbearbeitung
 from django.core.files.base import ContentFile
 import os
 from django.core.validators import FileExtensionValidator
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Transaction(models.Model):
     sender = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='sent_transactions', null=False, blank=False, db_index=True)
@@ -179,3 +182,26 @@ class Category(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+class UserSettings(models.Model):
+    THEME_CHOICES = [
+        ('auto', 'System-Standard'),
+        ('light', 'Hell'),
+        ('dark', 'Dunkel'),
+    ]
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='settings')
+    
+    theme = models.CharField(max_length=10, choices=THEME_CHOICES, default='auto')
+
+    def __str__(self):
+        return f"Einstellungen von {self.user.username}"
+
+@receiver(post_save, sender=User)
+def create_user_settings(sender, instance, created, **kwargs):
+    if created:
+        UserSettings.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_settings(sender, instance, **kwargs):
+    instance.settings.save()

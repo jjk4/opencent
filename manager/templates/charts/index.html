@@ -1,15 +1,36 @@
 {% extends 'master.html' %}
 {% load static %}
 {% block content %}
+
+<style>
+    #sankey-preview, #balance-preview {
+        pointer-events: none;
+        min-height: 200px;
+    }
+    
+    #sankey-preview text {
+        fill: var(--bs-body-color) !important; 
+        font-family: inherit !important;
+    }
+    
+    #sankey-preview svg {
+        border: none !important;
+    }
+    #sankey-preview #toolbar {
+        display: none !important;
+    }
+</style>
+
     <h1 class="mb-4">Analyse</h1>
     <div class="row">
         <div class="col-12 col-md-6 col-lg-4 mb-4">
             <a href="/charts/balance_over_time" class="text-decoration-none text-body">
                 <div class="card h-100 shadow-sm border-0 bg-body-tertiary">
-                    <img src="{% static 'charts/chart_balance_over_time.webp' %}" class="card-img-top" alt="Vorschau Kontostand" />
-                    <div class="card-body">
+                    <div id="balance-preview" style="height: 200px; width: 100%;"></div>
+                    
+                    <div class="card-body pt-0">
                         <h5 class="card-title fw-bold">Kontostand</h5>
-                        <p class="card-text text-body-secondary">Zeigt den absoluten Kontostand über einen gewählten Zeitraum an</p>
+                        <p class="card-text text-body-secondary small">Zeigt den absoluten Kontostand über einen gewählten Zeitraum an</p>
                     </div>
                 </div>
             </a>
@@ -18,15 +39,98 @@
         <div class="col-12 col-md-6 col-lg-4 mb-4">
             <a href="/charts/sankey" class="text-decoration-none text-body">
                 <div class="card h-100 shadow-sm border-0 bg-body-tertiary">
-                    <img src="{% static 'charts/chart_sankey.webp' %}" class="card-img-top" alt="Vorschau Sankey" />
-                    <div class="card-body">
+                    <div id="sankey-preview" class="d-flex justify-content-center w-100"></div>
+                    
+                    <div class="card-body pt-0">
                         <h5 class="card-title fw-bold">Einnahmen/Ausgaben Sankey</h5>
-                        <p class="card-text text-body-secondary">Zeigt Einnahmen und Ausgaben nach Kategorie in einem Sankey an</p>
+                        <p class="card-text text-body-secondary small">Zeigt Einnahmen und Ausgaben nach Kategorie in einem Sankey an</p>
                     </div>
                 </div>
             </a>
         </div>
-
     </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexsankey@1.3.0"></script>
+
+<script>
+function initPreviewCharts() {
+    const balanceContainer = document.querySelector("#balance-preview");
+    const sankeyContainer = document.querySelector("#sankey-preview");
+
+    if (!balanceContainer || !sankeyContainer) return;
+
+    balanceContainer.innerHTML = '';
+    sankeyContainer.innerHTML = '';
+
+    const getCurrentTheme = () => document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light';
+
+    const lineOptions = {
+        series: [{
+            name: 'Vorschau',
+            data: [
+                { x: new Date('2025-12-01').getTime(), y: 22000 },
+                { x: new Date('2025-12-05').getTime(), y: 22050 },
+                { x: new Date('2025-12-07').getTime(), y: 22500 },
+                { x: new Date('2025-12-11').getTime(), y: 22500 },
+                { x: new Date('2025-12-13').getTime(), y: 21800 },
+                { x: new Date('2025-12-19').getTime(), y: 21800 },
+                { x: new Date('2025-12-21').getTime(), y: 21950 },
+            ]
+        }],
+        chart: {
+            type: 'area',
+            height: 200,
+            animations: { enabled: false },
+            fontFamily: 'inherit',
+            background: 'transparent',
+            toolbar: { show: false },
+            zoom: { enabled: false },
+            selection: { enabled: false },
+        },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'stepline', width: 2 },
+        
+        xaxis: { type: 'datetime', labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false }, tooltip: { enabled: false } },
+        yaxis: { labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+        grid: { show: false },
+        
+        theme: { mode: getCurrentTheme() },
+        colors: ['#0d6efd'],
+        fill: { type: 'gradient' },
+        tooltip: { enabled: false }
+    };
+
+    const balanceChart = new ApexCharts(balanceContainer, lineOptions);
+    balanceChart.render();
+
+    const sankeyData = {
+        nodes: [
+            { id: 'l1', title: 'Lohn' }, { id: 'l2', title: 'Geschenke' },
+            { id: 'b', title: 'Budget: 2737,54 €' },
+            { id: 'e1', title: 'Miete' }, { id: 'e2', title: 'Essen' }, { id: 'e3', title: 'Hobby' }
+        ],
+        edges: [
+            { source: 'l1', target: 'b', value: 2500 }, { source: 'l2', target: 'b', value: 237 },
+            { source: 'b', target: 'e1', value: 1200 }, { source: 'b', target: 'e2', value: 800 }, { source: 'b', target: 'e3', value: 737 }
+        ],
+    };
+
+    const sankeyChart = new ApexSankey(sankeyContainer, {
+        nodeWidth: 8,
+    });
+    
+    try {
+        sankeyChart.render(sankeyData);
+    } catch(e) {
+        console.warn("Sankey Vorschau Fehler:", e);
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initPreviewCharts, 50));
+} else {
+    setTimeout(initPreviewCharts, 50);
+}
+</script>
 {% endblock %}
