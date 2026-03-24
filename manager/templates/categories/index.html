@@ -1,15 +1,18 @@
 {% extends 'master.html' %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-4">
-    <h1>Kategorien</h1>
-    <a href="{% url 'category_add' %}" class="btn btn-primary mb-3">Neue Kategorie hinzufügen</a>
+    <h1>{% trans "Categories" %}</h1>
+    <a href="{% url 'category_add' %}" class="btn btn-primary mb-3">
+        <i class="bi bi-plus-circle me-1"></i> {% trans "Add new category" %}
+    </a>
     
     <div class="list-group">
         {% for category in categories %}
             {% include "elements/categories/category_item.html" with category=category %}
         {% empty %}
-            <p>Keine Kategorien vorhanden.</p>
+            <p class="text-body-secondary">{% trans "No categories available." %}</p>
         {% endfor %}
     </div>
 </div>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 11:29+0100\n"
+"POT-Creation-Date: 2026-03-24 11:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,147 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: manager/templates/categories/add.html:6
+msgid "Edit Category"
+msgstr ""
+
+#: manager/templates/categories/add.html:8
+msgid "New Category"
+msgstr ""
+
+#: manager/templates/categories/add.html:20
+msgid "Category name"
+msgstr ""
+
+#: manager/templates/categories/add.html:27
+msgid "Parent category (optional)"
+msgstr ""
+
+#: manager/templates/categories/add.html:33
+#: manager/templates/elements/quicksearch_results.html:13
+msgid "Icon"
+msgstr ""
+
+#: manager/templates/categories/add.html:43
+msgid "Selected icon"
+msgstr ""
+
+#: manager/templates/categories/add.html:44
+msgid "None selected"
+msgstr ""
+
+#: manager/templates/categories/add.html:60
+msgid "Select icon"
+msgstr ""
+
+#: manager/templates/categories/add.html:77
+msgid "Icon Library"
+msgstr ""
+
+#: manager/templates/categories/add.html:100
+msgid "Search (e.g. arrow, user)..."
+msgstr ""
+
+#: manager/templates/categories/add.html:134
+msgid "No icon found with this name."
+msgstr ""
+
+#: manager/templates/categories/add.html:140
+msgid "Select an icon from the list."
+msgstr ""
+
+#: manager/templates/categories/add.html:151
+#: manager/templates/categories/delete.html:38
+#: manager/templates/transactions/add.html:145
+#: manager/templates/transactions/delete.html:24
+msgid "Cancel"
+msgstr ""
+
+#: manager/templates/categories/add.html:155
+#: manager/templates/transactions/add.html:148
+#: manager/templates/user_settings.html:60
+msgid "Save changes"
+msgstr ""
+
+#: manager/templates/categories/add.html:157
+msgid "Add category"
+msgstr ""
+
+#: manager/templates/categories/add.html:189
+msgid "Error loading icons"
+msgstr ""
+
+#: manager/templates/categories/delete.html:12
+msgid "Affected transactions"
+msgstr ""
+
+#: manager/templates/categories/delete.html:20
+msgid "Back to category"
+msgstr ""
+
+#: manager/templates/categories/delete.html:24
+#: manager/templates/transactions/delete.html:8
+msgid "Confirm deletion"
+msgstr ""
+
+#: manager/templates/categories/delete.html:27
+msgid "Do you really want to delete this category?"
+msgstr ""
+
+#: manager/templates/categories/delete.html:33
+#: manager/templates/transactions/delete.html:19
+msgid "This action cannot be undone."
+msgstr ""
+
+#: manager/templates/categories/delete.html:39
+#: manager/templates/transactions/delete.html:25
+msgid "Yes, delete permanently"
+msgstr ""
+
+#: manager/templates/categories/detail.html:6
+#: manager/templates/transactions/detail.html:5
+msgid "Back"
+msgstr ""
+
+#: manager/templates/categories/detail.html:16
+msgid "Parent category"
+msgstr ""
+
+#: manager/templates/categories/detail.html:21
+msgid "Subcategories"
+msgstr ""
+
+#: manager/templates/categories/detail.html:39
+#: manager/templates/transactions/detail.html:71
+msgid "Edit"
+msgstr ""
+
+#: manager/templates/categories/detail.html:43
+#: manager/templates/transactions/add.html:130
+#: manager/templates/transactions/add.html:172
+#: manager/templates/transactions/detail.html:75
+msgid "Delete"
+msgstr ""
+
+#: manager/templates/categories/detail.html:47
+msgid "Show transactions"
+msgstr ""
+
+#: manager/templates/categories/index.html:6
+#: manager/templates/elements/quicksearch_results.html:25
+#: manager/templates/master.html:54 manager/templates/search.html:40
+#: manager/templates/transactions/detail.html:19
+msgid "Categories"
+msgstr ""
+
+#: manager/templates/categories/index.html:8
+msgid "Add new category"
+msgstr ""
+
+#: manager/templates/categories/index.html:15
+msgid "No categories available."
+msgstr ""
 
 #: manager/templates/charts/balance_over_time.html:5
 msgid "Account Balance over Time"
@@ -142,16 +283,6 @@ msgstr ""
 #: manager/templates/elements/quicksearch_results.html:8
 #: manager/templates/master.html:45 manager/templates/search.html:9
 msgid "Accounts"
-msgstr ""
-
-#: manager/templates/elements/quicksearch_results.html:13
-msgid "Icon"
-msgstr ""
-
-#: manager/templates/elements/quicksearch_results.html:25
-#: manager/templates/master.html:54 manager/templates/search.html:40
-#: manager/templates/transactions/detail.html:19
-msgid "Categories"
 msgstr ""
 
 #: manager/templates/elements/quicksearch_results.html:38
@@ -422,32 +553,12 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
-#: manager/templates/transactions/add.html:130
-#: manager/templates/transactions/add.html:172
-#: manager/templates/transactions/detail.html:75
-msgid "Delete"
-msgstr ""
-
 #: manager/templates/transactions/add.html:140
 msgid "Add another category"
 msgstr ""
 
-#: manager/templates/transactions/add.html:145
-#: manager/templates/transactions/delete.html:24
-msgid "Cancel"
-msgstr ""
-
-#: manager/templates/transactions/add.html:148
-#: manager/templates/user_settings.html:60
-msgid "Save changes"
-msgstr ""
-
 #: manager/templates/transactions/add.html:150
 msgid "Add transaction"
-msgstr ""
-
-#: manager/templates/transactions/delete.html:8
-msgid "Confirm deletion"
 msgstr ""
 
 #: manager/templates/transactions/delete.html:11
@@ -456,18 +567,6 @@ msgstr ""
 
 #: manager/templates/transactions/delete.html:14
 msgid "No description"
-msgstr ""
-
-#: manager/templates/transactions/delete.html:19
-msgid "This action cannot be undone."
-msgstr ""
-
-#: manager/templates/transactions/delete.html:25
-msgid "Yes, delete permanently"
-msgstr ""
-
-#: manager/templates/transactions/detail.html:5
-msgid "Back"
 msgstr ""
 
 #: manager/templates/transactions/detail.html:16
@@ -501,10 +600,6 @@ msgstr ""
 
 #: manager/templates/transactions/detail.html:68
 msgid "Duplicate"
-msgstr ""
-
-#: manager/templates/transactions/detail.html:71
-msgid "Edit"
 msgstr ""
 
 #: manager/templates/transactions/index.html:13

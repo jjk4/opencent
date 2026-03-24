@@ -1,29 +1,36 @@
-{% extends 'master.html' %} {% block content %}
+{% extends 'master.html' %} 
+{% load i18n %}
+{% block content %}
+
 {% if is_edit %}
-    <h1>Kategorie bearbeiten</h1>
+    <h1>{% trans "Edit Category" %}</h1>
 {% else %}
-    <h1>Neue Kategorie</h1>
+    <h1>{% trans "New Category" %}</h1>
 {% endif %}
+
 <form method="post">
-    {% csrf_token %} {% if form.non_field_errors %}
+    {% csrf_token %} 
+    {% if form.non_field_errors %}
     <div class="alert alert-danger">
         {% for error in form.non_field_errors %} {{ error }} {% endfor %}
     </div>
     {% endif %}
+
     <div class="mb-3">
-        <label class="form-label">Name der Kategorie</label>
+        <label class="form-label">{% trans "Category name" %}</label>
         {{ form.name }} {% if form.name.errors %}
         <div class="text-danger small">{{ form.name.errors }}</div>
         {% endif %}
     </div>
+
     <div class="mb-3">
-        <label class="form-label">Parent Kategorie (optional)</label>
+        <label class="form-label">{% trans "Parent category (optional)" %}</label>
         {{ form.parent_category }} {% if form.parent_category.errors %}
         <div class="text-danger small">{{ form.parent_category.errors }}</div>
         {% endif %}
     </div>
 
-    <label class="form-label">Icon</label>
+    <label class="form-label">{% trans "Icon" %}</label>
 
     <div class="d-flex align-items-center mb-3">
         <div class="p-3 border rounded bg-light me-3">
@@ -33,8 +40,8 @@
             ></i>
         </div>
         <div>
-            <label class="form-label text-muted small">Gewähltes Icon:</label>
-            <div class="fw-bold" id="selected-icon-name">Keins ausgewählt</div>
+            <label class="form-label text-muted small">{% trans "Selected icon" %}:</label>
+            <div class="fw-bold" id="selected-icon-name">{% trans "None selected" %}</div>
             <input
                 type="hidden"
                 id="{{ form.icon.id_for_label }}"
@@ -43,17 +50,19 @@
             />
         </div>
     </div>
+
     <button
         type="button"
         class="btn btn-primary"
         data-bs-toggle="modal"
         data-bs-target="#iconPickerModal"
     >
-        <i class="bi bi-grid-3x3-gap me-2"></i> Icon auswählen
+        <i class="bi bi-grid-3x3-gap me-2"></i> {% trans "Select icon" %}
     </button>
     {% if form.icon.errors %}
     <div class="text-danger small">{{ form.icon.errors }}</div>
     {% endif %}
+
     <div
         class="modal fade"
         id="iconPickerModal"
@@ -65,7 +74,7 @@
         >
             <div class="modal-content h-75">
                 <div class="modal-header">
-                    <h5 class="modal-title">Icon Bibliothek</h5>
+                    <h5 class="modal-title">{% trans "Icon Library" %}</h5>
                     <button
                         type="button"
                         class="btn-close"
@@ -88,7 +97,7 @@
                                 type="text"
                                 id="icon-search"
                                 class="form-control border-start-0 shadow-none"
-                                placeholder="Suche (z.B. arrow, user)..."
+                                placeholder="{% trans 'Search (e.g. arrow, user)...' %}"
                                 autocomplete="off"
                             />
                         </div>
@@ -122,26 +131,31 @@
                         class="text-center py-5 d-none text-muted"
                     >
                         <i class="bi bi-emoji-frown fs-1 mb-2"></i>
-                        <p>Kein Icon mit diesem Namen gefunden.</p>
+                        <p>{% trans "No icon found with this name." %}</p>
                     </div>
                 </div>
 
                 <div class="modal-footer bg-light">
                     <small class="text-muted w-100 text-center"
-                        >Wähle ein Icon aus der Liste.</small
+                        >{% trans "Select an icon from the list." %}</small
                     >
                 </div>
             </div>
         </div>
     </div>
+
     <hr />
+
     <div class="d-flex justify-content-end">
-        <a href="{% url 'categories' %}" class="btn btn-secondary me-2"
-            >Abbrechen</a
-        >
+        <a href="{% url 'categories' %}" class="btn btn-secondary me-2">
+            {% trans "Cancel" %}
+        </a>
         <button type="submit" class="btn btn-primary">
-            {% if is_edit %} Änderungen speichern {% else %} Kategorie
-            hinzufügen {% endif %}
+            {% if is_edit %} 
+                {% trans "Save changes" %} 
+            {% else %} 
+                {% trans "Add category" %} 
+            {% endif %}
         </button>
     </div>
 </form>
@@ -153,7 +167,7 @@
     const modalElement = document.getElementById("iconPickerModal");
     const hiddenInput = document.getElementById("id_icon");
 
-    if (hiddenInput.value) {
+    if (hiddenInput && hiddenInput.value) {
         selectIcon(hiddenInput.value);
     }
 
@@ -172,7 +186,7 @@
             .catch((err) => {
                 console.error(err);
                 document.getElementById("loading-spinner").innerHTML =
-                    '<span class="text-danger">Fehler beim Laden</span>';
+                    '<span class="text-danger">{% trans "Error loading icons" %}</span>';
             });
     });
 
@@ -215,7 +229,6 @@
         container.innerHTML = html;
     }
 
-    // 5. Auswahl Funktion
     function selectIcon(iconName) {
         const displayIcon = document.getElementById("selected-icon-display");
         const displayName = document.getElementById("selected-icon-name");

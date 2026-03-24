@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 11:31+0100\n"
+"POT-Creation-Date: 2026-03-24 11:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,151 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: manager/templates/categories/add.html:6
+msgid "Edit Category"
+msgstr "Kategorie bearbeiten"
+
+#: manager/templates/categories/add.html:8
+msgid "New Category"
+msgstr "Neue Kategorie"
+
+#: manager/templates/categories/add.html:20
+msgid "Category name"
+msgstr "Kategorie Name"
+
+#: manager/templates/categories/add.html:27
+msgid "Parent category (optional)"
+msgstr "Übergeordnete Kategorie (optional)"
+
+#: manager/templates/categories/add.html:33
+#: manager/templates/elements/quicksearch_results.html:13
+msgid "Icon"
+msgstr "Icon"
+
+#: manager/templates/categories/add.html:43
+#| msgid "Selected icon:"
+msgid "Selected icon"
+msgstr "Ausgewähltes Icon"
+
+#: manager/templates/categories/add.html:44
+msgid "None selected"
+msgstr "Kein Icon ausgewählt"
+
+#: manager/templates/categories/add.html:60
+msgid "Select icon"
+msgstr "Icon auswählen"
+
+#: manager/templates/categories/add.html:77
+msgid "Icon Library"
+msgstr "Icon-Bibliothek"
+
+#: manager/templates/categories/add.html:100
+msgid "Search (e.g. arrow, user)..."
+msgstr "Suchen (z.B. arrow, user)..."
+
+#: manager/templates/categories/add.html:134
+msgid "No icon found with this name."
+msgstr "Kein Icon mit diesem Namen gefunden."
+
+#: manager/templates/categories/add.html:140
+msgid "Select an icon from the list."
+msgstr "Wähle ein Icon aus der Liste aus."
+
+#: manager/templates/categories/add.html:151
+#: manager/templates/categories/delete.html:38
+#: manager/templates/transactions/add.html:145
+#: manager/templates/transactions/delete.html:24
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: manager/templates/categories/add.html:155
+#: manager/templates/transactions/add.html:148
+#: manager/templates/user_settings.html:60
+msgid "Save changes"
+msgstr "Änderungen speichern"
+
+#: manager/templates/categories/add.html:157
+msgid "Add category"
+msgstr "Kategorie hinzufügen"
+
+#: manager/templates/categories/add.html:189
+msgid "Error loading icons"
+msgstr "Fehler beim Laden der Icons"
+
+#: manager/templates/categories/delete.html:12
+#| msgid "Affected transactions:"
+msgid "Affected transactions"
+msgstr "Betroffnene Transaktionen"
+
+#: manager/templates/categories/delete.html:20
+msgid "Back to category"
+msgstr "Zurück zur Kategorie"
+
+#: manager/templates/categories/delete.html:24
+#: manager/templates/transactions/delete.html:8
+msgid "Confirm deletion"
+msgstr "Löschen bestätigen"
+
+#: manager/templates/categories/delete.html:27
+msgid "Do you really want to delete this category?"
+msgstr "Möchtest du diese Kategorie wirklich löschen?"
+
+#: manager/templates/categories/delete.html:33
+#: manager/templates/transactions/delete.html:19
+msgid "This action cannot be undone."
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
+
+#: manager/templates/categories/delete.html:39
+#: manager/templates/transactions/delete.html:25
+msgid "Yes, delete permanently"
+msgstr "Ja, unwiderruflich löschen"
+
+#: manager/templates/categories/detail.html:6
+#: manager/templates/transactions/detail.html:5
+msgid "Back"
+msgstr "Zurück"
+
+#: manager/templates/categories/detail.html:16
+#, fuzzy
+#| msgid "Parent category:"
+msgid "Parent category"
+msgstr "Übergeordnete Kategorie:"
+
+#: manager/templates/categories/detail.html:21
+msgid "Subcategories"
+msgstr "Unterkategorien"
+
+#: manager/templates/categories/detail.html:39
+#: manager/templates/transactions/detail.html:71
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: manager/templates/categories/detail.html:43
+#: manager/templates/transactions/add.html:130
+#: manager/templates/transactions/add.html:172
+#: manager/templates/transactions/detail.html:75
+msgid "Delete"
+msgstr "Löschen"
+
+#: manager/templates/categories/detail.html:47
+msgid "Show transactions"
+msgstr "Transaktionen anzeigen"
+
+#: manager/templates/categories/index.html:6
+#: manager/templates/elements/quicksearch_results.html:25
+#: manager/templates/master.html:54 manager/templates/search.html:40
+#: manager/templates/transactions/detail.html:19
+msgid "Categories"
+msgstr "Kategorien"
+
+#: manager/templates/categories/index.html:8
+msgid "Add new category"
+msgstr "Neue Kategorie hinzufügen"
+
+#: manager/templates/categories/index.html:15
+msgid "No categories available."
+msgstr "Keine Kategorien verfügbar."
 
 #: manager/templates/charts/balance_over_time.html:5
 msgid "Account Balance over Time"
@@ -143,16 +288,6 @@ msgstr "Unterkategorien ein-/ausblenden"
 #: manager/templates/master.html:45 manager/templates/search.html:9
 msgid "Accounts"
 msgstr "Konten"
-
-#: manager/templates/elements/quicksearch_results.html:13
-msgid "Icon"
-msgstr "Icon"
-
-#: manager/templates/elements/quicksearch_results.html:25
-#: manager/templates/master.html:54 manager/templates/search.html:40
-#: manager/templates/transactions/detail.html:19
-msgid "Categories"
-msgstr "Kategorien"
 
 #: manager/templates/elements/quicksearch_results.html:38
 #: manager/templates/master.html:48 manager/templates/search.html:64
@@ -430,33 +565,13 @@ msgstr "Die Summe der Kategorien muss genau dem Gesamtbetrag entsprechen."
 msgid "Category"
 msgstr "Kategorie"
 
-#: manager/templates/transactions/add.html:130
-#: manager/templates/transactions/add.html:172
-#: manager/templates/transactions/detail.html:75
-msgid "Delete"
-msgstr "Löschen"
-
 #: manager/templates/transactions/add.html:140
 msgid "Add another category"
 msgstr "Weitere Kategorie hinzufügen"
 
-#: manager/templates/transactions/add.html:145
-#: manager/templates/transactions/delete.html:24
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: manager/templates/transactions/add.html:148
-#: manager/templates/user_settings.html:60
-msgid "Save changes"
-msgstr "Änderungen speichern"
-
 #: manager/templates/transactions/add.html:150
 msgid "Add transaction"
 msgstr "Transaktion hinzufügen"
-
-#: manager/templates/transactions/delete.html:8
-msgid "Confirm deletion"
-msgstr "Löschen bestätigen"
 
 #: manager/templates/transactions/delete.html:11
 msgid "Do you really want to delete this transaction?"
@@ -465,18 +580,6 @@ msgstr "Möchtest du diese Transaktion wirklich löschen?"
 #: manager/templates/transactions/delete.html:14
 msgid "No description"
 msgstr "Keine Beschreibung"
-
-#: manager/templates/transactions/delete.html:19
-msgid "This action cannot be undone."
-msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
-
-#: manager/templates/transactions/delete.html:25
-msgid "Yes, delete permanently"
-msgstr "Ja, unwiderruflich löschen"
-
-#: manager/templates/transactions/detail.html:5
-msgid "Back"
-msgstr "Zurück"
 
 #: manager/templates/transactions/detail.html:16
 msgid "Date"
@@ -511,10 +614,6 @@ msgstr "Rückerstattungs ID"
 #: manager/templates/transactions/detail.html:68
 msgid "Duplicate"
 msgstr "Duplizieren"
-
-#: manager/templates/transactions/detail.html:71
-msgid "Edit"
-msgstr "Bearbeiten"
 
 #: manager/templates/transactions/index.html:13
 msgid "Reset filters"
