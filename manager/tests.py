@@ -414,8 +414,8 @@ class GeneralViewTests(TestCase):
         self.assertTemplateUsed(response, 'index.html')
         self.assertTemplateUsed(response, 'master.html')
         
-        self.assertContains(response, "Gesamtvermögen")
-        self.assertContains(response, "Meine Konten")
+        self.assertContains(response, "Total Wealth")
+        self.assertContains(response, "My Accounts")
     
     def test_login_required_redirects(self):
         """Tests that all protected views redirect to the login page when accessed by an anonymous user."""

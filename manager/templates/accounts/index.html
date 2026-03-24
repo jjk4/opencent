@@ -1,16 +1,19 @@
 {% extends 'master.html' %}
 {% load humanize %}
+{% load i18n %}
 {% block content %}
-<h1>Kontenübersicht</h1>
-<a href="{% url 'account_add' %}" class="btn btn-primary mb-3">Neues Konto hinzufügen</a>
+<h1>{% trans "Account Overview" %}</h1>
+<a href="{% url 'account_add' %}" class="btn btn-primary mb-3">
+    <i class="bi bi-plus-circle me-1"></i> {% trans "Add new account" %}
+</a>
 
-<h3>Meine aktiven Konten:</h3>
+<h3>{% trans "My active accounts:" %}</h3>
 <table class="table table-hover align-middle">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Kontonummer</th>
-            <th class="text-end">Aktueller Saldo</th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Account Number" %}</th>
+            <th class="text-end">{% trans "Current Balance" %}</th>
         </tr>
     </thead>
     <tbody>
@@ -33,18 +36,19 @@
         {% endif %}
         {% empty %}
         <tr>
-            <td colspan="5" class="text-center">Keine Konten gefunden.</td>
+            <td colspan="3" class="text-center">{% trans "No accounts found." %}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-<h3 class="mt-5">Meine geschlossenen Konten:</h3>
+
+<h3 class="mt-5">{% trans "My closed accounts:" %}</h3>
 <table class="table table-hover align-middle">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Kontonummer</th>
-            <th class="text-end">Aktueller Saldo</th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Account Number" %}</th>
+            <th class="text-end">{% trans "Current Balance" %}</th>
         </tr>
     </thead>
     <tbody>
@@ -67,30 +71,29 @@
         {% endif %}
         {% empty %}
         <tr>
-            <td colspan="5" class="text-center">Keine Konten gefunden.</td>
+            <td colspan="3" class="text-center">{% trans "No accounts found." %}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-<h3 class="mt-5">Fremde Konten:</h3>
+
+<h3 class="mt-5">{% trans "External accounts:" %}</h3>
 <table class="table table-hover align-middle">
     <thead>
         <tr>
-            <th>Name</th>
+            <th>{% trans "Name" %}</th>
         </tr>
     </thead>
     <tbody>
         {% for account in accounts %}
         {% if not account.is_mine%}
-            {% with balance=account.get_current_balance %}
-                <tr>
-                    <td><a href="{% url 'account_detail' account.id %}">{{ account.name }}</a></td>
-                </tr>
-            {% endwith %}
+            <tr>
+                <td><a href="{% url 'account_detail' account.id %}">{{ account.name }}</a></td>
+            </tr>
         {% endif %}
         {% empty %}
         <tr>
-            <td colspan="5" class="text-center">Keine Konten gefunden.</td>
+            <td colspan="1" class="text-center">{% trans "No accounts found." %}</td>
         </tr>
         {% endfor %}
     </tbody>

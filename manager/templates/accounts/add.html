@@ -1,10 +1,11 @@
 {% extends 'master.html' %}
+{% load i18n %}
 
 {% block content %}
 {% if is_edit %}
-    <h1>Konto bearbeiten</h1>
+    <h1>{% trans "Edit Account" %}</h1>
 {% else %}
-    <h1>Neues Konto</h1>
+    <h1>{% trans "New Account" %}</h1>
 {% endif %}
 
 <form method="post" enctype="multipart/form-data">
@@ -17,48 +18,62 @@
         {% endfor %}
     </div>
 {% endif %}
+
 <div class="mb-3">
-    <label class="form-label">Kontoname</label>
+    <label class="form-label">{% trans "Account name" %}</label>
     {{ form.name }}
     {% if form.name.errors %}
         <div class="text-danger small">{{ form.name.errors }}</div>
     {% endif %}
 </div>
+
 <div class="mb-3">
-    <label class="form-label">Kontonummer</label>
+    <label class="form-label">{% trans "Account number" %}</label>
     {{ form.account_nr }}
     {% if form.account_nr.errors %}
         <div class="text-danger small">{{ form.account_nr.errors }}</div>
     {% endif %}
 </div>
+
 <div class="mb-3">
-    <label class="form-label">Anfangssaldo (€)</label>
+    <label class="form-label">{% trans "Starting balance" %} (€)</label>
     {{ form.start_balance }}
     {% if form.start_balance.errors %}
         <div class="text-danger small">{{ form.start_balance.errors }}</div>
     {% endif %}
 </div>
+
 <div class="mb-3">
-    <label class="form-label">Eigenes Konto?</label>
-    {{ form.is_mine }}
+    <div class="form-check">
+        {{ form.is_mine }}
+        <label class="form-check-label" for="{{ form.is_mine.id_for_label }}">
+            {% trans "Own account?" %}
+        </label>
+    </div>
     {% if form.is_mine.errors %}
         <div class="text-danger small">{{ form.is_mine.errors }}</div>
     {% endif %}
 </div>
+
 <div class="mb-3">
-    <label class="form-label">Konto geschlossen?</label>
-    {{ form.is_closed }}
+    <div class="form-check">
+        {{ form.is_closed }}
+        <label class="form-check-label" for="{{ form.is_closed.id_for_label }}">
+            {% trans "Account closed?" %}
+        </label>
+    </div>
     {% if form.is_closed.errors %}
         <div class="text-danger small">{{ form.is_closed.errors }}</div>
     {% endif %}
 </div>
+
 <div class="mb-3">
-    <label class="form-label">Konto-Icon (Optional)</label>
+    <label class="form-label">{% trans "Account Icon (Optional)" %}</label>
     
     {% if form.instance.icon %}
         <div class="mb-2">
-            <img src="{{ form.instance.icon.url }}" alt="Aktuelles Icon" class="img-thumbnail" style="max-width: 64px; max-height: 64px;">
-            <small class="text-muted d-block">Aktuelles Bild</small>
+            <img src="{{ form.instance.icon.url }}" alt="{% trans 'Current Icon' %}" class="img-thumbnail" style="max-width: 64px; max-height: 64px;">
+            <small class="text-muted d-block">{% trans "Current image" %}</small>
         </div>
     {% endif %}
 
@@ -68,13 +83,14 @@
         <div class="text-danger small">{{ form.icon.errors }}</div>
     {% endif %}
 </div>
-<div class="d-flex justify-content-end">
-    <a href="{% url 'accounts' %}" class="btn btn-secondary me-2">Abbrechen</a>
+
+<div class="d-flex justify-content-end border-top pt-3">
+    <a href="{% url 'accounts' %}" class="btn btn-secondary me-2">{% trans "Cancel" %}</a>
     <button type="submit" class="btn btn-primary">
         {% if is_edit %}
-            Änderungen speichern
+            {% trans "Save changes" %}
         {% else %}
-            Konto hinzufügen
+            {% trans "Add account" %}
         {% endif %}
     </button>
 </div>

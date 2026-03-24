@@ -1,27 +1,37 @@
 {% extends 'master.html' %}
+{% load i18n %}
 
 {% block content %}
-<button onclick="history.back()" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Zurück</button><br>
+<button onclick="history.back()" class="btn btn-secondary mb-3">
+    <i class="bi bi-arrow-left"></i> {% trans "Back" %}
+</button><br>
+
 <div class="card mt-3"> 
-        <div class="card-body shadow-sm"> 
-            <h5 class="card-title"> 
-                {{ account.name }}
-            </h5>
-            <p class="card-text"><i>Aktueller Kontostand: </i><b>{{ account.current_balance }} €</b></p>
-            <p class="card-text"><i>Kontonummer:  </i><b>{{ account.account_nr }} €</b></p>
-        </div>
+    <div class="card-body shadow-sm"> 
+        <h5 class="card-title"> 
+            {{ account.name }}
+        </h5>
+        <p class="card-text">
+            <i>{% trans "Current Balance:" %} </i><b>{{ account.current_balance }} €</b>
+        </p>
+        <p class="card-text">
+            <i>{% trans "Account Number:" %} </i><b>{{ account.account_nr }}</b>
+        </p>
     </div>
+</div>
+
 <div class="mt-4 border-top pt-3 d-flex justify-content-end">
     
     <a href="{% url 'account_edit' account.id %}" class="btn btn-outline-primary me-2">
-        <i class="bi bi-pencil"></i> Bearbeiten
+        <i class="bi bi-pencil"></i> {% trans "Edit" %}
     </a>
     
     <a href="{% url 'account_delete' account.id %}" class="btn btn-outline-danger">
-        <i class="bi bi-trash"></i> Löschen
+        <i class="bi bi-trash"></i> {% trans "Delete" %}
     </a>
-     <a href="{% url 'transactions' %}?account={{ account.id }}" class="btn btn-outline-secondary ms-2">
-        <i class="bi bi-list-ul"></i> Transaktionen anzeigen
+    
+    <a href="{% url 'transactions' %}?account={{ account.id }}" class="btn btn-outline-secondary ms-2">
+        <i class="bi bi-list-ul"></i> {% trans "Show transactions" %}
     </a>
 
 </div>

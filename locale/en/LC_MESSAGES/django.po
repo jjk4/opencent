@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 11:39+0100\n"
+"POT-Creation-Date: 2026-03-24 11:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,163 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: manager/templates/accounts/add.html:6
+msgid "Edit Account"
+msgstr ""
+
+#: manager/templates/accounts/add.html:8
+msgid "New Account"
+msgstr ""
+
+#: manager/templates/accounts/add.html:23
+msgid "Account name"
+msgstr ""
+
+#: manager/templates/accounts/add.html:31
+msgid "Account number"
+msgstr ""
+
+#: manager/templates/accounts/add.html:39
+msgid "Starting balance"
+msgstr ""
+
+#: manager/templates/accounts/add.html:50
+msgid "Own account?"
+msgstr ""
+
+#: manager/templates/accounts/add.html:62
+msgid "Account closed?"
+msgstr ""
+
+#: manager/templates/accounts/add.html:71
+msgid "Account Icon (Optional)"
+msgstr ""
+
+#: manager/templates/accounts/add.html:75
+msgid "Current Icon"
+msgstr ""
+
+#: manager/templates/accounts/add.html:76
+msgid "Current image"
+msgstr ""
+
+#: manager/templates/accounts/add.html:88
+#: manager/templates/accounts/delete.html:23
+#: manager/templates/categories/add.html:151
+#: manager/templates/categories/delete.html:38
+#: manager/templates/transactions/add.html:145
+#: manager/templates/transactions/delete.html:24
+msgid "Cancel"
+msgstr ""
+
+#: manager/templates/accounts/add.html:91
+#: manager/templates/categories/add.html:155
+#: manager/templates/transactions/add.html:148
+#: manager/templates/user_settings.html:60
+msgid "Save changes"
+msgstr ""
+
+#: manager/templates/accounts/add.html:93 manager/templates/index.html:78
+msgid "Add account"
+msgstr ""
+
+#: manager/templates/accounts/delete.html:8
+#: manager/templates/categories/delete.html:24
+#: manager/templates/transactions/delete.html:8
+msgid "Confirm deletion"
+msgstr ""
+
+#: manager/templates/accounts/delete.html:11
+msgid "Do you really want to delete this account?"
+msgstr ""
+
+#: manager/templates/accounts/delete.html:18
+#: manager/templates/categories/delete.html:33
+#: manager/templates/transactions/delete.html:19
+msgid "This action cannot be undone."
+msgstr ""
+
+#: manager/templates/accounts/delete.html:24
+#: manager/templates/categories/delete.html:39
+#: manager/templates/transactions/delete.html:25
+msgid "Yes, delete permanently"
+msgstr ""
+
+#: manager/templates/accounts/detail.html:6
+#: manager/templates/categories/detail.html:6
+#: manager/templates/transactions/detail.html:5
+msgid "Back"
+msgstr ""
+
+#: manager/templates/accounts/detail.html:15
+msgid "Current Balance:"
+msgstr ""
+
+#: manager/templates/accounts/detail.html:18
+msgid "Account Number:"
+msgstr ""
+
+#: manager/templates/accounts/detail.html:26
+#: manager/templates/categories/detail.html:39
+#: manager/templates/transactions/detail.html:71
+msgid "Edit"
+msgstr ""
+
+#: manager/templates/accounts/detail.html:30
+#: manager/templates/categories/detail.html:43
+#: manager/templates/transactions/add.html:130
+#: manager/templates/transactions/add.html:172
+#: manager/templates/transactions/detail.html:75
+msgid "Delete"
+msgstr ""
+
+#: manager/templates/accounts/detail.html:34
+#: manager/templates/categories/detail.html:47
+msgid "Show transactions"
+msgstr ""
+
+#: manager/templates/accounts/index.html:5
+msgid "Account Overview"
+msgstr ""
+
+#: manager/templates/accounts/index.html:7
+msgid "Add new account"
+msgstr ""
+
+#: manager/templates/accounts/index.html:10
+msgid "My active accounts:"
+msgstr ""
+
+#: manager/templates/accounts/index.html:14
+#: manager/templates/accounts/index.html:49
+#: manager/templates/accounts/index.html:84
+msgid "Name"
+msgstr ""
+
+#: manager/templates/accounts/index.html:15
+#: manager/templates/accounts/index.html:50
+msgid "Account Number"
+msgstr ""
+
+#: manager/templates/accounts/index.html:16
+#: manager/templates/accounts/index.html:51
+msgid "Current Balance"
+msgstr ""
+
+#: manager/templates/accounts/index.html:39
+#: manager/templates/accounts/index.html:74
+#: manager/templates/accounts/index.html:96 manager/templates/search.html:36
+msgid "No accounts found."
+msgstr ""
+
+#: manager/templates/accounts/index.html:45
+msgid "My closed accounts:"
+msgstr ""
+
+#: manager/templates/accounts/index.html:80
+msgid "External accounts:"
+msgstr ""
 
 #: manager/templates/categories/add.html:6
 msgid "Edit Category"
@@ -67,19 +224,6 @@ msgstr ""
 msgid "Select an icon from the list."
 msgstr ""
 
-#: manager/templates/categories/add.html:151
-#: manager/templates/categories/delete.html:38
-#: manager/templates/transactions/add.html:145
-#: manager/templates/transactions/delete.html:24
-msgid "Cancel"
-msgstr ""
-
-#: manager/templates/categories/add.html:155
-#: manager/templates/transactions/add.html:148
-#: manager/templates/user_settings.html:60
-msgid "Save changes"
-msgstr ""
-
 #: manager/templates/categories/add.html:157
 msgid "Add category"
 msgstr ""
@@ -96,28 +240,8 @@ msgstr ""
 msgid "Back to category"
 msgstr ""
 
-#: manager/templates/categories/delete.html:24
-#: manager/templates/transactions/delete.html:8
-msgid "Confirm deletion"
-msgstr ""
-
 #: manager/templates/categories/delete.html:27
 msgid "Do you really want to delete this category?"
-msgstr ""
-
-#: manager/templates/categories/delete.html:33
-#: manager/templates/transactions/delete.html:19
-msgid "This action cannot be undone."
-msgstr ""
-
-#: manager/templates/categories/delete.html:39
-#: manager/templates/transactions/delete.html:25
-msgid "Yes, delete permanently"
-msgstr ""
-
-#: manager/templates/categories/detail.html:6
-#: manager/templates/transactions/detail.html:5
-msgid "Back"
 msgstr ""
 
 #: manager/templates/categories/detail.html:16
@@ -126,22 +250,6 @@ msgstr ""
 
 #: manager/templates/categories/detail.html:21
 msgid "Subcategories"
-msgstr ""
-
-#: manager/templates/categories/detail.html:39
-#: manager/templates/transactions/detail.html:71
-msgid "Edit"
-msgstr ""
-
-#: manager/templates/categories/detail.html:43
-#: manager/templates/transactions/add.html:130
-#: manager/templates/transactions/add.html:172
-#: manager/templates/transactions/detail.html:75
-msgid "Delete"
-msgstr ""
-
-#: manager/templates/categories/detail.html:47
-msgid "Show transactions"
 msgstr ""
 
 #: manager/templates/categories/index.html:6
@@ -380,10 +488,6 @@ msgstr ""
 msgid "Create your first account to start tracking your finances."
 msgstr ""
 
-#: manager/templates/index.html:78
-msgid "Add account"
-msgstr ""
-
 #: manager/templates/master.html:35
 msgid "OpenCent Logo"
 msgstr ""
@@ -443,10 +547,6 @@ msgstr ""
 #: manager/templates/search.html:12
 #, python-format
 msgid "%(count)s accounts found."
-msgstr ""
-
-#: manager/templates/search.html:36
-msgid "No accounts found."
 msgstr ""
 
 #: manager/templates/search.html:43
