@@ -10,6 +10,17 @@
         
         const getCurrentTheme = () => document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light';
 
+        const userLang = document.documentElement.lang || 'en-US';
+
+        const currencyFormatter = new Intl.NumberFormat(userLang, {
+            style: 'currency',
+            currency: 'EUR'
+        });
+        
+        const dateFormatter = new Intl.DateTimeFormat(userLang, { 
+            dateStyle: 'medium' 
+        });
+
         var options = {
             series: [{
                 name: '{% trans "Total" %}',
@@ -49,7 +60,7 @@
             yaxis: {
                 labels: {
                     formatter: function (value) {
-                        return value.toFixed(2) + " €";
+                        return currencyFormatter.format(value);
                     }
                 }
             },
@@ -62,7 +73,9 @@
             },
             tooltip: {
                 x: {
-                    format: 'dd. MMM yyyy'
+                    formatter: function(value) {
+                        return dateFormatter.format(new Date(value));
+                    }
                 }
             }
         };

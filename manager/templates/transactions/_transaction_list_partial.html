@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% load humanize %}
 
 {% regroup page_obj by timestamp|date:"F Y" as transactions_by_month %}
 
@@ -11,7 +12,7 @@
         </div>
     {% endif %}
 
-    {% regroup month.list by timestamp|date:"d.m.Y" as transactions_by_day %}
+    {% regroup month.list by timestamp|date:"SHORT_DATE_FORMAT" as transactions_by_day %}
     {% for day in transactions_by_day %}
         <div class="day-header ms-2 mt-3">
             <strong>{{ day.grouper }}</strong>
@@ -80,14 +81,14 @@
                     <span class="fw-bold text-nowrap ms-3">
                       {% if t.has_refunds %}
                         {% if t.remainder_after_refunds == 0 %}  
-                          {{ t.amount }} €
+                          {{ t.amount|floatformat:2|intcomma }} €
                         {% else %}
-                          {{ t.remainder_after_refunds }} € <span class="text-decoration-line-through text-body-secondary small">{{ t.amount }} €</span>
+                          {{ t.remainder_after_refunds|floatformat:2|intcomma }} € <span class="text-decoration-line-through text-body-secondary small">{{ t.amount|floatformat:2|intcomma }} €</span>
                         {% endif %}
                       {% elif t.is_refund %}
-                        {{ t.remainder_of_refund }} € <span class="text-decoration-line-through text-body-secondary small">{{ t.amount }} €</span>
+                        {{ t.remainder_of_refund|floatformat:2|intcomma }} € <span class="text-decoration-line-through text-body-secondary small">{{ t.amount|floatformat:2|intcomma }} €</span>
                       {% else %}
-                        {{ t.amount }} €
+                        {{ t.amount|floatformat:2|intcomma }} €
                       {% endif %}
                     </span>
                 </a>

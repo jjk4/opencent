@@ -65,6 +65,12 @@ function initPreviewCharts() {
     sankeyContainer.innerHTML = '';
 
     const getCurrentTheme = () => document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light';
+    
+    const userLang = document.documentElement.lang || 'en-US';
+    const currencyFormatter = new Intl.NumberFormat(userLang, {
+        style: 'currency',
+        currency: 'EUR'
+    });
 
     const lineOptions = {
         series: [{
@@ -108,7 +114,7 @@ function initPreviewCharts() {
     const sankeyData = {
         nodes: [
             { id: 'l1', title: '{% trans "Salary" %}' }, { id: 'l2', title: '{% trans "Gifts" %}' },
-            { id: 'b', title: '{% trans "Budget" %}: 2737.54 €' },
+            { id: 'b', title: '{% trans "Budget" %}: ' + currencyFormatter.format(2737.54) },
             { id: 'e1', title: '{% trans "Rent" %}' }, { id: 'e2', title: '{% trans "Food" %}' }, { id: 'e3', title: '{% trans "Hobby" %}' }
         ],
         edges: [

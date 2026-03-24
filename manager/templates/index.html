@@ -85,6 +85,17 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const userLang = document.documentElement.lang || 'en-US';
+
+        const currencyFormatter = new Intl.NumberFormat(userLang, {
+            style: 'currency',
+            currency: 'EUR'
+        });
+        
+        const dateFormatter = new Intl.DateTimeFormat(userLang, { 
+            dateStyle: 'medium' 
+        });
+
         const rawData = {{ balances_over_time_json|safe }};
 
         const seriesData = rawData.map(item => {
@@ -131,7 +142,8 @@
             yaxis: {
                 labels: {
                     formatter: function (value) {
-                        return value.toFixed(2) + " €";
+                        // Nutzt den lokalisierten Währungs-Formatierer
+                        return currencyFormatter.format(value);
                     }
                 }
             },
@@ -144,7 +156,9 @@
             },
             tooltip: {
                 x: {
-                    format: 'dd. MMM yyyy'
+                    formatter: function(value) {
+                        return dateFormatter.format(new Date(value));
+                    }
                 }
             }
         };

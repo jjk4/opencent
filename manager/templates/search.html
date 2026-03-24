@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 {% if a.is_mine %}
-                    <span class="fw-bold text-nowrap ms-3">{{ a.get_current_balance }} €</span>
+                    <span class="fw-bold text-nowrap ms-3">{{ a.get_current_balance|floatformat:2|intcomma }} €</span>
                 {%endif%}
             </a>
         {% endfor %}
@@ -130,14 +130,14 @@
                 <span class="fw-bold text-nowrap ms-3">
                     {% if t.has_refunds %}
                         {% if t.remainder_after_refunds == 0 %}  
-                            {{ t.amount }} €
+                            {{ t.amount|floatformat:2|intcomma }} €
                         {% else %}
-                            {{ t.remainder_after_refunds }} € <span class="text-decoration-line-through text-body-secondary small">{{ t.amount }} €</span>
+                            {{ t.remainder_after_refunds|floatformat:2|intcomma }} € <span class="text-decoration-line-through text-body-secondary small">{{ t.amount|floatformat:2|intcomma }} €</span>
                         {% endif %}
                     {% elif t.is_refund %}
-                        {{ t.remainder_of_refund }} € <span class="text-decoration-line-through text-body-secondary small">{{ t.amount }} €</span>
+                        {{ t.remainder_of_refund|floatformat:2|intcomma }} € <span class="text-decoration-line-through text-body-secondary small">{{ t.amount|floatformat:2|intcomma }} €</span>
                     {% else %}
-                        {{ t.amount }} €
+                        {{ t.amount|floatformat:2|intcomma }} €
                     {% endif %}
                 </span>
             </a>

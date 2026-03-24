@@ -1,5 +1,6 @@
 {% extends 'master.html' %}
 {% load i18n %}
+{% load humanize %}
 
 {% block content %}
 <button onclick="history.back()" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> {% trans "Back" %}</button><br>
@@ -13,8 +14,10 @@
                     <a href="{% url 'account_detail' transaction.receiver.id %}"><i class="bi bi-box-arrow-up-right"></i></a>
             
             </h5>
-            <p class="card-text"><i>{% trans "Date" %}:</i> <strong>{{ transaction.timestamp|date:"d.m.Y H:i" }}</strong></p>
-            <p class="card-text"><i>{% trans "Amount" %}:</i> <strong>{{ transaction.amount }} €</strong></p>
+            <p class="card-text"><i>{% trans "Date" %}:</i> <strong>{{ transaction.timestamp|date:"SHORT_DATETIME_FORMAT" }}</strong></p>
+            
+            <p class="card-text"><i>{% trans "Amount" %}:</i> <strong>{{ transaction.amount|floatformat:2|intcomma }} €</strong></p>
+            
             <div class="mb-3">
                 <i>{% trans "Categories" %}:</i>
                 <ul class="list-group-flush mt-1">
@@ -24,7 +27,7 @@
                             <i class="{{ split.category.icon|default:'bi bi-tag' }} text-body-secondary me-1"></i>
                             {{ split.category.name }}
                         </span>
-                        <span class="fw-bold text-body-secondary">{{ split.amount }} €</span>
+                        <span class="fw-bold text-body-secondary">{{ split.amount|floatformat:2|intcomma }} €</span>
                     </li>
                     {% empty %}
                     <li class="text-body-secondary small">{% trans "No categories assigned" %}</li>
@@ -34,12 +37,15 @@
             {% if transaction.description %}
                 <p class="card-text"><i>{% trans "Description" %}:</i> <br> {{ transaction.description }}</p>
             {% endif %}
+            
             {% if is_refund_of %}
                 <p class="card-text text-warning-emphasis">{% trans "This transaction is a refund for the following transactions:" %}</p>
                 <ul>
                     {% for refund in is_refund_of %}
                     <li>
-                        {% trans "Transaction ID" %} {{ refund.original_transaction.id }}: {{ refund.original_transaction.amount }} € {% trans "on" %} {{ refund.original_transaction.timestamp|date:"d.m.Y H:i" }}
+                        {% trans "Transaction ID" %} {{ refund.original_transaction.id }}: 
+                        {{ refund.original_transaction.amount|floatformat:2|intcomma }} € 
+                        {% trans "on" %} {{ refund.original_transaction.timestamp|date:"SHORT_DATETIME_FORMAT" }}
                         <a href="{% url 'transaction_detail' refund.original_transaction.id %}">
                             <i class="bi bi-box-arrow-up-right"></i>
                         </a>
@@ -47,12 +53,15 @@
                     {% endfor %}
                 </ul>
             {% endif %}
+            
             {% if refunds %}
                 <p class="card-text text-success-emphasis">{% trans "This transaction has the following refunds:" %}</p>
                 <ul>
                     {% for refund in refunds %}
                     <li>
-                        {% trans "Refund ID" %} {{ refund.refund_transaction.id }}: {{ refund.refund_transaction.amount }} € {% trans "on" %} {{ refund.refund_transaction.timestamp|date:"d.m.Y H:i" }}
+                        {% trans "Refund ID" %} {{ refund.refund_transaction.id }}: 
+                        {{ refund.refund_transaction.amount|floatformat:2|intcomma }} € 
+                        {% trans "on" %} {{ refund.refund_transaction.timestamp|date:"SHORT_DATETIME_FORMAT" }}
                         <a href="{% url 'transaction_detail' refund.refund_transaction.id %}">
                             <i class="bi bi-box-arrow-up-right"></i>
                         </a>

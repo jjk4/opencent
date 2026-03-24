@@ -4,6 +4,11 @@ from django.utils.translation import gettext_lazy as _
 from .models import Transaction, Account, Category, TransactionSplit
 
 class TransactionForm(forms.ModelForm):
+    amount = forms.DecimalField(
+        label=_("Amount"),
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'})
+    )
+
     is_refund = forms.BooleanField(
         label=_("Is a refund"), 
         required=False, 
@@ -32,7 +37,6 @@ class TransactionForm(forms.ModelForm):
         
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'sender': forms.Select(attrs={'class': 'form-select'}),
             'receiver': forms.Select(attrs={'class': 'form-select'}),
         }
@@ -91,13 +95,18 @@ class TransactionForm(forms.ModelForm):
              
         return cleaned_data
 
+
 class TransactionSplitForm(forms.ModelForm):
+    amount = forms.DecimalField(
+        label=_("Amount"),
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': _('Amount')})
+    )
+
     class Meta:
         model = TransactionSplit
         fields = ['category', 'amount']
         widgets = {
             'category': forms.Select(attrs={'class': 'form-select'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': _('Amount')}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -146,7 +155,13 @@ TransactionSplitFormSet = inlineformset_factory(
     can_delete=True
 )
 
+
 class AccountForm(forms.ModelForm):
+    start_balance = forms.DecimalField(
+        label=_("Starting balance"),
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'})
+    )
+
     class Meta:
         model = Account
         fields = ['name', 'start_balance', 'is_mine', 'is_closed', 'icon', 'account_nr']
@@ -154,7 +169,6 @@ class AccountForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'account_nr': forms.TextInput(attrs={'class': 'form-control'}),
-            'start_balance': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'is_mine': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'is_closed': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'icon': forms.FileInput(attrs={'class': 'form-control'}),

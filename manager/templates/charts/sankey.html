@@ -1,6 +1,7 @@
 {% extends 'charts/chart_common.html' %}
 {% load l10n %}
 {% load i18n %}
+{% load humanize %}
 
 {% block chart_title %}{% trans "Income-Expense Sankey" %}{% endblock %}
 {% block chart_content %}
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Budget node
             {
                 id: 'budget',
-                title: '{% trans "Budget" %}: {{total_income}} €',
+                title: '{% trans "Budget" %}: {{ total_income|floatformat:2|intcomma }} €',
             },
             // Income
             {% for income_category, values in income_by_category.items %}

@@ -1,5 +1,6 @@
 {% extends 'master.html' %}
 {% load i18n %}
+{% load humanize %}
 
 {% block content %}
 <div class="container mt-5">
@@ -12,8 +13,8 @@
             
             <div class="bg-body-tertiary border rounded p-3 mb-3">
                 <strong>{{ transaction.description|default:_("No description") }}</strong><br>
-                {{ transaction.amount }} €<br>
-                <small class="text-body-secondary">{{ transaction.timestamp|date:"d.m.Y" }}</small>
+                {{ transaction.amount|floatformat:2|intcomma }} €<br>
+                <small class="text-body-secondary">{{ transaction.timestamp|date:"SHORT_DATE_FORMAT" }}</small>
             </div>
             
             <p class="text-danger-emphasis small">{% trans "This action cannot be undone." %}</p>

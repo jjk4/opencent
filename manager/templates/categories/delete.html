@@ -1,5 +1,6 @@
 {% extends 'master.html' %}
 {% load i18n %}
+{% load humanize %}
 
 {% block content %}
 <div class="container mt-5">
@@ -12,7 +13,7 @@
                     <p class="mb-1">{% trans "Affected transactions" %}:</p>
                     <ul class="mb-0">
                         {% for transaction in transactions %}
-                            <li><a href="{% url 'transaction_detail' transaction.id %}">{{ transaction }}</a> ({{ transaction.amount }} €)</li>
+                            <li><a href="{% url 'transaction_detail' transaction.id %}">{{ transaction }}</a> ({{ transaction.amount|floatformat:2|intcomma }} €)</li>
                         {% endfor %}
                     </ul>
                 {% endif %}

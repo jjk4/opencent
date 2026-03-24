@@ -1,5 +1,6 @@
 {% extends 'master.html' %}
 {% load i18n %}
+{% load humanize %}
 
 {% block content %}
 <button onclick="history.back()" class="btn btn-secondary mb-3">
@@ -12,7 +13,7 @@
             {{ account.name }}
         </h5>
         <p class="card-text">
-            <i>{% trans "Current Balance:" %} </i><b>{{ account.current_balance }} €</b>
+            <i>{% trans "Current Balance:" %} </i><b>{{ account.current_balance|floatformat:2|intcomma }} €</b>
         </p>
         <p class="card-text">
             <i>{% trans "Account Number:" %} </i><b>{{ account.account_nr }}</b>
