@@ -844,27 +844,19 @@ def chart_sankey(request):
                 
                 adjusted_split_amount = split.amount * scale_factor
                 
-                cat = split.category
+                current_cat = split.category
                 
-                if cat.id not in target_dict:
-                    target_dict[cat.id] = {
-                        'name': cat.name, 
-                        'amount': 0, 
-                        'parent': cat.parent_category.id if cat.parent_category else None
-                    }
-                
-                target_dict[cat.id]["amount"] += adjusted_split_amount
-
-                if is_expense and target_dict[cat.id]["parent"] is not None:
-                    parent_id = target_dict[cat.id]["parent"]
-                    if parent_id not in target_dict:
-                        parent_obj = cat.parent_category
-                        target_dict[parent_id] = {
-                            'name': parent_obj.name, 
+                while current_cat is not None:
+                    if current_cat.id not in target_dict:
+                        target_dict[current_cat.id] = {
+                            'name': current_cat.name, 
                             'amount': 0, 
-                            'parent': parent_obj.parent_category.id if parent_obj.parent_category else None
+                            'parent': current_cat.parent_category.id if current_cat.parent_category else None
                         }
-                    target_dict[parent_id]["amount"] += adjusted_split_amount
+                    
+                    target_dict[current_cat.id]["amount"] += adjusted_split_amount
+                    
+                    current_cat = current_cat.parent_category
 
             uncategorized_original = t.amount - splits_sum_original
             
