@@ -5,8 +5,8 @@
 
 {% block chart_title %}{% trans "Income-Expense Sankey" %}{% endblock %}
 {% block chart_content %}
-    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexsankey@1.3.0"></script>
+<script src="{% static 'vendor/svgjs/svg.min.js' %}"></script>
+<script src="{% static 'vendor/apexsankey/apexsankey.min.js' %}"></script>
 <div id="svg-sankey" style="display: flex; justify-content: center"></div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
