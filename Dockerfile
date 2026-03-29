@@ -43,7 +43,9 @@ RUN wget -O bs-icons.zip https://github.com/twbs/icons/releases/download/v1.13.1
 # Bootstrap 5 (CSS & JS Bundle)
 RUN mkdir -p bootstrap/css bootstrap/js && \
     wget -O bootstrap/css/bootstrap.min.css https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css && \
-    wget -O bootstrap/js/bootstrap.bundle.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js
+    wget -O bootstrap/css/bootstrap.min.css.map https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css.map && \
+    wget -O bootstrap/js/bootstrap.bundle.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js && \
+    wget -O bootstrap/js/bootstrap.bundle.min.js.map https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js.map
 
 # SVG.js
 RUN mkdir -p svgjs && \
