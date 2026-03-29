@@ -115,7 +115,7 @@ def get_balance_history(request, my_accounts, from_date=None):
     
     transactions = Transaction.objects.filter(
         Q(sender__in=my_accounts) | Q(receiver__in=my_accounts)
-    ).filter(user=request.user).order_by('timestamp')
+    ).filter(user=request.user, timestamp__lte=timezone.now()).order_by('timestamp')
     
     if from_date:
         transactions = transactions.filter(timestamp__gte=from_date)
