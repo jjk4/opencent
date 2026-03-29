@@ -76,7 +76,7 @@ WORKDIR /app
 COPY --chown=appuser:appuser . .
 
 # copy downloaded static assets from downloader stage
-COPY --from=downloader --chown=appuser:appuser /downloads/ /app/static/vendor/
+COPY --from=downloader --chown=appuser:appuser /downloads/ /app/productionfiles/vendor/
 
 RUN SECRET_KEY="dummy-key-for-build" python manage.py compilemessages
 
