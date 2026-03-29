@@ -14,6 +14,33 @@
     </a>
   {% endif %}
 
+  {% if transaction_list_future %}
+    <button class="btn btn-outline-info mb-3 ms-2" type="button" 
+            data-bs-toggle="collapse" data-bs-target="#futureTransactionsCollapse" 
+            aria-expanded="false" aria-controls="futureTransactionsCollapse"
+            onclick="this.classList.add('d-none')">
+      <i class="bi bi-calendar-event me-1"></i> {% trans "Show future transactions" %} ({{ transaction_list_future|length }})
+    </button>
+
+    <div class="collapse mb-4" id="futureTransactionsCollapse">
+      <div class="month-header mt-2 mb-2">
+          <h3 class="text-body-secondary border-bottom pb-2">{% trans "Future" %}</h3>
+      </div>
+      
+      {% regroup transaction_list_future by timestamp|date:"SHORT_DATE_FORMAT" as future_transactions_by_day %}
+      {% for day in future_transactions_by_day %}
+          <div class="day-header ms-2 mt-3">
+              <strong>{{ day.grouper }}</strong>
+          </div>
+          <div class="list-group ms-2">
+              {% for t in day.list %}
+                  {% include 'transactions/_transaction_item.html' %}
+              {% endfor %}
+          </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <div id="transaction-list-container">
       {% include 'transactions/_transaction_list_partial.html' %}
   </div>

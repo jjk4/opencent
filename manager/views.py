@@ -271,17 +271,28 @@ def first_run_setup(request):
 @login_required
 def transactions(request):
     is_filter_active = False
-    transaction_list = Transaction.objects.filter(user=request.user).select_related(
+    transaction_list = Transaction.objects.filter(user=request.user, timestamp__lte=timezone.now()).select_related(
             'sender', 'receiver'
         ).prefetch_related(
             'splits__category',
             'original_transaction_refunds', 
             'original_transaction_refunds__refund_transaction'
         ).order_by('-timestamp')
+    transaction_list_future = Transaction.objects.filter(user=request.user, timestamp__gt=timezone.now()).select_related(
+            'sender', 'receiver'
+        ).prefetch_related(
+            'splits__category',
+            'original_transaction_refunds', 
+            'original_transaction_refunds__refund_transaction'
+        ).order_by('-timestamp')
+        
     filter_accounts = request.GET.getlist('account')
     if filter_accounts:
         is_filter_active = True
         transaction_list = transaction_list.filter(
+            Q(sender__id__in=filter_accounts) | Q(receiver__id__in=filter_accounts)
+        )
+        transaction_list_future = transaction_list_future.filter(
             Q(sender__id__in=filter_accounts) | Q(receiver__id__in=filter_accounts)
         )
 
@@ -297,6 +308,7 @@ def transactions(request):
                 if subcat.id not in category_ids:
                     category_ids.append(subcat.id)
         transaction_list = transaction_list.filter(categories__id__in=category_ids).distinct()
+        transaction_list_future = transaction_list_future.filter(categories__id__in=category_ids).distinct()
 
     paginator = Paginator(transaction_list, 100)
     page_number = request.GET.get('page')
@@ -308,6 +320,7 @@ def transactions(request):
             'selected_tab': 'transactions',
         },
         'transaction_list': transaction_list,
+        'transaction_list_future': transaction_list_future,
         'my_accounts': Account.objects.filter(is_mine=True, user=request.user),
         'show_refunds': request.GET.get('refunds') == 'on',
         'is_filter_active': is_filter_active,
@@ -724,6 +737,9 @@ def user_settings(request):
         language = request.POST.get('language')
         if language in dict(django_settings.LANGUAGES).keys():
             user_settings_obj.language = language
+            
+        future_transactions_in_balance = request.POST.get('future_transactions_in_balance') == 'on'
+        user_settings_obj.future_transactions_in_balance = future_transactions_in_balance
 
         user_settings_obj.save()
 

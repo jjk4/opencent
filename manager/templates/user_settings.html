@@ -55,6 +55,15 @@
                 </label>
             </div>
 
+            <h5 class="card-title fw-bold mb-3"><i class="bi bi-calendar-check me-2 opacity-75"></i> {% trans "Balance Calculation" %}</h5>
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" name="future_transactions_in_balance" id="futureTransactionsInBalance" 
+                        {% if settings.future_transactions_in_balance %}checked{% endif %}>
+                <label class="form-check-label" for="futureTransactionsInBalance">
+                    {% trans "Include future transactions in balance calculation" %}
+                </label>
+            </div>
+
             <hr class="mb-4">
             
             <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>

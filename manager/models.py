@@ -136,8 +136,15 @@ class Account(models.Model):
     )
     
     def get_current_balance(self):
-        incoming = Transaction.objects.filter(receiver=self).aggregate(models.Sum('amount'))['amount__sum'] or Decimal(0)
-        outgoing = Transaction.objects.filter(sender=self).aggregate(models.Sum('amount'))['amount__sum'] or Decimal(0)
+        transactions_in = Transaction.objects.filter(receiver=self)
+        transactions_out = Transaction.objects.filter(sender=self)
+        
+        if not self.user.settings.future_transactions_in_balance:
+            transactions_in = transactions_in.filter(timestamp__lte=models.functions.Now())
+            transactions_out = transactions_out.filter(timestamp__lte=models.functions.Now())
+        
+        incoming = transactions_in.aggregate(models.Sum('amount'))['amount__sum'] or Decimal(0)
+        outgoing = transactions_out.aggregate(models.Sum('amount'))['amount__sum'] or Decimal(0)
         balance = self.start_balance + incoming - outgoing
         return Decimal(balance).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
@@ -210,6 +217,8 @@ class UserSettings(models.Model):
     )
     
     theme = models.CharField(max_length=10, choices=THEME_CHOICES, default='auto')
+    
+    future_transactions_in_balance = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _("User Setting")

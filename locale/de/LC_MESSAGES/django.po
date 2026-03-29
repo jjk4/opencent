@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 12:07+0100\n"
+"POT-Creation-Date: 2026-03-29 11:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,46 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: manager/forms.py:8
-msgid "Is a refund"
-msgstr "Ist eine Rückerstattung"
-
-#: manager/forms.py:16 manager/templates/transactions/add.html:84
-msgid "Original transaction(s)"
-msgstr "Ursprüngliche Transaktion(en)"
-
-#: manager/forms.py:21 manager/templates/transactions/add.html:54
-msgid "Date & Time"
-msgstr "Datum & Uhrzeit"
-
-#: manager/forms.py:53 manager/templates/index.html:29
-msgid "My Accounts"
-msgstr "Meine Konten"
-
-#: manager/forms.py:54
-msgid "External Accounts"
-msgstr "Externe Konten"
-
-#: manager/forms.py:84
-msgid "Sender and receiver cannot be identical."
-msgstr "Sender und Empfänger dürfen nicht identisch sein."
-
-#: manager/forms.py:87
-msgid "The amount cannot be negative."
-msgstr "Der Betrag kann nicht negativ sein."
-
-#: manager/forms.py:90
-msgid "Please select at least one original transaction."
-msgstr "Bitte wähle mindestens eine ursprüngliche Transaktion aus."
-
-#: manager/forms.py:100 manager/templates/transactions/add.html:46
+#: manager/forms.py:8 manager/forms.py:101 manager/forms.py:102
+#: manager/templates/transactions/add.html:46
 #: manager/templates/transactions/add.html:118
 #: manager/templates/transactions/add.html:165
-#: manager/templates/transactions/detail.html:17
+#: manager/templates/transactions/detail.html:19
 msgid "Amount"
 msgstr "Betrag"
 
-#: manager/forms.py:134
+#: manager/forms.py:13
+msgid "Is a refund"
+msgstr "Ist eine Rückerstattung"
+
+#: manager/forms.py:21 manager/templates/transactions/add.html:84
+msgid "Original transaction(s)"
+msgstr "Ursprüngliche Transaktion(en)"
+
+#: manager/forms.py:26 manager/templates/transactions/add.html:54
+msgid "Date & Time"
+msgstr "Datum & Uhrzeit"
+
+#: manager/forms.py:57 manager/templates/index.html:29
+msgid "My Accounts"
+msgstr "Meine Konten"
+
+#: manager/forms.py:58
+msgid "External Accounts"
+msgstr "Externe Konten"
+
+#: manager/forms.py:88
+msgid "Sender and receiver cannot be identical."
+msgstr "Sender und Empfänger dürfen nicht identisch sein."
+
+#: manager/forms.py:91
+msgid "The amount cannot be negative."
+msgstr "Der Betrag kann nicht negativ sein."
+
+#: manager/forms.py:94
+msgid "Please select at least one original transaction."
+msgstr "Bitte wähle mindestens eine ursprüngliche Transaktion aus."
+
+#: manager/forms.py:143
 #, python-format
 msgid ""
 "The sum of the categories (%(split_amount)s €) cannot exceed the total "
@@ -66,13 +67,17 @@ msgstr ""
 "Die Summe der Kategorien (%(split_amount)s €) darf den Gesamtbetrag "
 "(%(total_amount)s €) nicht überschreiten."
 
-#: manager/models.py:96 manager/views.py:329
+#: manager/forms.py:161 manager/templates/accounts/add.html:39
+msgid "Starting balance"
+msgstr "Startguthaben"
+
+#: manager/models.py:96
 msgid "Transaction"
 msgstr "Transaktion"
 
-#: manager/models.py:97 manager/templates/elements/quicksearch_results.html:38
+#: manager/models.py:97 manager/templates/elements/quicksearch_results.html:39
 #: manager/templates/master.html:48 manager/templates/search.html:64
-#: manager/templates/transactions/index.html:5 manager/views.py:305
+#: manager/templates/transactions/index.html:5 manager/views.py:319
 msgid "Transactions"
 msgstr "Transaktionen"
 
@@ -92,53 +97,53 @@ msgstr "Rückerstattung"
 msgid "Refunds"
 msgstr "Rückerstattungen"
 
-#: manager/models.py:172 manager/templates/charts/chart_common.html:33
+#: manager/models.py:179 manager/templates/charts/chart_common.html:33
 msgid "Account"
 msgstr "Konto"
 
-#: manager/models.py:173 manager/templates/elements/quicksearch_results.html:8
+#: manager/models.py:180 manager/templates/elements/quicksearch_results.html:9
 #: manager/templates/master.html:45 manager/templates/search.html:9
-#: manager/views.py:491
+#: manager/views.py:506
 msgid "Accounts"
 msgstr "Konten"
 
-#: manager/models.py:182 manager/templates/transactions/add.html:110
+#: manager/models.py:189 manager/templates/transactions/add.html:110
 #: manager/templates/transactions/add.html:161
 msgid "Category"
 msgstr "Kategorie"
 
-#: manager/models.py:183 manager/templates/categories/index.html:6
-#: manager/templates/elements/quicksearch_results.html:25
+#: manager/models.py:190 manager/templates/categories/index.html:6
+#: manager/templates/elements/quicksearch_results.html:26
 #: manager/templates/master.html:54 manager/templates/search.html:40
-#: manager/templates/transactions/detail.html:19 manager/views.py:576
+#: manager/templates/transactions/detail.html:22 manager/views.py:591
 msgid "Categories"
 msgstr "Kategorien"
 
-#: manager/models.py:199
+#: manager/models.py:206
 msgid "System Default"
 msgstr "Systemstandard"
 
-#: manager/models.py:200 manager/templates/user_settings.html:27
+#: manager/models.py:207 manager/templates/user_settings.html:27
 msgid "Light"
 msgstr "Hell"
 
-#: manager/models.py:201 manager/templates/user_settings.html:35
+#: manager/models.py:208 manager/templates/user_settings.html:35
 msgid "Dark"
 msgstr "Dunkel"
 
-#: manager/models.py:215
+#: manager/models.py:224
 msgid "User Setting"
 msgstr "Benutzereinstellung"
 
-#: manager/models.py:216 manager/views.py:732
+#: manager/models.py:225 manager/views.py:750
 msgid "User Settings"
 msgstr "Benutzereinstellungen"
 
-#: manager/templates/accounts/add.html:6 manager/views.py:546
+#: manager/templates/accounts/add.html:6 manager/views.py:561
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
-#: manager/templates/accounts/add.html:8 manager/views.py:526
+#: manager/templates/accounts/add.html:8 manager/views.py:541
 msgid "New Account"
 msgstr "Neues Konto"
 
@@ -149,10 +154,6 @@ msgstr "Kontoname"
 #: manager/templates/accounts/add.html:31
 msgid "Account number"
 msgstr "Kontonummer"
-
-#: manager/templates/accounts/add.html:39
-msgid "Starting balance"
-msgstr "Startguthaben"
 
 #: manager/templates/accounts/add.html:50
 msgid "Own account?"
@@ -177,16 +178,16 @@ msgstr "Aktuelles Bild"
 #: manager/templates/accounts/add.html:88
 #: manager/templates/accounts/delete.html:23
 #: manager/templates/categories/add.html:151
-#: manager/templates/categories/delete.html:38
+#: manager/templates/categories/delete.html:39
 #: manager/templates/transactions/add.html:145
-#: manager/templates/transactions/delete.html:24
+#: manager/templates/transactions/delete.html:25
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: manager/templates/accounts/add.html:91
 #: manager/templates/categories/add.html:155
 #: manager/templates/transactions/add.html:148
-#: manager/templates/user_settings.html:60
+#: manager/templates/user_settings.html:69
 msgid "Save changes"
 msgstr "Änderungen speichern"
 
@@ -195,8 +196,8 @@ msgid "Add account"
 msgstr "Konto hinzufügen"
 
 #: manager/templates/accounts/delete.html:8
-#: manager/templates/categories/delete.html:24
-#: manager/templates/transactions/delete.html:8
+#: manager/templates/categories/delete.html:25
+#: manager/templates/transactions/delete.html:9
 msgid "Confirm deletion"
 msgstr "Löschen bestätigen"
 
@@ -205,46 +206,46 @@ msgid "Do you really want to delete this account?"
 msgstr "Möchtest du dieses Konto wirklich löschen?"
 
 #: manager/templates/accounts/delete.html:18
-#: manager/templates/categories/delete.html:33
-#: manager/templates/transactions/delete.html:19
+#: manager/templates/categories/delete.html:34
+#: manager/templates/transactions/delete.html:20
 msgid "This action cannot be undone."
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: manager/templates/accounts/delete.html:24
-#: manager/templates/categories/delete.html:39
-#: manager/templates/transactions/delete.html:25
+#: manager/templates/categories/delete.html:40
+#: manager/templates/transactions/delete.html:26
 msgid "Yes, delete permanently"
 msgstr "Ja, unwiderruflich löschen"
 
-#: manager/templates/accounts/detail.html:6
+#: manager/templates/accounts/detail.html:7
 #: manager/templates/categories/detail.html:6
-#: manager/templates/transactions/detail.html:5
+#: manager/templates/transactions/detail.html:6
 msgid "Back"
 msgstr "Zurück"
 
-#: manager/templates/accounts/detail.html:15
+#: manager/templates/accounts/detail.html:16
 msgid "Current Balance:"
 msgstr "Kontostand:"
 
-#: manager/templates/accounts/detail.html:18
+#: manager/templates/accounts/detail.html:19
 msgid "Account Number:"
 msgstr "Kontonummer:"
 
-#: manager/templates/accounts/detail.html:26
+#: manager/templates/accounts/detail.html:27
 #: manager/templates/categories/detail.html:39
-#: manager/templates/transactions/detail.html:71
+#: manager/templates/transactions/detail.html:80
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: manager/templates/accounts/detail.html:30
+#: manager/templates/accounts/detail.html:31
 #: manager/templates/categories/detail.html:43
 #: manager/templates/transactions/add.html:130
 #: manager/templates/transactions/add.html:172
-#: manager/templates/transactions/detail.html:75
+#: manager/templates/transactions/detail.html:84
 msgid "Delete"
 msgstr "Löschen"
 
-#: manager/templates/accounts/detail.html:34
+#: manager/templates/accounts/detail.html:35
 #: manager/templates/categories/detail.html:47
 msgid "Show transactions"
 msgstr "Transaktionen anzeigen"
@@ -291,11 +292,11 @@ msgstr "Meine geschlossenen Konten:"
 msgid "External accounts:"
 msgstr "Externe Konten:"
 
-#: manager/templates/categories/add.html:6 manager/views.py:630
+#: manager/templates/categories/add.html:6 manager/views.py:645
 msgid "Edit Category"
 msgstr "Kategorie bearbeiten"
 
-#: manager/templates/categories/add.html:8 manager/views.py:610
+#: manager/templates/categories/add.html:8 manager/views.py:625
 msgid "New Category"
 msgstr "Neue Kategorie"
 
@@ -308,7 +309,7 @@ msgid "Parent category (optional)"
 msgstr "Übergeordnete Kategorie (optional)"
 
 #: manager/templates/categories/add.html:33
-#: manager/templates/elements/quicksearch_results.html:13
+#: manager/templates/elements/quicksearch_results.html:14
 msgid "Icon"
 msgstr "Icon"
 
@@ -348,15 +349,15 @@ msgstr "Kategorie hinzufügen"
 msgid "Error loading icons"
 msgstr "Fehler beim Laden der Icons"
 
-#: manager/templates/categories/delete.html:12
+#: manager/templates/categories/delete.html:13
 msgid "Affected transactions"
 msgstr "Betroffene Transaktionen"
 
-#: manager/templates/categories/delete.html:20
+#: manager/templates/categories/delete.html:21
 msgid "Back to category"
 msgstr "Zurück zur Kategorie"
 
-#: manager/templates/categories/delete.html:27
+#: manager/templates/categories/delete.html:28
 msgid "Do you really want to delete this category?"
 msgstr "Möchtest du diese Kategorie wirklich löschen?"
 
@@ -380,7 +381,7 @@ msgstr "Keine Kategorien verfügbar."
 msgid "Account Balance over Time"
 msgstr "Kontostand über Zeit"
 
-#: manager/templates/charts/balance_over_time.html:15
+#: manager/templates/charts/balance_over_time.html:26
 msgid "Total"
 msgstr "Gesamt"
 
@@ -437,7 +438,7 @@ msgid "Apply"
 msgstr "Anwenden"
 
 #: manager/templates/charts/index.html:25 manager/templates/master.html:51
-#: manager/views.py:744
+#: manager/views.py:762
 msgid "Analysis"
 msgstr "Analyse"
 
@@ -457,36 +458,36 @@ msgstr "Einnahmen/Ausgaben Sankey"
 msgid "Shows income and expenses by category in a Sankey diagram"
 msgstr "Zeigt Einnahmen und Ausgaben nach Kategorie in einem Sankey-Diagramm"
 
-#: manager/templates/charts/index.html:71
+#: manager/templates/charts/index.html:77
 msgid "Preview"
 msgstr "Vorschau"
 
-#: manager/templates/charts/index.html:110
+#: manager/templates/charts/index.html:116
 msgid "Salary"
 msgstr "Lohn"
 
-#: manager/templates/charts/index.html:110
+#: manager/templates/charts/index.html:116
 msgid "Gifts"
 msgstr "Geschenke"
 
-#: manager/templates/charts/index.html:111
-#: manager/templates/charts/sankey.html:17
+#: manager/templates/charts/index.html:117
+#: manager/templates/charts/sankey.html:18
 msgid "Budget"
 msgstr "Budget"
 
-#: manager/templates/charts/index.html:112
+#: manager/templates/charts/index.html:118
 msgid "Rent"
 msgstr "Miete"
 
-#: manager/templates/charts/index.html:112
+#: manager/templates/charts/index.html:118
 msgid "Food"
 msgstr "Essen"
 
-#: manager/templates/charts/index.html:112
+#: manager/templates/charts/index.html:118
 msgid "Hobby"
 msgstr "Hobby"
 
-#: manager/templates/charts/sankey.html:5
+#: manager/templates/charts/sankey.html:6
 msgid "Income-Expense Sankey"
 msgstr "Einnahmen/Ausgaben Sankey"
 
@@ -494,18 +495,18 @@ msgstr "Einnahmen/Ausgaben Sankey"
 msgid "Toggle subcategories"
 msgstr "Unterkategorien ein-/ausblenden"
 
-#: manager/templates/elements/quicksearch_results.html:50
+#: manager/templates/elements/quicksearch_results.html:51
 #: manager/templates/search.html:112
-#: manager/templates/transactions/_transaction_list_partial.html:62
+#: manager/templates/transactions/_transaction_item.html:45
 msgid "Transfer"
 msgstr "Umbuchung"
 
-#: manager/templates/elements/quicksearch_results.html:61
+#: manager/templates/elements/quicksearch_results.html:62
 #, python-format
 msgid "Show all results for \"%(query)s\""
 msgstr "Alle Ergebnisse für \"%(query)s\" anzeigen"
 
-#: manager/templates/elements/quicksearch_results.html:67
+#: manager/templates/elements/quicksearch_results.html:68
 msgid "No results found."
 msgstr "Keine Ergebnisse gefunden."
 
@@ -558,14 +559,14 @@ msgstr "Die Passwörter stimmen nicht überein!"
 msgid "Create superuser account"
 msgstr "Superuser-Konto erstellen"
 
-#: manager/templates/index.html:14 manager/templates/index.html:101
+#: manager/templates/index.html:14 manager/templates/index.html:112
 msgid "Total Wealth"
 msgstr "Gesamtvermögen"
 
 #: manager/templates/index.html:53 manager/templates/search.html:20
 #: manager/templates/search.html:81 manager/templates/search.html:83
-#: manager/templates/transactions/_transaction_list_partial.html:31
-#: manager/templates/transactions/_transaction_list_partial.html:33
+#: manager/templates/transactions/_transaction_item.html:14
+#: manager/templates/transactions/_transaction_item.html:16
 msgid "Account Icon"
 msgstr "Konto-Icon"
 
@@ -585,7 +586,7 @@ msgstr "Lege dein erstes Konto an, um deine Finanzen zu verfolgen."
 msgid "OpenCent Logo"
 msgstr "OpenCent Logo"
 
-#: manager/templates/master.html:42 manager/views.py:475
+#: manager/templates/master.html:42 manager/views.py:490
 msgid "Home"
 msgstr "Startseite"
 
@@ -661,35 +662,35 @@ msgid "%(count)s transactions found."
 msgstr "%(count)s Transaktionen gefunden."
 
 #: manager/templates/search.html:89
-#: manager/templates/transactions/_transaction_list_partial.html:39
+#: manager/templates/transactions/_transaction_item.html:22
 msgid "Multiple categories"
 msgstr "Mehrere Kategorien"
 
 #: manager/templates/search.html:120
-#: manager/templates/transactions/_transaction_list_partial.html:70
+#: manager/templates/transactions/_transaction_item.html:53
 msgid "Refunded"
 msgstr "Rückerstattet"
 
 #: manager/templates/search.html:122
-#: manager/templates/transactions/_transaction_list_partial.html:72
+#: manager/templates/transactions/_transaction_item.html:55
 msgid "Partially Refunded"
 msgstr "Teilweise rückerstattet"
 
 #: manager/templates/search.html:147
-#: manager/templates/transactions/index.html:22
+#: manager/templates/transactions/index.html:49
 msgid "No transactions found."
 msgstr "Keine Transaktionen gefunden."
 
-#: manager/templates/transactions/_transaction_list_partial.html:108
+#: manager/templates/transactions/_transaction_list_partial.html:40
 msgid "Loading more..."
 msgstr "Lade mehr..."
 
-#: manager/templates/transactions/add.html:7 manager/views.py:424
+#: manager/templates/transactions/add.html:7 manager/views.py:439
 msgid "Edit Transaction"
 msgstr "Transaktion bearbeiten"
 
 #: manager/templates/transactions/add.html:9
-#: manager/templates/transactions/index.html:8 manager/views.py:391
+#: manager/templates/transactions/index.html:8 manager/views.py:406
 msgid "New Transaction"
 msgstr "Neue Transaktion"
 
@@ -702,7 +703,7 @@ msgid "To Account (Receiver)"
 msgstr "Auf Konto (Empfänger)"
 
 #: manager/templates/transactions/add.html:63
-#: manager/templates/transactions/detail.html:35
+#: manager/templates/transactions/detail.html:38
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -736,51 +737,59 @@ msgstr "Weitere Kategorie hinzufügen"
 msgid "Add transaction"
 msgstr "Transaktion hinzufügen"
 
-#: manager/templates/transactions/delete.html:11
+#: manager/templates/transactions/delete.html:12
 msgid "Do you really want to delete this transaction?"
 msgstr "Möchtest du diese Transaktion wirklich löschen?"
 
-#: manager/templates/transactions/delete.html:14
+#: manager/templates/transactions/delete.html:15
 msgid "No description"
 msgstr "Keine Beschreibung"
 
-#: manager/templates/transactions/detail.html:16
+#: manager/templates/transactions/detail.html:17
 msgid "Date"
 msgstr "Datum"
 
-#: manager/templates/transactions/detail.html:30
+#: manager/templates/transactions/detail.html:33
 msgid "No categories assigned"
 msgstr "Keine Kategorien zugewiesen"
 
-#: manager/templates/transactions/detail.html:38
+#: manager/templates/transactions/detail.html:42
 msgid "This transaction is a refund for the following transactions:"
 msgstr ""
 "Diese Transaktion ist eine Rückerstattung für die folgenden Transaktionen:"
 
-#: manager/templates/transactions/detail.html:42
+#: manager/templates/transactions/detail.html:46
 msgid "Transaction ID"
 msgstr "Transaktions-ID"
 
-#: manager/templates/transactions/detail.html:42
-#: manager/templates/transactions/detail.html:55
+#: manager/templates/transactions/detail.html:48
+#: manager/templates/transactions/detail.html:64
 msgid "on"
 msgstr "am"
 
-#: manager/templates/transactions/detail.html:51
+#: manager/templates/transactions/detail.html:58
 msgid "This transaction has the following refunds:"
 msgstr "Diese Transaktion hat folgende Rückerstattungen:"
 
-#: manager/templates/transactions/detail.html:55
+#: manager/templates/transactions/detail.html:62
 msgid "Refund ID"
 msgstr "Rückerstattungs-ID"
 
-#: manager/templates/transactions/detail.html:68
+#: manager/templates/transactions/detail.html:77
 msgid "Duplicate"
 msgstr "Duplizieren"
 
 #: manager/templates/transactions/index.html:13
 msgid "Reset filters"
 msgstr "Filter zurücksetzen"
+
+#: manager/templates/transactions/index.html:22
+msgid "Show future transactions"
+msgstr "Zukünftige Transaktionen anzeigen"
+
+#: manager/templates/transactions/index.html:27
+msgid "Future"
+msgstr "Zukünftige"
 
 #: manager/templates/user_settings.html:12
 msgid "Appearance"
@@ -806,27 +815,31 @@ msgstr "Sprache"
 msgid "Choose the display language for your account."
 msgstr "Wähle die Anzeigesprache für deinen Account."
 
-#: manager/views.py:122
+#: manager/templates/user_settings.html:58
+msgid "Balance Calculation"
+msgstr "Kontostandberechnung"
+
+#: manager/templates/user_settings.html:63
+msgid "Include future transactions in balance calculation"
+msgstr "Zukünftige Transaktionen in den Kontostand miteinberechnen"
+
+#: manager/views.py:124
 msgid "Start"
 msgstr "Start"
 
-#: manager/views.py:261
+#: manager/views.py:263
 msgid "Setup Assistant"
 msgstr "Einrichtungsassistent"
 
-#: manager/views.py:329 manager/views.py:504 manager/views.py:588
-msgid "Details"
-msgstr "Details"
-
-#: manager/views.py:455
+#: manager/views.py:470
 msgid "Delete Transaction"
 msgstr "Transaktion löschen"
 
-#: manager/views.py:564
+#: manager/views.py:579
 msgid "Delete Account"
 msgstr "Konto löschen"
 
-#: manager/views.py:646
+#: manager/views.py:661
 msgid ""
 "This category cannot be deleted because it is still assigned to "
 "transactions. Please remove the category from all assigned transactions "
@@ -836,20 +849,20 @@ msgstr ""
 "zugeordnet ist. Bitte entferne die Kategorie von allen zugeordneten "
 "Transaktionen, bevor du sie löschst."
 
-#: manager/views.py:654
+#: manager/views.py:669
 msgid "Delete Category"
 msgstr "Kategorie löschen"
 
-#: manager/views.py:677
+#: manager/views.py:692
 #, python-format
 msgid "Search: %s"
 msgstr "Suche: %s"
 
-#: manager/views.py:783 manager/views.py:885
+#: manager/views.py:801 manager/views.py:895
 msgid "Charts"
 msgstr "Diagramme"
 
-#: manager/views.py:803 manager/views.py:804
+#: manager/views.py:821 manager/views.py:822
 msgid "Uncategorized"
 msgstr "Nicht kategorisiert"
 
