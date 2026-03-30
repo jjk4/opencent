@@ -55,6 +55,17 @@ RUN mkdir -p svgjs && \
 RUN mkdir -p apexsankey && \
     wget -O apexsankey/apexsankey.min.js https://cdn.jsdelivr.net/npm/apexsankey@1.3.0
 
+# Jquery
+RUN mkdir -p jquery && \
+    wget -O jquery/jquery.min.js https://code.jquery.com/jquery-3.7.1.min.js
+
+# Select2
+RUN mkdir -p select2 && \
+    wget -O select2/select2.min.js https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js && \
+    wget -O select2/select2.min.css https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css && \
+    wget -O select2/select2-bootstrap-5-theme.min.css https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css
+
+
 # Stage 3: Production stage
 FROM python:3.13-slim
 

@@ -19,7 +19,7 @@ class TransactionForm(forms.ModelForm):
         queryset=Transaction.objects.none(),
         required=False,
         label=_("Original transaction(s)"),
-        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5'})
+        widget=forms.SelectMultiple(attrs={'class': 'form-select select2-transactions'}) 
     )
 
     timestamp = forms.DateTimeField(
@@ -62,19 +62,27 @@ class TransactionForm(forms.ModelForm):
         self.fields['receiver'].choices = grouped_choices
 
         if user:
-            qs = Transaction.objects.filter(user=user).order_by('-timestamp')
-            
+            qs = Transaction.objects.filter(user=user)
             if self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
-                
-                has_refunds = self.instance.refund_transaction_refunds.exists()
-                self.fields['is_refund'].initial = has_refunds
-                
-                if has_refunds:
-                    existing_refs = self.instance.refund_transaction_refunds.values_list('original_transaction_id', flat=True)
-                    self.fields['refund_links'].initial = existing_refs
-
-            self.fields['refund_links'].queryset = qs
+            
+            selected_ids = []
+            
+            if self.instance.pk and self.instance.refund_transaction_refunds.exists():
+                selected_ids = list(self.instance.refund_transaction_refunds.values_list('original_transaction_id', flat=True))
+                self.fields['is_refund'].initial = True
+                self.fields['refund_links'].initial = selected_ids
+            
+            if self.is_bound and self.data.getlist('refund_links'):
+                try:
+                    selected_ids.extend([int(id) for id in self.data.getlist('refund_links')])
+                except ValueError:
+                    pass
+            
+            if selected_ids:
+                self.fields['refund_links'].queryset = qs.filter(id__in=selected_ids)
+            else:
+                self.fields['refund_links'].queryset = qs.none()
 
     def clean(self):
         cleaned_data = super().clean()

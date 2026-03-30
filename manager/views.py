@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -410,6 +410,42 @@ def transaction_add(request, copy_id=None):
         'formset': formset,
     }
     return render(request, 'transactions/add.html', context)
+
+@login_required
+def transaction_search_ajax(request):
+    """AJAX endpoint for Select2 to search transactions."""
+    query = request.GET.get('q', '')
+    
+    qs = Transaction.objects.filter(user=request.user).select_related('sender', 'receiver').order_by('-timestamp')
+    
+    if query:
+        filter_q = Q(description__icontains=query) | \
+                   Q(sender__name__icontains=query) | \
+                   Q(receiver__name__icontains=query)
+                   
+        try:
+            amount_query = Decimal(query.replace(',', '.'))
+            filter_q |= Q(amount=amount_query)
+        except (ValueError, TypeError, ArithmeticError):
+            pass
+            
+        qs = qs.filter(filter_q)
+        
+    qs = qs[:30]
+    
+    results = []
+    for t in qs:
+        date_str = t.timestamp.strftime('%d.%m.%Y')
+        text = f"{date_str} | {t.sender.name} -> {t.receiver.name} | {t.amount} €"
+        if t.description:
+            text += f" | {t.description}"
+            
+        results.append({
+            'id': t.id,
+            'text': text
+        })
+        
+    return JsonResponse({'results': results})
 
 @login_required
 def transaction_edit(request, transaction_id):

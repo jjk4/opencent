@@ -10,6 +10,7 @@ urlpatterns = [
     path('transaction_add/<int:copy_id>/', views.transaction_add, name='transaction_add'),
     path('transaction_edit/<int:transaction_id>/', views.transaction_edit, name='transaction_edit'),
     path('transaction_delete/<int:transaction_id>/', views.transaction_delete, name='transaction_delete'),
+    path('transactions/search/', views.transaction_search_ajax, name='transaction_search_ajax'),
     path('accounts/', views.accounts, name='accounts'),
     path('account_detail/<int:account_id>/', views.account_detail, name='account_detail'),
     path('account_add/', views.account_add, name='account_add'),

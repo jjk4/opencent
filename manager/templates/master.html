@@ -11,9 +11,13 @@
 
     <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'vendor/bootstrap-icons/bootstrap-icons.min.css' %}" />
+    <link href="{% static 'vendor/select2/select2.min.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'vendor/select2/select2-bootstrap-5-theme.min.css' %}" />
     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}" defer></script>
     <script src="{% static 'vendor/apexcharts/apexcharts.min.js' %}" defer></script>
     <script src="{% static 'vendor/htmx/htmx.min.js' %}" defer></script>
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/select2/select2.min.js' %}"></script>
 
     {% with user_theme=request.user.settings.theme|default:"auto" %}
     <script>

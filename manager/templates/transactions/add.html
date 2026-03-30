@@ -177,23 +177,29 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const addBtn = document.getElementById('add-split-btn');
-    const container = document.getElementById('split-form-container');
-    const totalFormsInput = document.getElementById('id_splits-TOTAL_FORMS');
-    const template = document.getElementById('empty-form-template');
-
-    addBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        let formCount = parseInt(totalFormsInput.value);
-        let newRowHtml = template.innerHTML;
-        newRowHtml = newRowHtml.replace(/__prefix__/g, formCount);
-        const newDiv = document.createElement('div');
-        newDiv.innerHTML = newRowHtml;
-        while (newDiv.firstChild) {
-            container.appendChild(newDiv.firstChild);
+$(document).ready(function() {
+    $('.select2-transactions').select2({
+        theme: 'bootstrap-5',
+        width: '100%',
+        placeholder: '{% trans "Search for transactions..." %}',
+        allowClear: true,
+        minimumInputLength: 2,
+        ajax: {
+            url: '{% url "transaction_search_ajax" %}',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.results
+                };
+            },
+            cache: true
         }
-        totalFormsInput.value = formCount + 1;
     });
 
     const refundCheckbox = document.getElementById('{{ form.is_refund.id_for_label }}');
