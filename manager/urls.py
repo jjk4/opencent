@@ -1,5 +1,10 @@
 from django.urls import path, include
 from . import views
+from django.views.generic import TemplateView
+from django.http import JsonResponse
+
+def chrome_devtools_json(request):
+    return JsonResponse({})
 
 urlpatterns = [
     path('', views.homepage, name='homepage'),
@@ -30,6 +35,9 @@ urlpatterns = [
     path('charts/', views.charts, name='charts'),
     path('charts/balance_over_time/', views.chart_balance_over_time, name='chart_balance_over_time'),
     path('charts/sankey/', views.chart_sankey, name='chart_sankey'),
+    path('manifest.json', TemplateView.as_view(template_name='manifest.json', content_type='application/json'), name='manifest'),
+    path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/javascript'), name='service_worker'),
+    path('offline/', TemplateView.as_view(template_name='offline.html'), name='offline'),
+    path('.well-known/appspecific/com.chrome.devtools.json', chrome_devtools_json),
     path('devview/', views.devview, name='devview'),
-
 ]

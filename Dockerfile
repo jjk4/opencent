@@ -49,7 +49,8 @@ RUN mkdir -p bootstrap/css bootstrap/js && \
 
 # SVG.js
 RUN mkdir -p svgjs && \
-    wget -O svgjs/svg.min.js https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.2.5/dist/svg.min.js
+    wget -O svgjs/svg.min.js https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.2.5/dist/svg.min.js && \
+    wget -O svgjs/svg.min.js.map https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.2.5/dist/svg.min.js.map
 
 # ApexSankey
 RUN mkdir -p apexsankey && \
