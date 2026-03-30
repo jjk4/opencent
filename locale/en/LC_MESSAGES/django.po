@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 11:09+0200\n"
+"POT-Creation-Date: 2026-03-30 09:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: manager/forms.py:8 manager/forms.py:101 manager/forms.py:102
+#: manager/forms.py:8 manager/forms.py:109 manager/forms.py:110
 #: manager/templates/transactions/add.html:46
 #: manager/templates/transactions/add.html:118
 #: manager/templates/transactions/add.html:165
@@ -46,26 +46,26 @@ msgstr ""
 msgid "External Accounts"
 msgstr ""
 
-#: manager/forms.py:88
+#: manager/forms.py:96
 msgid "Sender and receiver cannot be identical."
 msgstr ""
 
-#: manager/forms.py:91
+#: manager/forms.py:99
 msgid "The amount cannot be negative."
 msgstr ""
 
-#: manager/forms.py:94
+#: manager/forms.py:102
 msgid "Please select at least one original transaction."
 msgstr ""
 
-#: manager/forms.py:143
+#: manager/forms.py:151
 #, python-format
 msgid ""
 "The sum of the categories (%(split_amount)s €) cannot exceed the total "
 "amount (%(total_amount)s €)."
 msgstr ""
 
-#: manager/forms.py:161 manager/templates/accounts/add.html:39
+#: manager/forms.py:169 manager/templates/accounts/add.html:39
 msgid "Starting balance"
 msgstr ""
 
@@ -74,8 +74,8 @@ msgid "Transaction"
 msgstr ""
 
 #: manager/models.py:97 manager/templates/elements/quicksearch_results.html:39
-#: manager/templates/master.html:48 manager/templates/search.html:64
-#: manager/templates/transactions/index.html:5 manager/views.py:319
+#: manager/templates/master.html:52 manager/templates/search.html:64
+#: manager/templates/transactions/index.html:5 manager/views.py:324
 msgid "Transactions"
 msgstr ""
 
@@ -100,8 +100,8 @@ msgid "Account"
 msgstr ""
 
 #: manager/models.py:180 manager/templates/elements/quicksearch_results.html:9
-#: manager/templates/master.html:45 manager/templates/search.html:9
-#: manager/views.py:506
+#: manager/templates/master.html:49 manager/templates/search.html:9
+#: manager/views.py:547
 msgid "Accounts"
 msgstr ""
 
@@ -112,8 +112,8 @@ msgstr ""
 
 #: manager/models.py:190 manager/templates/categories/index.html:6
 #: manager/templates/elements/quicksearch_results.html:26
-#: manager/templates/master.html:54 manager/templates/search.html:40
-#: manager/templates/transactions/detail.html:22 manager/views.py:591
+#: manager/templates/master.html:58 manager/templates/search.html:40
+#: manager/templates/transactions/detail.html:22 manager/views.py:632
 msgid "Categories"
 msgstr ""
 
@@ -133,15 +133,15 @@ msgstr ""
 msgid "User Setting"
 msgstr ""
 
-#: manager/models.py:225 manager/views.py:750
+#: manager/models.py:225 manager/views.py:791
 msgid "User Settings"
 msgstr ""
 
-#: manager/templates/accounts/add.html:6 manager/views.py:561
+#: manager/templates/accounts/add.html:6 manager/views.py:602
 msgid "Edit Account"
 msgstr ""
 
-#: manager/templates/accounts/add.html:8 manager/views.py:541
+#: manager/templates/accounts/add.html:8 manager/views.py:582
 msgid "New Account"
 msgstr ""
 
@@ -290,11 +290,11 @@ msgstr ""
 msgid "External accounts:"
 msgstr ""
 
-#: manager/templates/categories/add.html:6 manager/views.py:645
+#: manager/templates/categories/add.html:6 manager/views.py:686
 msgid "Edit Category"
 msgstr ""
 
-#: manager/templates/categories/add.html:8 manager/views.py:625
+#: manager/templates/categories/add.html:8 manager/views.py:666
 msgid "New Category"
 msgstr ""
 
@@ -435,8 +435,8 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: manager/templates/charts/index.html:25 manager/templates/master.html:51
-#: manager/views.py:762
+#: manager/templates/charts/index.html:25 manager/templates/master.html:55
+#: manager/views.py:928
 msgid "Analysis"
 msgstr ""
 
@@ -469,7 +469,7 @@ msgid "Gifts"
 msgstr ""
 
 #: manager/templates/charts/index.html:117
-#: manager/templates/charts/sankey.html:18
+#: manager/templates/charts/sankey.html:19
 msgid "Budget"
 msgstr ""
 
@@ -485,7 +485,7 @@ msgstr ""
 msgid "Hobby"
 msgstr ""
 
-#: manager/templates/charts/sankey.html:6
+#: manager/templates/charts/sankey.html:7
 msgid "Income-Expense Sankey"
 msgstr ""
 
@@ -578,39 +578,39 @@ msgstr ""
 msgid "Create your first account to start tracking your finances."
 msgstr ""
 
-#: manager/templates/master.html:35
+#: manager/templates/master.html:39
 msgid "OpenCent Logo"
 msgstr ""
 
-#: manager/templates/master.html:42 manager/views.py:490
+#: manager/templates/master.html:46 manager/views.py:531
 msgid "Home"
 msgstr ""
 
-#: manager/templates/master.html:62
+#: manager/templates/master.html:66
 msgid "Search..."
 msgstr ""
 
-#: manager/templates/master.html:63
+#: manager/templates/master.html:67
 msgid "Search"
 msgstr ""
 
-#: manager/templates/master.html:84
+#: manager/templates/master.html:88
 msgid "User menu"
 msgstr ""
 
-#: manager/templates/master.html:91
+#: manager/templates/master.html:95
 msgid "Admin Panel"
 msgstr ""
 
-#: manager/templates/master.html:94 manager/templates/user_settings.html:6
+#: manager/templates/master.html:98 manager/templates/user_settings.html:6
 msgid "Settings"
 msgstr ""
 
-#: manager/templates/master.html:101
+#: manager/templates/master.html:105
 msgid "Logout"
 msgstr ""
 
-#: manager/templates/master.html:106
+#: manager/templates/master.html:110
 #: manager/templates/registration/login.html:11
 #: manager/templates/registration/login.html:52
 msgid "Login"
@@ -677,12 +677,12 @@ msgstr ""
 msgid "Loading more..."
 msgstr ""
 
-#: manager/templates/transactions/add.html:7 manager/views.py:439
+#: manager/templates/transactions/add.html:7 manager/views.py:480
 msgid "Edit Transaction"
 msgstr ""
 
 #: manager/templates/transactions/add.html:9
-#: manager/templates/transactions/index.html:8 manager/views.py:406
+#: manager/templates/transactions/index.html:8 manager/views.py:411
 msgid "New Transaction"
 msgstr ""
 
@@ -725,6 +725,10 @@ msgstr ""
 
 #: manager/templates/transactions/add.html:150
 msgid "Add transaction"
+msgstr ""
+
+#: manager/templates/transactions/add.html:184
+msgid "Search for transactions..."
 msgstr ""
 
 #: manager/templates/transactions/delete.html:12
@@ -810,50 +814,101 @@ msgstr ""
 msgid "Include future transactions in balance calculation"
 msgstr ""
 
-#: manager/views.py:124
+#: manager/templates/user_settings.html:75
+msgid "Backup & Restore"
+msgstr ""
+
+#: manager/templates/user_settings.html:78
+msgid ""
+"Export your entire data as a JSON file or import a previously exported file. "
+"Warning: Importing will overwrite all your current data!"
+msgstr ""
+
+#: manager/templates/user_settings.html:84
+msgid "Export Data"
+msgstr ""
+
+#: manager/templates/user_settings.html:85
+msgid ""
+"Download all your accounts, transactions, and categories to your device."
+msgstr ""
+
+#: manager/templates/user_settings.html:87
+msgid "Download Backup"
+msgstr ""
+
+#: manager/templates/user_settings.html:96
+msgid "Import Data"
+msgstr ""
+
+#: manager/templates/user_settings.html:97
+msgid ""
+"Upload a backup file. All existing data will be permanently deleted and "
+"replaced."
+msgstr ""
+
+#: manager/templates/user_settings.html:100
+msgid ""
+"Are you sure? This will delete ALL your current data. This action cannot be "
+"undone!"
+msgstr ""
+
+#: manager/templates/user_settings.html:105
+msgid "Restore"
+msgstr ""
+
+#: manager/views.py:129
 msgid "Start"
 msgstr ""
 
-#: manager/views.py:263
+#: manager/views.py:268
 msgid "Setup Assistant"
 msgstr ""
 
-#: manager/views.py:470
+#: manager/views.py:511
 msgid "Delete Transaction"
 msgstr ""
 
-#: manager/views.py:579
+#: manager/views.py:620
 msgid "Delete Account"
 msgstr ""
 
-#: manager/views.py:661
+#: manager/views.py:702
 msgid ""
 "This category cannot be deleted because it is still assigned to "
 "transactions. Please remove the category from all assigned transactions "
 "before deleting it."
 msgstr ""
 
-#: manager/views.py:669
+#: manager/views.py:710
 msgid "Delete Category"
 msgstr ""
 
-#: manager/views.py:692
+#: manager/views.py:733
 #, python-format
 msgid "Search: %s"
 msgstr ""
 
-#: manager/views.py:801 manager/views.py:895
+#: manager/views.py:915
+msgid "Data and images successfully restored!"
+msgstr ""
+
+#: manager/views.py:918
+msgid "Error importing data. Make sure the file is a valid backup."
+msgstr ""
+
+#: manager/views.py:967 manager/views.py:1061
 msgid "Charts"
 msgstr ""
 
-#: manager/views.py:821 manager/views.py:822
+#: manager/views.py:987 manager/views.py:988
 msgid "Uncategorized"
 msgstr ""
 
-#: opencent/settings.py:141
+#: opencent/settings.py:140
 msgid "German"
 msgstr ""
 
-#: opencent/settings.py:142
+#: opencent/settings.py:141
 msgid "English"
 msgstr ""

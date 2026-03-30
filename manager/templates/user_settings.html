@@ -69,5 +69,46 @@
             <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
         </form>
     </div>
+    <!-- NEU: Backup & Restore Sektion -->
+    <div class="row mt-5 pt-3 border-top">
+        <h5 class="card-title fw-bold mb-3 text-danger">
+            <i class="bi bi-shield-lock me-2"></i> {% trans "Backup & Restore" %}
+        </h5>
+        <p class="text-body-secondary small mb-4">
+            {% trans "Export your entire data as a JSON file or import a previously exported file. Warning: Importing will overwrite all your current data!" %}
+        </p>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm border-0 bg-body-tertiary">
+                <div class="card-body">
+                    <h6 class="fw-bold"><i class="bi bi-cloud-download me-2"></i>{% trans "Export Data" %}</h6>
+                    <p class="small text-body-secondary">{% trans "Download all your accounts, transactions, and categories to your device." %}</p>
+                    <a href="{% url 'backup_export' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-download me-1"></i> {% trans "Download Backup" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm border-danger">
+                <div class="card-body">
+                    <h6 class="fw-bold text-danger"><i class="bi bi-cloud-upload me-2"></i>{% trans "Import Data" %}</h6>
+                    <p class="small text-body-secondary">{% trans "Upload a backup file. All existing data will be permanently deleted and replaced." %}</p>
+                    
+                    <!-- Formular MUSS enctype="multipart/form-data" haben, damit File Uploads funktionieren -->
+                    <form method="post" action="{% url 'backup_import' %}" enctype="multipart/form-data" onsubmit="return confirm('{% trans 'Are you sure? This will delete ALL your current data. This action cannot be undone!' %}');">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="file" class="form-control form-control-sm" name="backup_file" accept=".json" required>
+                            <button class="btn btn-danger btn-sm" type="submit">
+                                <i class="bi bi-upload me-1"></i> {% trans "Restore" %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
