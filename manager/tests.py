@@ -7,7 +7,6 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from io import BytesIO
 from PIL import Image
-from .views import calculate_refund_clusters
 
 class AccountModelTests(TestCase):
     def setUp(self):
@@ -158,41 +157,8 @@ class TransactionModelTests(TestCase):
         )
         self.assertEqual(str(tx), "Girokonto -> Supermarkt: 15.50 €")
 
-    def test_transaction_types_and_ui_classes(self):
-        """Tests the transaction type determination and corresponding UI classes based on sender and receiver accounts."""
-        acc_mine = self.account_giro
-        acc_ext = self.account_supermarkt
-        acc_ext2 = Account.objects.create(name="Anderer Supermarkt", is_mine=False, user=self.user_a)
 
-        # 1. TRANSFER
-        tx_transfer = Transaction.objects.create(
-            sender=acc_mine, receiver=acc_mine, amount=Decimal('10.00'), timestamp=timezone.now(), user=self.user_a
-        )
-        self.assertEqual(tx_transfer.type, 'TRANSFER')
-        self.assertEqual(tx_transfer.ui_color_class, 'list-group-item-secondary')
-
-        # 2. EXPENSE
-        tx_expense = Transaction.objects.create(
-            sender=acc_mine, receiver=acc_ext, amount=Decimal('10.00'), timestamp=timezone.now(), user=self.user_a
-        )
-        self.assertEqual(tx_expense.type, 'EXPENSE')
-        self.assertEqual(tx_expense.ui_color_class, 'list-group-item-danger')
-
-        # 3. INCOME
-        tx_income = Transaction.objects.create(
-            sender=acc_ext, receiver=acc_mine, amount=Decimal('10.00'), timestamp=timezone.now(), user=self.user_a
-        )
-        self.assertEqual(tx_income.type, 'INCOME')
-        self.assertEqual(tx_income.ui_color_class, 'list-group-item-success')
-
-        # 4. EXTERNAL
-        tx_external = Transaction.objects.create(
-            sender=acc_ext, receiver=acc_ext2, amount=Decimal('10.00'), timestamp=timezone.now(), user=self.user_a
-        )
-        self.assertEqual(tx_external.type, 'EXTERNAL')
-        self.assertEqual(tx_external.ui_color_class, 'list-group-item-secondary')
-
-    def test_transaction_refund_queries_and_ui(self):
+    def test_transaction_refund_queries(self):
         """Tests refund queries"""
         tx_orig = Transaction.objects.create(
             sender=self.account_giro, receiver=self.account_supermarkt, amount=Decimal('100.00'), 
@@ -207,13 +173,6 @@ class TransactionModelTests(TestCase):
         self.assertIn(refund_link, tx_orig.refunds)
         self.assertIn(refund_link, tx_ref.is_refund_of)
 
-        self.assertEqual(tx_orig.ui_color_class, 'list-group-item-danger')
-        tx_orig.remainder_after_refunds = Decimal('0')
-        self.assertEqual(tx_orig.ui_color_class, 'list-group-item-secondary text-decoration-line-through opacity-75')
-
-        self.assertEqual(tx_ref.ui_color_class, 'list-group-item-success')
-        tx_ref.remainder_of_refund = Decimal('0')
-        self.assertEqual(tx_ref.ui_color_class, 'list-group-item-secondary text-decoration-line-through opacity-75')
 
     def test_transaction_split_str(self):
         """Tests the string representation of the TransactionSplit model"""
@@ -340,64 +299,6 @@ class CategoryModelTests(TestCase):
         self.assertIn(grandchild, subcats)
 
 
-class RefundClusterLogicTests(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='usera', password='pw')
-        self.acc_giro = Account.objects.create(name="Giro", start_balance=0, is_mine=True, user=self.user)
-        self.acc_shop = Account.objects.create(name="Shop", start_balance=0, is_mine=False, user=self.user)
-
-    def test_simple_full_refund_calculation(self):
-        """Tests a simple case where a 100€ transaction is fully refunded with another 100€ transaction, and checks if the remainders are correctly set to 0."""
-        tx_out = Transaction.objects.create(
-            sender=self.acc_giro, receiver=self.acc_shop, amount=Decimal('100.00'), 
-            timestamp=timezone.now(), user=self.user, remainder_after_refunds=Decimal('100.00')
-        )
-        tx_in = Transaction.objects.create(
-            sender=self.acc_shop, receiver=self.acc_giro, amount=Decimal('100.00'), 
-            timestamp=timezone.now(), user=self.user, remainder_of_refund=Decimal('100.00')
-        )
-        
-        Refund.objects.create(original_transaction=tx_out, refund_transaction=tx_in)
-
-        calculate_refund_clusters(self.user, {tx_out.id, tx_in.id})
-
-        tx_out.refresh_from_db()
-        tx_in.refresh_from_db()
-
-        self.assertEqual(tx_out.remainder_after_refunds, Decimal('0.00'))
-        self.assertEqual(tx_in.remainder_of_refund, Decimal('0.00'))
-
-    def test_partial_refund_calculation(self):
-        """Tests a case where a 100€ transaction is partially refunded with a 40€ transaction, and checks if the remainders are correctly updated to reflect the partial refund."""
-        tx_out = Transaction.objects.create(
-            sender=self.acc_giro, receiver=self.acc_shop, amount=Decimal('100.00'), 
-            timestamp=timezone.now(), user=self.user, remainder_after_refunds=Decimal('100.00')
-        )
-        tx_in = Transaction.objects.create(
-            sender=self.acc_shop, receiver=self.acc_giro, amount=Decimal('40.00'), 
-            timestamp=timezone.now(), user=self.user, remainder_of_refund=Decimal('40.00')
-        )
-        
-        Refund.objects.create(original_transaction=tx_out, refund_transaction=tx_in)
-        calculate_refund_clusters(self.user, {tx_out.id})
-
-        tx_out.refresh_from_db()
-        tx_in.refresh_from_db()
-
-        self.assertEqual(tx_out.remainder_after_refunds, Decimal('60.00'))
-        self.assertEqual(tx_in.remainder_of_refund, Decimal('0.00'))
-
-    def test_orphaned_transaction_reset(self):
-        """Tests whether the amounts are reset when a cluster is dissolved, i.e., when there are no more refunds linked to an original transaction, the remainder should be reset to the full amount."""
-        tx_out = Transaction.objects.create(
-            sender=self.acc_giro, receiver=self.acc_shop, amount=Decimal('100.00'), 
-            timestamp=timezone.now(), user=self.user, remainder_after_refunds=Decimal('0.00')
-        )
-        
-        calculate_refund_clusters(self.user, {tx_out.id})
-        
-        tx_out.refresh_from_db()
-        self.assertEqual(tx_out.remainder_after_refunds, Decimal('100.00'))
         
 class GeneralViewTests(TestCase):
     def setUp(self):

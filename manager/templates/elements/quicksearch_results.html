@@ -48,7 +48,15 @@
                             {% else %}
                                 <i class="bi bi-cash-coin text-body-secondary me-2"></i>
                             {% endif %}
-                            <span class="text-truncate">{{ t.description|default:_("Transfer") }}</span>
+                            <span class="text-truncate">
+                            {% if t.receiver.is_mine and t.sender.is_mine %}
+                                {{ t.description|default:_("Transfer") }}
+                            {% elif t.receiver.is_mine %}
+                                {{ t.description|default:t.sender }}
+                            {% else %}
+                                {{ t.description|default:t.receiver }}
+                            {% endif %}
+                            </span>
                         </div>
                         <span class="fw-bold small text-nowrap">{{ t.amount|floatformat:2|intcomma }} €</span>
                     </a>
