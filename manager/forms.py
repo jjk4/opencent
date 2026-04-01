@@ -73,11 +73,19 @@ class TransactionForm(forms.ModelForm):
                 self.fields['is_refund'].initial = True
                 self.fields['refund_links'].initial = selected_ids
             
-            if self.is_bound and self.data.getlist('refund_links'):
-                try:
-                    selected_ids.extend([int(id) for id in self.data.getlist('refund_links')])
-                except ValueError:
-                    pass
+            if self.is_bound:
+                if hasattr(self.data, 'getlist'):
+                    raw_links = self.data.getlist('refund_links')
+                else:
+                    raw_links = self.data.get('refund_links', [])
+                    if not isinstance(raw_links, list):
+                        raw_links = [raw_links]
+
+                if raw_links:
+                    try:
+                        selected_ids.extend([int(link_id) for link_id in raw_links])
+                    except (ValueError, TypeError):
+                        pass
             
             if selected_ids:
                 self.fields['refund_links'].queryset = qs.filter(id__in=selected_ids)

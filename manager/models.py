@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 import os
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, pre_delete
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
@@ -259,7 +259,7 @@ def trigger_refund_calc_on_transaction_save(sender, instance, created, **kwargs)
         if is_involved:
             recalculate_refund_clusters(instance.user, {instance.id})
 
-@receiver(post_delete, sender=Transaction)
+@receiver(pre_delete, sender=Transaction)
 def trigger_refund_calc_on_transaction_delete(sender, instance, **kwargs):
     """
     Falls eine Transaktion gelöscht wird, die Teil eines Clusters war,
