@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-30 09:22+0200\n"
+"POT-Creation-Date: 2026-04-02 10:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: manager/forms.py:8 manager/forms.py:109 manager/forms.py:110
+#: manager/forms.py:8 manager/forms.py:117 manager/forms.py:118
 #: manager/templates/transactions/add.html:46
 #: manager/templates/transactions/add.html:118
 #: manager/templates/transactions/add.html:165
@@ -46,102 +46,102 @@ msgstr ""
 msgid "External Accounts"
 msgstr ""
 
-#: manager/forms.py:96
+#: manager/forms.py:104
 msgid "Sender and receiver cannot be identical."
 msgstr ""
 
-#: manager/forms.py:99
+#: manager/forms.py:107
 msgid "The amount cannot be negative."
 msgstr ""
 
-#: manager/forms.py:102
+#: manager/forms.py:110
 msgid "Please select at least one original transaction."
 msgstr ""
 
-#: manager/forms.py:151
+#: manager/forms.py:159
 #, python-format
 msgid ""
 "The sum of the categories (%(split_amount)s €) cannot exceed the total "
 "amount (%(total_amount)s €)."
 msgstr ""
 
-#: manager/forms.py:169 manager/templates/accounts/add.html:39
+#: manager/forms.py:177 manager/templates/accounts/add.html:39
 msgid "Starting balance"
 msgstr ""
 
-#: manager/models.py:96
+#: manager/models.py:84
 msgid "Transaction"
 msgstr ""
 
-#: manager/models.py:97 manager/templates/elements/quicksearch_results.html:39
-#: manager/templates/master.html:52 manager/templates/search.html:64
-#: manager/templates/transactions/index.html:5 manager/views.py:324
+#: manager/models.py:85 manager/templates/elements/quicksearch_results.html:39
+#: manager/templates/master.html:109 manager/templates/search.html:65
+#: manager/templates/transactions/index.html:5 manager/views/transactions.py:61
 msgid "Transactions"
 msgstr ""
 
-#: manager/models.py:106
+#: manager/models.py:94
 msgid "Transaction Split"
 msgstr ""
 
-#: manager/models.py:107
+#: manager/models.py:95
 msgid "Transaction Splits"
 msgstr ""
 
-#: manager/models.py:117 manager/templates/transactions/add.html:71
+#: manager/models.py:105 manager/templates/transactions/add.html:71
 msgid "Refund"
 msgstr ""
 
-#: manager/models.py:118
+#: manager/models.py:106
 msgid "Refunds"
 msgstr ""
 
-#: manager/models.py:179 manager/templates/charts/chart_common.html:33
+#: manager/models.py:167 manager/templates/charts/chart_common.html:34
 msgid "Account"
 msgstr ""
 
-#: manager/models.py:180 manager/templates/elements/quicksearch_results.html:9
-#: manager/templates/master.html:49 manager/templates/search.html:9
-#: manager/views.py:547
+#: manager/models.py:168 manager/templates/elements/quicksearch_results.html:9
+#: manager/templates/master.html:106 manager/templates/search.html:10
+#: manager/views/accounts.py:13
 msgid "Accounts"
 msgstr ""
 
-#: manager/models.py:189 manager/templates/transactions/add.html:110
+#: manager/models.py:177 manager/templates/transactions/add.html:110
 #: manager/templates/transactions/add.html:161
 msgid "Category"
 msgstr ""
 
-#: manager/models.py:190 manager/templates/categories/index.html:6
+#: manager/models.py:178 manager/templates/categories/index.html:6
 #: manager/templates/elements/quicksearch_results.html:26
-#: manager/templates/master.html:58 manager/templates/search.html:40
-#: manager/templates/transactions/detail.html:22 manager/views.py:632
+#: manager/templates/master.html:115 manager/templates/search.html:41
+#: manager/templates/transactions/detail.html:22 manager/views/categories.py:15
 msgid "Categories"
 msgstr ""
 
-#: manager/models.py:206
+#: manager/models.py:194
 msgid "System Default"
 msgstr ""
 
-#: manager/models.py:207 manager/templates/user_settings.html:27
+#: manager/models.py:195 manager/templates/user_settings.html:27
 msgid "Light"
 msgstr ""
 
-#: manager/models.py:208 manager/templates/user_settings.html:35
+#: manager/models.py:196 manager/templates/user_settings.html:35
 msgid "Dark"
 msgstr ""
 
-#: manager/models.py:224
+#: manager/models.py:212
 msgid "User Setting"
 msgstr ""
 
-#: manager/models.py:225 manager/views.py:791
+#: manager/models.py:213 manager/views/core.py:137
 msgid "User Settings"
 msgstr ""
 
-#: manager/templates/accounts/add.html:6 manager/views.py:602
+#: manager/templates/accounts/add.html:6 manager/views/accounts.py:68
 msgid "Edit Account"
 msgstr ""
 
-#: manager/templates/accounts/add.html:8 manager/views.py:582
+#: manager/templates/accounts/add.html:8 manager/views/accounts.py:48
 msgid "New Account"
 msgstr ""
 
@@ -278,7 +278,7 @@ msgstr ""
 
 #: manager/templates/accounts/index.html:39
 #: manager/templates/accounts/index.html:74
-#: manager/templates/accounts/index.html:96 manager/templates/search.html:36
+#: manager/templates/accounts/index.html:96 manager/templates/search.html:37
 msgid "No accounts found."
 msgstr ""
 
@@ -290,11 +290,11 @@ msgstr ""
 msgid "External accounts:"
 msgstr ""
 
-#: manager/templates/categories/add.html:6 manager/views.py:686
+#: manager/templates/categories/add.html:6 manager/views/categories.py:69
 msgid "Edit Category"
 msgstr ""
 
-#: manager/templates/categories/add.html:8 manager/views.py:666
+#: manager/templates/categories/add.html:8 manager/views/categories.py:49
 msgid "New Category"
 msgstr ""
 
@@ -380,7 +380,45 @@ msgid "Account Balance over Time"
 msgstr ""
 
 #: manager/templates/charts/balance_over_time.html:26
+#: manager/views/charts.py:478
 msgid "Total"
+msgstr ""
+
+#: manager/templates/charts/category_comparison.html:4
+#: manager/templates/charts/index.html:71
+msgid "Category Comparison"
+msgstr ""
+
+#: manager/templates/charts/category_comparison.html:8
+msgid "Categories to compare:"
+msgstr ""
+
+#: manager/templates/charts/category_comparison.html:17
+#: manager/templates/charts/income_expense_bar.html:8
+msgid "Group by:"
+msgstr ""
+
+#: manager/templates/charts/category_comparison.html:20
+#: manager/templates/charts/income_expense_bar.html:11
+msgid "Month"
+msgstr ""
+
+#: manager/templates/charts/category_comparison.html:23
+#: manager/templates/charts/income_expense_bar.html:14
+msgid "Week"
+msgstr ""
+
+#: manager/templates/charts/category_comparison.html:26
+#: manager/templates/charts/income_expense_bar.html:17
+msgid "Year"
+msgstr ""
+
+#: manager/templates/charts/category_comparison.html:41
+msgid "Please select one or more categories and click 'Apply'."
+msgstr ""
+
+#: manager/templates/charts/category_comparison.html:50
+msgid "Select categories..."
 msgstr ""
 
 #: manager/templates/charts/chart_common.html:5
@@ -427,16 +465,55 @@ msgstr ""
 msgid "End date"
 msgstr ""
 
-#: manager/templates/charts/chart_common.html:35
+#: manager/templates/charts/chart_common.html:36
 msgid "All accounts"
 msgstr ""
 
-#: manager/templates/charts/chart_common.html:41
+#: manager/templates/charts/chart_common.html:47
 msgid "Apply"
 msgstr ""
 
-#: manager/templates/charts/index.html:25 manager/templates/master.html:55
-#: manager/views.py:928
+#: manager/templates/charts/expense_heatmap.html:4
+#: manager/templates/charts/index.html:84
+msgid "Expense Heatmap"
+msgstr ""
+
+#: manager/templates/charts/expense_heatmap.html:8
+msgid "Perspective:"
+msgstr ""
+
+#: manager/templates/charts/expense_heatmap.html:11
+msgid "Weekday in Week"
+msgstr ""
+
+#: manager/templates/charts/expense_heatmap.html:14
+msgid "Day in Month"
+msgstr ""
+
+#: manager/templates/charts/expense_heatmap.html:17
+msgid "Month in Year"
+msgstr ""
+
+#: manager/templates/charts/expense_heatmap.html:68
+msgid "Heatmap"
+msgstr ""
+
+#: manager/templates/charts/income_expense_bar.html:4
+msgid "Income vs. Expenses"
+msgstr ""
+
+#: manager/templates/charts/income_expense_bar.html:41
+#: manager/templates/charts/index.html:178
+msgid "Income"
+msgstr ""
+
+#: manager/templates/charts/income_expense_bar.html:44
+#: manager/templates/charts/index.html:181
+msgid "Expenses"
+msgstr ""
+
+#: manager/templates/charts/index.html:25 manager/templates/master.html:112
+#: manager/views/charts.py:18
 msgid "Analysis"
 msgstr ""
 
@@ -456,33 +533,65 @@ msgstr ""
 msgid "Shows income and expenses by category in a Sankey diagram"
 msgstr ""
 
-#: manager/templates/charts/index.html:77
+#: manager/templates/charts/index.html:59
+msgid "Income & Expenses"
+msgstr ""
+
+#: manager/templates/charts/index.html:60
+msgid "Compares income and expenses grouped by year, month or week"
+msgstr ""
+
+#: manager/templates/charts/index.html:72
+msgid "Directly compare expenses or income between specific categories."
+msgstr ""
+
+#: manager/templates/charts/index.html:85
+msgid "Visualizes the temporal distribution of your expenses."
+msgstr ""
+
+#: manager/templates/charts/index.html:115
 msgid "Preview"
 msgstr ""
 
-#: manager/templates/charts/index.html:116
+#: manager/templates/charts/index.html:154
 msgid "Salary"
 msgstr ""
 
-#: manager/templates/charts/index.html:116
+#: manager/templates/charts/index.html:154
 msgid "Gifts"
 msgstr ""
 
-#: manager/templates/charts/index.html:117
+#: manager/templates/charts/index.html:155
 #: manager/templates/charts/sankey.html:19
 msgid "Budget"
 msgstr ""
 
-#: manager/templates/charts/index.html:118
+#: manager/templates/charts/index.html:156
 msgid "Rent"
 msgstr ""
 
-#: manager/templates/charts/index.html:118
+#: manager/templates/charts/index.html:156
 msgid "Food"
 msgstr ""
 
-#: manager/templates/charts/index.html:118
+#: manager/templates/charts/index.html:156
 msgid "Hobby"
+msgstr ""
+
+#: manager/templates/charts/index.html:216
+msgid "Groceries"
+msgstr ""
+
+#: manager/templates/charts/index.html:219
+msgid "Mobility"
+msgstr ""
+
+#: manager/templates/charts/index.html:222
+msgid "Housing"
+msgstr ""
+
+#: manager/templates/charts/index.html:225
+msgid "Leisure"
 msgstr ""
 
 #: manager/templates/charts/sankey.html:7
@@ -493,18 +602,18 @@ msgstr ""
 msgid "Toggle subcategories"
 msgstr ""
 
-#: manager/templates/elements/quicksearch_results.html:51
-#: manager/templates/search.html:112
-#: manager/templates/transactions/_transaction_item.html:45
+#: manager/templates/elements/quicksearch_results.html:53
+#: manager/templates/search.html:113
+#: manager/templates/transactions/_transaction_item.html:46
 msgid "Transfer"
 msgstr ""
 
-#: manager/templates/elements/quicksearch_results.html:62
+#: manager/templates/elements/quicksearch_results.html:70
 #, python-format
 msgid "Show all results for \"%(query)s\""
 msgstr ""
 
-#: manager/templates/elements/quicksearch_results.html:68
+#: manager/templates/elements/quicksearch_results.html:76
 msgid "No results found."
 msgstr ""
 
@@ -559,10 +668,10 @@ msgstr ""
 msgid "Total Wealth"
 msgstr ""
 
-#: manager/templates/index.html:53 manager/templates/search.html:20
-#: manager/templates/search.html:81 manager/templates/search.html:83
-#: manager/templates/transactions/_transaction_item.html:14
-#: manager/templates/transactions/_transaction_item.html:16
+#: manager/templates/index.html:53 manager/templates/search.html:21
+#: manager/templates/search.html:82 manager/templates/search.html:84
+#: manager/templates/transactions/_transaction_item.html:15
+#: manager/templates/transactions/_transaction_item.html:17
 msgid "Account Icon"
 msgstr ""
 
@@ -578,42 +687,60 @@ msgstr ""
 msgid "Create your first account to start tracking your finances."
 msgstr ""
 
-#: manager/templates/master.html:39
+#: manager/templates/master.html:96
 msgid "OpenCent Logo"
 msgstr ""
 
-#: manager/templates/master.html:46 manager/views.py:531
+#: manager/templates/master.html:103 manager/views/core.py:54
 msgid "Home"
 msgstr ""
 
-#: manager/templates/master.html:66
+#: manager/templates/master.html:123
 msgid "Search..."
 msgstr ""
 
-#: manager/templates/master.html:67
+#: manager/templates/master.html:124
 msgid "Search"
 msgstr ""
 
-#: manager/templates/master.html:88
+#: manager/templates/master.html:145
 msgid "User menu"
 msgstr ""
 
-#: manager/templates/master.html:95
+#: manager/templates/master.html:152
 msgid "Admin Panel"
 msgstr ""
 
-#: manager/templates/master.html:98 manager/templates/user_settings.html:6
+#: manager/templates/master.html:155 manager/templates/user_settings.html:6
 msgid "Settings"
 msgstr ""
 
-#: manager/templates/master.html:105
+#: manager/templates/master.html:162
 msgid "Logout"
 msgstr ""
 
-#: manager/templates/master.html:110
+#: manager/templates/master.html:167
 #: manager/templates/registration/login.html:11
 #: manager/templates/registration/login.html:52
 msgid "Login"
+msgstr ""
+
+#: manager/templates/offline.html:8
+msgid "Offline - OpenCent"
+msgstr ""
+
+#: manager/templates/offline.html:19
+msgid "You are offline"
+msgstr ""
+
+#: manager/templates/offline.html:21
+msgid ""
+"Please check your internet connection. OpenCent needs a connection to sync "
+"your latest transactions."
+msgstr ""
+
+#: manager/templates/offline.html:25
+msgid "Try again"
 msgstr ""
 
 #: manager/templates/registration/login.html:18
@@ -630,45 +757,45 @@ msgstr ""
 msgid "Please log in to view this page."
 msgstr ""
 
-#: manager/templates/search.html:6
+#: manager/templates/search.html:7
 msgid "Search for"
 msgstr ""
 
-#: manager/templates/search.html:12
+#: manager/templates/search.html:13
 #, python-format
 msgid "%(count)s accounts found."
 msgstr ""
 
-#: manager/templates/search.html:43
+#: manager/templates/search.html:44
 #, python-format
 msgid "%(count)s categories found."
 msgstr ""
 
-#: manager/templates/search.html:60
+#: manager/templates/search.html:61
 msgid "No categories found."
 msgstr ""
 
-#: manager/templates/search.html:67
+#: manager/templates/search.html:68
 #, python-format
 msgid "%(count)s transactions found."
 msgstr ""
 
-#: manager/templates/search.html:89
-#: manager/templates/transactions/_transaction_item.html:22
+#: manager/templates/search.html:90
+#: manager/templates/transactions/_transaction_item.html:23
 msgid "Multiple categories"
 msgstr ""
 
-#: manager/templates/search.html:120
-#: manager/templates/transactions/_transaction_item.html:53
+#: manager/templates/search.html:121
+#: manager/templates/transactions/_transaction_item.html:54
 msgid "Refunded"
 msgstr ""
 
-#: manager/templates/search.html:122
-#: manager/templates/transactions/_transaction_item.html:55
+#: manager/templates/search.html:123
+#: manager/templates/transactions/_transaction_item.html:56
 msgid "Partially Refunded"
 msgstr ""
 
-#: manager/templates/search.html:147
+#: manager/templates/search.html:148
 #: manager/templates/transactions/index.html:49
 msgid "No transactions found."
 msgstr ""
@@ -677,12 +804,13 @@ msgstr ""
 msgid "Loading more..."
 msgstr ""
 
-#: manager/templates/transactions/add.html:7 manager/views.py:480
+#: manager/templates/transactions/add.html:7 manager/views/transactions.py:239
 msgid "Edit Transaction"
 msgstr ""
 
 #: manager/templates/transactions/add.html:9
-#: manager/templates/transactions/index.html:8 manager/views.py:411
+#: manager/templates/transactions/index.html:8
+#: manager/views/transactions.py:158
 msgid "New Transaction"
 msgstr ""
 
@@ -857,52 +985,149 @@ msgstr ""
 msgid "Restore"
 msgstr ""
 
-#: manager/views.py:129
+#: manager/utils.py:113
 msgid "Start"
 msgstr ""
 
-#: manager/views.py:268
-msgid "Setup Assistant"
-msgstr ""
-
-#: manager/views.py:511
-msgid "Delete Transaction"
-msgstr ""
-
-#: manager/views.py:620
+#: manager/views/accounts.py:86
 msgid "Delete Account"
 msgstr ""
 
-#: manager/views.py:702
+#: manager/views/categories.py:85
 msgid ""
 "This category cannot be deleted because it is still assigned to "
 "transactions. Please remove the category from all assigned transactions "
 "before deleting it."
 msgstr ""
 
-#: manager/views.py:710
+#: manager/views/categories.py:93
 msgid "Delete Category"
 msgstr ""
 
-#: manager/views.py:733
+#: manager/views/charts.py:57 manager/views/charts.py:151
+#: manager/views/charts.py:226 manager/views/charts.py:249
+#: manager/views/charts.py:371
+msgid "Charts"
+msgstr ""
+
+#: manager/views/charts.py:77 manager/views/charts.py:78
+msgid "Uncategorized"
+msgstr ""
+
+#: manager/views/charts.py:324
+#, python-brace-format
+msgid ""
+"The category '{target_cat_name}' (or one of its subcategories) contains both "
+"income and expenses in the selected period. A comparison is not possible."
+msgstr ""
+
+#: manager/views/charts.py:420
+msgid "Monday"
+msgstr ""
+
+#: manager/views/charts.py:420
+msgid "Tuesday"
+msgstr ""
+
+#: manager/views/charts.py:420
+msgid "Wednesday"
+msgstr ""
+
+#: manager/views/charts.py:421
+msgid "Thursday"
+msgstr ""
+
+#: manager/views/charts.py:421
+msgid "Friday"
+msgstr ""
+
+#: manager/views/charts.py:421
+msgid "Saturday"
+msgstr ""
+
+#: manager/views/charts.py:421
+msgid "Sunday"
+msgstr ""
+
+#: manager/views/charts.py:440
+msgid "Jan"
+msgstr ""
+
+#: manager/views/charts.py:440
+msgid "Feb"
+msgstr ""
+
+#: manager/views/charts.py:440
+msgid "Mar"
+msgstr ""
+
+#: manager/views/charts.py:440
+msgid "Apr"
+msgstr ""
+
+#: manager/views/charts.py:441
+msgid "May"
+msgstr ""
+
+#: manager/views/charts.py:441
+msgid "Jun"
+msgstr ""
+
+#: manager/views/charts.py:441
+msgid "Jul"
+msgstr ""
+
+#: manager/views/charts.py:441
+msgid "Aug"
+msgstr ""
+
+#: manager/views/charts.py:442
+msgid "Sep"
+msgstr ""
+
+#: manager/views/charts.py:442
+msgid "Oct"
+msgstr ""
+
+#: manager/views/charts.py:442
+msgid "Nov"
+msgstr ""
+
+#: manager/views/charts.py:442
+msgid "Dec"
+msgstr ""
+
+#: manager/views/charts.py:460
+msgid "Total per Weekday"
+msgstr ""
+
+#: manager/views/charts.py:468
+msgid "Total per Day of Month"
+msgstr ""
+
+#: manager/views/charts.py:476
+msgid "Total per Month"
+msgstr ""
+
+#: manager/views/core.py:33
+msgid "Setup Assistant"
+msgstr ""
+
+#: manager/views/core.py:79
 #, python-format
 msgid "Search: %s"
 msgstr ""
 
-#: manager/views.py:915
+#: manager/views/core.py:261
 msgid "Data and images successfully restored!"
 msgstr ""
 
-#: manager/views.py:918
+#: manager/views/core.py:264
 msgid "Error importing data. Make sure the file is a valid backup."
 msgstr ""
 
-#: manager/views.py:967 manager/views.py:1061
-msgid "Charts"
-msgstr ""
-
-#: manager/views.py:987 manager/views.py:988
-msgid "Uncategorized"
+#: manager/views/transactions.py:258
+msgid "Delete Transaction"
 msgstr ""
 
 #: opencent/settings.py:140

@@ -1,0 +1,187 @@
+{% extends 'charts/chart_common.html' %}
+{% load i18n %}
+
+{% block chart_title %}{% trans "Expense Heatmap" %}{% endblock %}
+
+{% block extra_filters %}
+  <div class="col-12 mt-1">
+      <label class="form-label">{% trans "Perspective:" %}</label>
+      <div class="btn-group w-100" role="group">
+          <input type="radio" class="btn-check" name="group_by" id="day_of_week" value="day_of_week" {% if group_by == 'day_of_week' or not group_by %}checked{% endif %}>
+          <label class="btn btn-outline-secondary" for="day_of_week">{% trans "Weekday in Week" %}</label>
+
+          <input type="radio" class="btn-check" name="group_by" id="day_of_month" value="day_of_month" {% if group_by == 'day_of_month' %}checked{% endif %}>
+          <label class="btn btn-outline-secondary" for="day_of_month">{% trans "Day in Month" %}</label>
+          
+          <input type="radio" class="btn-check" name="group_by" id="month_of_year" value="month_of_year" {% if group_by == 'month_of_year' %}checked{% endif %}>
+          <label class="btn btn-outline-secondary" for="month_of_year">{% trans "Month in Year" %}</label>
+      </div>
+  </div>
+{% endblock %}
+
+{% block chart_content %}
+  <div id="chart-heatmap" class="mt-4"></div>
+  <div id="chart-totals" class="mt-2"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const seriesData = {{ series|safe }};
+        
+        if (seriesData.length > 0) {
+            const getCurrentTheme = () => document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light';
+            const userLang = document.documentElement.lang || 'en-US';
+            const currencyFormatter = new Intl.NumberFormat(userLang, { style: 'currency', currency: 'EUR' });
+
+            const renderHeatmap = () => {
+                const theme = getCurrentTheme();
+                const emptyColor = theme === 'dark' ? '#2b3035' : '#f8f9fa'; 
+                const chartContainer = document.querySelector("#chart-heatmap");
+                
+                chartContainer.innerHTML = '';
+
+                let maxExpense = 0;
+                
+                seriesData.forEach(series => {
+                    series.data.forEach(point => {
+                        if (point.y > maxExpense) {
+                            maxExpense = point.y;
+                        }
+                    });
+                });
+
+                if (maxExpense === 0) maxExpense = 100;
+
+                const step1 = Math.round(maxExpense * 0.33);
+                const step2 = Math.round(maxExpense * 0.66);
+                // ------------------------------------------
+
+                var options = {
+                    series: seriesData,
+                    chart: {
+                        type: 'heatmap',
+                        height: 450,
+                        fontFamily: 'inherit',
+                        background: 'transparent',
+                        toolbar: { show: true }
+                    },
+                    title: {
+                        text: '{% trans "Heatmap" %}',
+                        align: 'center',
+                        style: { fontWeight: 'bold', color: theme === 'dark' ? '#f8f9fa' : '#212529' }
+                    },
+                    plotOptions: {
+                        heatmap: {
+                            shadeIntensity: 0.5,
+                            radius: 4,
+                            useFillColorAsStroke: false,
+                            colorScale: {
+                                ranges: [
+                                    { from: 0, to: 0, color: emptyColor, name: '0 €' },
+                                    
+                                    { 
+                                        from: 0.01, 
+                                        to: step1, 
+                                        color: '#f1aeb5', 
+                                        name: '< ' + currencyFormatter.format(step1) 
+                                    },
+                                    
+                                    { 
+                                        from: step1 + 0.01, 
+                                        to: step2, 
+                                        color: '#e35d6a', 
+                                        name: '< ' + currencyFormatter.format(step2) 
+                                    },
+                                    
+                                    { 
+                                        from: step2 + 0.01, 
+                                        to: maxExpense + 1,
+                                        color: '#dc3545', 
+                                        name: '> ' + currencyFormatter.format(step2) 
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    dataLabels: { enabled: false },
+                    stroke: { width: 1 },
+                    theme: { mode: theme },
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                return currencyFormatter.format(val);
+                            }
+                        }
+                    }
+                };
+
+                var chart = new ApexCharts(chartContainer, options);
+                chart.render();
+                const totalsContainer = document.querySelector("#chart-totals");
+                totalsContainer.innerHTML = '';
+                
+                const totalsSeries = {{ totals_series|safe|default:"[]" }};
+                const totalsCategories = {{ totals_categories|safe|default:"[]" }};
+                
+                if (totalsSeries.length > 0 && totalsSeries[0].data.some(val => val > 0)) {
+                    var totalsOptions = {
+                        series: totalsSeries,
+                        chart: {
+                            type: 'bar',
+                            height: 250,
+                            fontFamily: 'inherit',
+                            background: 'transparent',
+                            toolbar: { show: false }
+                        },
+                        title: {
+                            text: '{{ totals_title }}',
+                            align: 'center',
+                            style: { fontWeight: 'bold', color: theme === 'dark' ? '#f8f9fa' : '#212529' }
+                        },
+                        plotOptions: {
+                            bar: {
+                                columnWidth: '60%',
+                                borderRadius: 4
+                            }
+                        },
+                        dataLabels: { enabled: false },
+                        xaxis: {
+                            categories: totalsCategories,
+                            labels: { style: { colors: theme === 'dark' ? '#adb5bd' : '#6c757d' } }
+                        },
+                        yaxis: {
+                            labels: {
+                                formatter: function (value) {
+                                    return currencyFormatter.format(value);
+                                }
+                            }
+                        },
+                        colors: ['#0d6efd'],
+                        theme: { mode: theme },
+                        tooltip: {
+                            y: {
+                                formatter: function (val) {
+                                    return currencyFormatter.format(val);
+                                }
+                            }
+                        }
+                    };
+
+                    var totalsChart = new ApexCharts(totalsContainer, totalsOptions);
+                    totalsChart.render();
+                }
+            };
+
+            renderHeatmap();
+
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.attributeName === "data-bs-theme") {
+                        renderHeatmap();
+                    }
+                });
+            });
+            observer.observe(document.documentElement, { attributes: true });
+        }
+    });
+  </script>
+{% endblock %}

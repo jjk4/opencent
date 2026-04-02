@@ -1,0 +1,119 @@
+{% extends 'charts/chart_common.html' %}
+{% load i18n %}
+
+{% block chart_title %}{% trans "Category Comparison" %}{% endblock %}
+
+{% block extra_filters %}
+  <div class="col-12 col-md-6 mt-1">
+      <label for="categories" class="form-label">{% trans "Categories to compare:" %}</label>
+      <select name="categories" id="categories" class="form-control" multiple="multiple" style="width: 100%;">
+          {% for cat in all_categories %}
+          <option value="{{ cat.id }}" {% if cat.id in selected_categories %}selected{% endif %}>{{ cat.name }}</option>
+          {% endfor %}
+      </select>
+  </div>
+
+  <div class="col-12 col-md-6 mt-1">
+      <label class="form-label">{% trans "Group by:" %}</label>
+      <div class="btn-group w-100" role="group">
+          <input type="radio" class="btn-check" name="group_by" id="group_month" value="month" {% if group_by == 'month' or not group_by %}checked{% endif %}>
+          <label class="btn btn-outline-secondary" for="group_month">{% trans "Month" %}</label>
+
+          <input type="radio" class="btn-check" name="group_by" id="group_week" value="week" {% if group_by == 'week' %}checked{% endif %}>
+          <label class="btn btn-outline-secondary" for="group_week">{% trans "Week" %}</label>
+          
+          <input type="radio" class="btn-check" name="group_by" id="group_year" value="year" {% if group_by == 'year' %}checked{% endif %}>
+          <label class="btn btn-outline-secondary" for="group_year">{% trans "Year" %}</label>
+      </div>
+  </div>
+{% endblock %}
+
+{% block chart_content %}
+  <div>
+      {% if error_message %}
+          <div class="alert alert-danger shadow-sm" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error_message }}
+          </div>
+      {% elif series != '[]' %}
+          <div id="chart-category-comparison"></div>
+      {% else %}
+          <div class="alert alert-info shadow-sm" role="alert">
+              <i class="bi bi-info-circle-fill me-2"></i> {% trans "Please select one or more categories and click 'Apply'." %}
+          </div>
+      {% endif %}
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#categories').select2({
+            theme: 'bootstrap-5',
+            placeholder: "{% trans 'Select categories...' %}",
+            allowClear: true
+        });
+
+        const seriesData = {{ series|safe }};
+        const categoriesData = {{ chart_categories|safe }};
+        
+        if (seriesData.length > 0) {
+            const getCurrentTheme = () => document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light';
+            const userLang = document.documentElement.lang || 'en-US';
+            const currencyFormatter = new Intl.NumberFormat(userLang, { style: 'currency', currency: 'EUR' });
+
+            var options = {
+                series: seriesData,
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    fontFamily: 'inherit',
+                    background: 'transparent',
+                    toolbar: { show: true }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '60%',
+                        endingShape: 'rounded'
+                    },
+                },
+                dataLabels: { enabled: false },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                xaxis: {
+                    categories: categoriesData,
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return currencyFormatter.format(value);
+                        }
+                    }
+                },
+                theme: { mode: getCurrentTheme() },
+                fill: { opacity: 1 },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return currencyFormatter.format(val);
+                        }
+                    }
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart-category-comparison"), options);
+            chart.render();
+
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.attributeName === "data-bs-theme") {
+                        chart.updateOptions({ theme: { mode: getCurrentTheme() } });
+                    }
+                });
+            });
+            observer.observe(document.documentElement, { attributes: true });
+        }
+    });
+  </script>
+{% endblock %}

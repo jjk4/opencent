@@ -50,6 +50,9 @@ urlpatterns = [
     path('charts/', charts.charts, name='charts'),
     path('charts/balance_over_time/', charts.chart_balance_over_time, name='chart_balance_over_time'),
     path('charts/sankey/', charts.chart_sankey, name='chart_sankey'),
+    path('charts/income_expense_bar/', charts.chart_income_expense_bar, name='chart_income_expense_bar'),
+    path('charts/category_comparison/', charts.chart_category_comparison, name='chart_category_comparison'),
+    path('charts/expense_heatmap/', charts.chart_expense_heatmap, name='chart_expense_heatmap'),
 
     # --- INTERNATIONALIZATION ---
     path('i18n/', include('django.conf.urls.i18n')),

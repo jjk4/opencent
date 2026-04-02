@@ -4,7 +4,7 @@
 {% block content %}
 
 <style>
-    #sankey-preview, #balance-preview {
+    #sankey-preview, #balance-preview, #bar-preview, #cat-compare-preview {
         pointer-events: none;
         min-height: 200px;
     }
@@ -45,6 +45,44 @@
                     <div class="card-body pt-0">
                         <h5 class="card-title fw-bold">{% trans "Income/Expense Sankey" %}</h5>
                         <p class="card-text text-body-secondary small">{% trans "Shows income and expenses by category in a Sankey diagram" %}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+            <a href="/charts/income_expense_bar" class="text-decoration-none text-body">
+                <div class="card h-100 shadow-sm border-0 bg-body-tertiary">
+                    <div id="bar-preview" style="height: 200px; width: 100%;"></div>
+                    
+                    <div class="card-body pt-0">
+                        <h5 class="card-title fw-bold">{% trans "Income & Expenses" %}</h5>
+                        <p class="card-text text-body-secondary small">{% trans "Compares income and expenses grouped by year, month or week" %}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+            <a href="/charts/category_comparison" class="text-decoration-none text-body">
+                <div class="card h-100 shadow-sm border-0 bg-body-tertiary">
+                    <div id="cat-compare-preview" style="height: 200px; width: 100%;"></div>
+                    
+                    <div class="card-body pt-0">
+                        <h5 class="card-title fw-bold">{% trans "Category Comparison" %}</h5>
+                        <p class="card-text text-body-secondary small">{% trans "Directly compare expenses or income between specific categories." %}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+            <a href="/charts/expense_heatmap" class="text-decoration-none text-body">
+                <div class="card h-100 shadow-sm border-0 bg-body-tertiary">
+                    <div id="heatmap-preview" style="height: 200px; width: 100%;"></div>
+                    
+                    <div class="card-body pt-0">
+                        <h5 class="card-title fw-bold">{% trans "Expense Heatmap" %}</h5>
+                        <p class="card-text text-body-secondary small">{% trans "Visualizes the temporal distribution of your expenses." %}</p>
                     </div>
                 </div>
             </a>
@@ -131,6 +169,143 @@ function initPreviewCharts() {
         sankeyChart.render(sankeyData);
     } catch(e) {
         console.warn("Sankey Preview Error:", e);
+    }
+    const barContainer = document.querySelector("#bar-preview");
+    if (barContainer) {
+        barContainer.innerHTML = '';
+        const barOptions = {
+            series: [{
+                name: '{% trans "Income" %}',
+                data: [3100, 4000, 2800, 5100, 4200, 3800]
+            }, {
+                name: '{% trans "Expenses" %}',
+                data: [2100, 2600, 2200, 3400, 2800, 2100]
+            }],
+            chart: {
+                type: 'bar',
+                height: 200,
+                animations: { enabled: false },
+                fontFamily: 'inherit',
+                background: 'transparent',
+                toolbar: { show: false },
+                zoom: { enabled: false },
+                selection: { enabled: false },
+            },
+            plotOptions: {
+                bar: { columnWidth: '60%' }
+            },
+            dataLabels: { enabled: false },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false }, tooltip: { enabled: false }
+            },
+            yaxis: { labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+            grid: { show: false },
+            theme: { mode: getCurrentTheme() },
+            colors: ['#198754', '#dc3545'],
+            tooltip: { enabled: false }
+        };
+        const previewBarChart = new ApexCharts(barContainer, barOptions);
+        previewBarChart.render();
+    }
+    const catCompareContainer = document.querySelector("#cat-compare-preview");
+    if (catCompareContainer) {
+        catCompareContainer.innerHTML = '';
+        const catCompareOptions = {
+            series: [{
+                name: '{% trans "Groceries" %}',
+                data: [300, 320, 280, 400]
+            }, {
+                name: '{% trans "Mobility" %}',
+                data: [150, 210, 140, 180]
+            }, {
+                name: '{% trans "Housing" %}',
+                data: [800, 800, 800, 800]
+            }, {
+                name: '{% trans "Leisure" %}',
+                data: [120, 90, 200, 150]
+            }],
+            chart: {
+                type: 'bar',
+                height: 200,
+                animations: { enabled: false },
+                fontFamily: 'inherit',
+                background: 'transparent',
+                toolbar: { show: false },
+                zoom: { enabled: false },
+                selection: { enabled: false },
+            },
+            plotOptions: { bar: { columnWidth: '85%' } },
+            dataLabels: { enabled: false },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr'],
+                labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false }, tooltip: { enabled: false }
+            },
+            yaxis: { labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+            grid: { show: false },
+            theme: { mode: getCurrentTheme() },
+            tooltip: { enabled: false },
+            legend: { show: true } 
+        };
+        const previewCatCompareChart = new ApexCharts(catCompareContainer, catCompareOptions);
+        previewCatCompareChart.render();
+    }
+    const heatmapContainer = document.querySelector("#heatmap-preview");
+    if (heatmapContainer) {
+        heatmapContainer.innerHTML = '';
+        
+        const generateHeatmapData = () => {
+            const data = [];
+            for(let i = 1; i <= 4; i++) {
+                const val = Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+                data.push({ x: 'W' + i, y: val });
+            }
+            return data;
+        };
+
+        const heatmapOptions = {
+            series: [
+                { name: 'Mo', data: generateHeatmapData() },
+                { name: 'Di', data: generateHeatmapData() },
+                { name: 'Mi', data: generateHeatmapData() },
+                { name: 'Do', data: generateHeatmapData() },
+                { name: 'Fr', data: generateHeatmapData() },
+                { name: 'Sa', data: [{x:'W1', y:200}, {x:'W2', y:180}, {x:'W3', y:250}, {x:'W4', y:120}] },
+                { name: 'So', data: [{x:'W1', y:150}, {x:'W2', y:90}, {x:'W3', y:180}, {x:'W4', y:210}] }
+            ],
+            chart: {
+                type: 'heatmap',
+                height: 200,
+                animations: { enabled: false },
+                fontFamily: 'inherit',
+                background: 'transparent',
+                toolbar: { show: false },
+                zoom: { enabled: false },
+                selection: { enabled: false },
+            },
+            plotOptions: {
+                heatmap: {
+                    shadeIntensity: 0.5,
+                    radius: 2,
+                    colorScale: {
+                        ranges: [
+                            { from: 0, to: 50, color: '#f1aeb5' },
+                            { from: 51, to: 150, color: '#e35d6a' },
+                            { from: 151, to: 300, color: '#dc3545' }
+                        ]
+                    }
+                }
+            },
+            dataLabels: { enabled: false },
+            xaxis: { labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+            yaxis: { labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+            grid: { show: false },
+            theme: { mode: getCurrentTheme() },
+            tooltip: { enabled: false },
+            legend: { show: false }
+        };
+        const previewHeatmapChart = new ApexCharts(heatmapContainer, heatmapOptions);
+        previewHeatmapChart.render();
     }
 }
 

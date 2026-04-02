@@ -50,6 +50,43 @@
     }
     </script>
     {% endwith %}
+    <style>
+      /* Dark Mode Support für Select2 Bootstrap 5 Theme */
+      [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection {
+          background-color: var(--bs-body-bg);
+          color: var(--bs-body-color);
+          border-color: var(--bs-border-color);
+      }
+      
+      [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection__choice {
+          background-color: var(--bs-tertiary-bg);
+          color: var(--bs-body-color) !important;
+          border-color: var(--bs-border-color);
+      }
+      
+      [data-bs-theme="dark"] .select2-dropdown {
+          background-color: var(--bs-body-bg);
+          border-color: var(--bs-border-color);
+      }
+      
+      [data-bs-theme="dark"] .select2-search__field {
+          background-color: var(--bs-body-bg);
+          color: var(--bs-body-color);
+          border-color: var(--bs-border-color);
+      }
+      
+      [data-bs-theme="dark"] .select2-results__option {
+          color: var(--bs-body-color);
+      }
+      
+      [data-bs-theme="dark"] .select2-results__option--highlighted[aria-selected] {
+          background-color: var(--bs-primary);
+          color: #fff;
+      }
+      [data-bs-theme="dark"] .select2-selectuib__choice {
+          color: var(--bs-body-color) !important;
+      }
+  </style>
   </head>
   <body>
     <header class="p-3 mb-3 border-bottom">
