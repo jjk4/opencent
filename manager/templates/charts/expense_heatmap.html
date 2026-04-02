@@ -40,20 +40,30 @@
                 chartContainer.innerHTML = '';
 
                 let maxExpense = 0;
+                let minExpense = Infinity;
                 
                 seriesData.forEach(series => {
                     series.data.forEach(point => {
                         if (point.y > maxExpense) {
                             maxExpense = point.y;
                         }
+                        if (point.y > 0 && point.y < minExpense) {
+                            minExpense = point.y;
+                        }
                     });
                 });
 
-                if (maxExpense === 0) maxExpense = 100;
+                if (maxExpense === 0) { maxExpense = 100; minExpense = 0; }
+                if (minExpense === Infinity) minExpense = 0;
+                
+                if (maxExpense === minExpense && maxExpense > 0) {
+                    minExpense = maxExpense * 0.5;
+                }
 
-                const step1 = Math.round(maxExpense * 0.33);
-                const step2 = Math.round(maxExpense * 0.66);
-                // ------------------------------------------
+                const diff = maxExpense - minExpense;
+                
+                const step1 = minExpense + (diff * 0.33);
+                const step2 = minExpense + (diff * 0.66);
 
                 var options = {
                     series: seriesData,
@@ -116,6 +126,7 @@
 
                 var chart = new ApexCharts(chartContainer, options);
                 chart.render();
+                
                 const totalsContainer = document.querySelector("#chart-totals");
                 totalsContainer.innerHTML = '';
                 
