@@ -231,14 +231,23 @@ $(document).ready(function() {
         width: '100%'
     });
 
-    2. Select2 auf NEUE Kategorien anwenden, wenn man auf "Weitere Kategorie hinzufügen" klickt
-    $('#add-split-btn').on('click', function() {
-        setTimeout(function() {
-            $('#split-form-container select[id$="-category"]').not('.select2-hidden-accessible').select2({
-                theme: 'bootstrap-5',
-                width: '100%'
-            });
-        }, 50);
+    $('#add-split-btn').on('click', function(e) {
+        e.preventDefault();
+
+        var totalFormsInput = $('#id_splits-TOTAL_FORMS');
+        var formCount = parseInt(totalFormsInput.val());
+        
+        var emptyTemplate = $('#empty-form-template').html();
+        var compiledTemplate = emptyTemplate.replace(/__prefix__/g, formCount);
+
+        $('#split-form-container').append(compiledTemplate);
+
+        totalFormsInput.val(formCount + 1);
+
+        $('#split-form-container select[id$="-category"]').not('.select2-hidden-accessible').select2({
+            theme: 'bootstrap-5',
+            width: '100%'
+        });
     });
 
     const refundCheckbox = document.getElementById('{{ form.is_refund.id_for_label }}');
