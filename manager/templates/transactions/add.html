@@ -2,6 +2,26 @@
 {% load i18n %}
 
 {% block content %}
+<style>
+/* Bootstrap Darkmode for select2 */
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-search__field {
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color) !important;
+    border-color: var(--bs-border-color) !important;
+}
+
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-search__field:focus {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection .select2-selection__rendered {
+    color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection .select2-selection__placeholder {
+    color: var(--bs-secondary-color) !important;
+}
+</style>
 <div class="container mt-4">
     {% if is_edit %}
         <h1>{% trans "Edit Transaction" %}</h1>
@@ -200,6 +220,25 @@ $(document).ready(function() {
             },
             cache: true
         }
+    });
+
+    $('#id_sender, #id_receiver').select2({
+        theme: 'bootstrap-5',
+        width: '100%',
+    });
+    $('#split-form-container select[id$="-category"]').select2({
+        theme: 'bootstrap-5',
+        width: '100%'
+    });
+
+    2. Select2 auf NEUE Kategorien anwenden, wenn man auf "Weitere Kategorie hinzufügen" klickt
+    $('#add-split-btn').on('click', function() {
+        setTimeout(function() {
+            $('#split-form-container select[id$="-category"]').not('.select2-hidden-accessible').select2({
+                theme: 'bootstrap-5',
+                width: '100%'
+            });
+        }, 50);
     });
 
     const refundCheckbox = document.getElementById('{{ form.is_refund.id_for_label }}');
